@@ -1,8 +1,8 @@
 import 'package:apniseva/controller/auth_controller/auth_controller.dart';
 import 'package:apniseva/utils/buttons.dart';
 import 'package:get/get.dart';
-import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 import '../../../utils/theme.dart';
 import '../widget/auth_input_field.dart';
@@ -17,12 +17,8 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
 
-  final countryPicker = const FlCountryCodePicker();
-  CountryCode? countryCode;
-
   final formKey = GlobalKey<FormState>();
   final authController = Get.put(AuthController());
-
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +31,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: Container(
           width: double.maxFinite,
           height: double.maxFinite,
-          // decoration: BoxDecoration(
-          //     image: DecorationImage(
-          //         fit: BoxFit.cover,
-          //         image: AssetImage(backgroundImage)
-          //     )
-          // ),
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Spacer(),
                 SizedBox(height: height * 0.15),
+
                 Text('Let\'s get started',
                     style: AppTheme.lightTheme.textTheme.headlineLarge
                 ),
@@ -56,11 +47,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       style: AppTheme.lightTheme.textTheme.titleMedium
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: height * 0.015) ,
 
                 Form(
                     key: formKey,
-                    child: PhoneNumberVerification(controller: authController.mobileController)
+                    child: PhoneNumberVerification(
+                      controller: authController.mobileController,
+                    )
                 ),
                 SizedBox(height: height * 0.02),
                 
@@ -69,8 +62,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 47,
                     onPressed: (){
                       if(formKey.currentState!.validate()) {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => OtpVerificationScreen(phoneNumber: authController.mobileController.text)));
-                      }else {
+                        debugPrint(authController.mobileController.text);
+                        authController.loginWithOTP();
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) =>
+                        //         OtpVerificationScreen(
+                        //             phoneNumber: authController.mobileController.text
+                        //         )
+                        //     )
+                        // );
+                      } else {
                         return;
                       }
                     },
@@ -82,7 +83,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ),
         ),
       ),
-
     );
   }
 }

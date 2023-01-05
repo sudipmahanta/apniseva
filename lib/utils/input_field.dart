@@ -9,7 +9,6 @@ class SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-
       child: TextFormField(
         textCapitalization: TextCapitalization.sentences,
         keyboardType: TextInputType.text,

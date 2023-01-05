@@ -36,10 +36,10 @@ class DashScreen extends StatelessWidget {
                   )
               ),
               const DashServices(),
-              SizedBox(height: height * 0.04),
+              SizedBox(height: height * 0.02),
 
               const DashCarousel(),
-              SizedBox(height: height * 0.03),
+              SizedBox(height: height * 0.02),
 
               Align(
                   alignment: Alignment.centerLeft,

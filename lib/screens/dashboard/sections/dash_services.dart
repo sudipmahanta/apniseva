@@ -9,57 +9,61 @@ class DashServices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: 220),
-      child: GridView.builder(
-          shrinkWrap: true,
-          itemCount: 6,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 0.8
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Badge(
-                        badgeContent: GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(Remix.close_line)),
-                        badgeColor: Colors.transparent,
-                        elevation: 0,
-                        position: const BadgePosition(
-                          end: 0,
-                          top: -30
-                        ),
-                        child: Container(
-                          color: Colors.grey,
-                        ),
-                      );
-                    });
-              },
-              child: Card(
-                elevation: 1.0,
-                color: Colors.grey.shade200,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(DashStrings.serviceImg)),
-                    Text(DashStrings.serviceName,
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                  ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 220),
+        child: GridView.builder(
+            shrinkWrap: true,
+            itemCount: 6,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 0.8
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Badge(
+                          badgeContent: GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Icon(Remix.close_line)),
+                          badgeColor: Colors.transparent,
+                          elevation: 0,
+                          position: const BadgePosition(
+                            end: 0,
+                            top: -30
+                          ),
+                          child: Container(
+                            height: 90,
+                            child: Text('data'),
+                          ),
+                        );
+                      });
+                },
+                child: Card(
+                  elevation: 1.0,
+                  color: Colors.grey.shade200,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(DashStrings.serviceImg)),
+                      Text(DashStrings.serviceName,
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
+              );
+            }
+        ),
       ),
     );
   }

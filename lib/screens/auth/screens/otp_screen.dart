@@ -2,6 +2,7 @@ import 'package:apniseva/utils/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../../utils/color.dart';
 import '../../../utils/theme.dart';
 import '../../dashboard/screens/dashboard_screen.dart';
 
@@ -70,11 +71,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     keyboardType: TextInputType.number,
                     pinTheme: PinTheme(
                         borderWidth: 1.5,
-                        // activeFillColor: vedaWhite,
-                        // selectedColor: vedaWhite,
-                        // activeColor: vedaWhite,
-                        // inactiveColor: inActiveColor,
-                        // errorBorderColor: primaryColor,
+                        borderRadius: BorderRadius.circular(8),
+                        activeFillColor: primaryColor,
+                        selectedColor: primaryColor,
+                        activeColor: Colors.black,
+                        inactiveColor: Colors.black,
+                        errorBorderColor: Colors.red,
                         fieldOuterPadding: EdgeInsets.zero
                     ),
                   ),
@@ -86,7 +88,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        color: Colors.white54,
+                        color: primaryColor.withOpacity(0.13),
                         borderRadius: BorderRadius.circular(8)
                     ),
                     child: Row(
@@ -94,12 +96,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: const [
                         Icon(Icons.info_outlined,
-                          color: Color(0xFFFFAE34),
+                          color: Colors.red,
                         ),
                         SizedBox(width: 10),
                         Text('Automatically reading  OTP',
                           style: TextStyle(
-                            color: Color(0xFFFFAE34),
+                            color: Colors.red,
                           ),
                         )
                       ],
@@ -133,7 +135,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         onPressed: (){},
                         child: const Text('Resend OTP',
                           style: TextStyle(
-                            color: Color(0xFFFFAE34),
+                            color: Colors.red,
                           ),
                         )
                     ),

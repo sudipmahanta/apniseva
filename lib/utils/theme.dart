@@ -6,6 +6,7 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.grey.shade100,
     fontFamily: 'Poppins',
+    primaryColor: primaryColor,
 
     textTheme: const TextTheme(
       displayLarge: TextStyle(
@@ -49,7 +50,7 @@ class AppTheme {
     ),
 
     inputDecorationTheme: InputDecorationTheme(
-      // contentPadding: const EdgeInsets.all(20.0),
+      contentPadding: const EdgeInsets.all(15.0),
       hintStyle: const TextStyle(
           color: Colors.grey,
           fontWeight: FontWeight.w500,
@@ -79,6 +80,12 @@ class AppTheme {
       elevation: 0.5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8)
+      )
+    ),
+
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: primaryColor
       )
     )
     

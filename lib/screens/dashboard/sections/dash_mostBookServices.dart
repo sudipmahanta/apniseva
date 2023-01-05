@@ -8,21 +8,23 @@ class DashBookedServices extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
-    return SizedBox(
+    return Container(
       width: width,
-      height: 170,
+      height: 180,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+
       child: ListView.builder(
           itemCount: 10,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             return Container(
-              width: 120,
+              width: 130,
               padding: const EdgeInsets.only(right: 10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 110,
+                    height: 120,
                     decoration: BoxDecoration(
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(10),
