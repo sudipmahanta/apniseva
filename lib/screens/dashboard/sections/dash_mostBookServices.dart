@@ -1,8 +1,8 @@
 import 'package:apniseva/screens/dashboard/widget/dash_strings.dart';
 import 'package:flutter/material.dart';
 
-class DashMostViewedServices extends StatelessWidget {
-  const DashMostViewedServices({Key? key}) : super(key: key);
+class DashBookedServices extends StatelessWidget {
+  const DashBookedServices({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,17 +10,18 @@ class DashMostViewedServices extends StatelessWidget {
     double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
     return SizedBox(
       width: width,
-      height: 190,
+      height: 170,
       child: ListView.builder(
           itemCount: 10,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            return Padding(
+            return Container(
+              width: 120,
               padding: const EdgeInsets.only(right: 10.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 120,
                     height: 110,
                     decoration: BoxDecoration(
                       color: Colors.grey,
@@ -30,7 +31,21 @@ class DashMostViewedServices extends StatelessWidget {
                           image: NetworkImage(DashStrings.bannerImg))
                     ),
                   ),
-                  Text(DashStrings.productName)
+                  Text(DashStrings.productName,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  Text('₹399',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  RichText(text:  TextSpan(
+                      style: Theme.of(context).textTheme.titleMedium,
+                      children: const [
+                        WidgetSpan(child: Icon(Icons.star_rate_rounded,
+                          size: 14,
+                        )),
+                        TextSpan(text: '4.7')
+                      ])
+                  )
                 ],
               ),
             );

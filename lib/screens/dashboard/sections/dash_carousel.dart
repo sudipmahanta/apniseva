@@ -11,7 +11,6 @@ class DashCarousel extends StatelessWidget {
     double height = MediaQuery.of(context).size.height-(MediaQuery.of(context).padding.top + MediaQuery.of(context).padding.bottom);
 
     return SizedBox(
-
       child: CarouselSlider.builder(
           itemCount: 3,
           options: CarouselOptions(

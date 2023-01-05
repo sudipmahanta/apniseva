@@ -1,8 +1,10 @@
-import 'package:apniseva/screens/dashboard/widget/dash_carousel.dart';
-import 'package:apniseva/screens/dashboard/widget/dash_mostBookServices.dart';
-import 'package:apniseva/screens/dashboard/widget/dash_services.dart';
+import 'package:apniseva/screens/dashboard/sections/dash_carousel.dart';
+import 'package:apniseva/screens/dashboard/sections/dash_mostBookServices.dart';
+import 'package:apniseva/screens/dashboard/sections/dash_reviews.dart';
+import 'package:apniseva/screens/dashboard/sections/dash_services.dart';
 import 'package:flutter/material.dart';
 
+import '../../../utils/bottom_nav_bar.dart';
 import '../../../utils/input_field.dart';
 import '../widget/dash_appbar.dart';
 
@@ -25,16 +27,16 @@ class DashScreen extends StatelessWidget {
           child: Column(
             children: [
               const SearchField(),
-              SizedBox(height: height * 0.02),
+              SizedBox(height: height * 0.04),
 
               Align(
                   alignment: Alignment.centerLeft,
                   child: Text('Our Services',
-                    style: Theme.of(context).textTheme.headlineMedium,
+                    style: Theme.of(context).textTheme.headlineLarge,
                   )
               ),
               const DashServices(),
-              SizedBox(height: height * 0.03),
+              SizedBox(height: height * 0.04),
 
               const DashCarousel(),
               SizedBox(height: height * 0.03),
@@ -42,10 +44,19 @@ class DashScreen extends StatelessWidget {
               Align(
                   alignment: Alignment.centerLeft,
                   child: Text('Most Booked Services',
-                    style: Theme.of(context).textTheme.headlineMedium,
+                    style: Theme.of(context).textTheme.headlineLarge,
                   )
               ),
-              const DashMostViewedServices()
+              const DashBookedServices(),
+              SizedBox(height: height * 0.03),
+
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Your Reviews',
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  )
+              ),
+              const DashReviews()
             ],
           ),
         )
