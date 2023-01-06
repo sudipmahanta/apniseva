@@ -27,22 +27,40 @@ class DashServices extends StatelessWidget {
                   showModalBottomSheet(
                       context: context,
                       builder: (context) {
-                        return Badge(
-                          badgeContent: GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(Remix.close_line)),
-                          badgeColor: Colors.transparent,
-                          elevation: 0,
-                          position: const BadgePosition(
-                            end: 0,
-                            top: -30
-                          ),
-                          child: Container(
-                            height: 90,
-                            child: Text('data'),
-                          ),
+                        return Container(
+                          height: 210,
+                          color: Colors.green,
+                          alignment: Alignment.center,
+                          child: ListView.builder(
+                              itemCount: 10,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index){
+                                return Container(
+                                  // color: Colors.green,
+                                  // padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8)
+                                        ),
+                                        child: Container(
+                                          height: 90,
+                                          width: 110,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(image: NetworkImage(DashStrings.serviceImg))
+                                          ),
+                                        ),
+                                      ),
+                                      Text('Sub-cat',
+                                        style: Theme.of(context).textTheme.labelMedium,
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }),
                         );
                       });
                 },

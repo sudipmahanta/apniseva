@@ -1,3 +1,4 @@
+import 'package:apniseva/utils/bottom_nav_bar.dart';
 import 'package:apniseva/utils/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -114,7 +115,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       width: width,
                       height: 47,
                       onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const DashScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const BottomNavBar()));
                       },
                       label: 'SUBMIT'
                   ),

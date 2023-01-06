@@ -25,7 +25,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
     List<PersistentBottomNavBarItem> item = [
       PersistentBottomNavBarItem(
-        icon: const Icon(Remix.home_line),
+        icon: const Icon(Remix.home_fill),
         title: ("Home"),
         iconSize: 22,
         textStyle: Theme.of(context).textTheme.titleSmall,

@@ -2,7 +2,6 @@ import 'package:apniseva/controller/auth_controller/auth_controller.dart';
 import 'package:apniseva/utils/buttons.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 
 import '../../../utils/theme.dart';
 import '../widget/auth_input_field.dart';
@@ -62,7 +61,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 47,
                     onPressed: (){
                       if(formKey.currentState!.validate()) {
-                        debugPrint(authController.mobileController.text);
+
                         authController.loginWithOTP();
                         // Navigator.push(context,
                         //     MaterialPageRoute(builder: (context) =>

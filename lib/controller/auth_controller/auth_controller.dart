@@ -12,28 +12,45 @@ class AuthController {
 
   RxBool isLoading = false.obs;
 
+
   loginWithOTP()  async{
-    SharedPreferences pref = await SharedPreferences.getInstance();
+    // SharedPreferences pref = await SharedPreferences.getInstance();
     isLoading.value = true;
 
-    Map mobileNumber = {'contact': mobileController.text.toString()};
-    debugPrint(mobileNumber.toString());
-    var body = jsonEncode(mobileNumber);
+    Map<String, String> mobileNumber = {'contact': mobileController.text.toString()};
 
-    http.Response response = await http.post(
-        Uri.parse(ApiStrings.registerApi),
-        body: body
+    var body = json.encode(mobileNumber);
+    var header = {
+      "Content-Type": "application/json"
+    };
+
+    http.Response response = await http.post(Uri.parse(ApiStrings.registerApi),
+        headers: header,
+        body: body,
     );
     debugPrint('Status Code: ${response.statusCode.toString()}');
-    debugPrint('Body: ${response.body}');
+  }
 
-    var data = jsonDecode(response.body);
-    var otp = data['otp'];
-    if(response.statusCode == 200 && data['status']==true) {
-      Get.snackbar('Success', data['message']);
-      clear();
+  getOTP() async{
+    Map<String, String> mobileNumber = {'contact_otp': mobileController.text.toString()};
+    Map<String, String> status = {'status': jsonEncode(mobileNumber).toString()};
+    Map<String, String> messages = {'messages': jsonEncode(status).toString()};
+    var body = json.encode(messages);
+    var header = {
+      "Content-Type": "application/json"
+    };
+
+    http.Response response  = await http.post(
+        Uri.parse(ApiStrings.registerApi),
+      body: body,
+      headers: header
+    );
+
+    if(response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      var otp = jsonResponse['login_otp'];
+      debugPrint(otp.toString());
     }
-
   }
 
   clear() {
