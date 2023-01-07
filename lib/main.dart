@@ -1,7 +1,5 @@
 import 'package:apniseva/screens/auth/screens/registration_screen.dart';
-import 'package:apniseva/screens/dashboard/screens/dashboard_screen.dart';
-import 'package:apniseva/screens/splashScreen/screens/splash_screen.dart';
-import 'package:apniseva/utils/bottom_nav_bar.dart';
+
 import 'package:apniseva/utils/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -17,9 +15,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const RegistrationScreen(),
-      // home: const BottomNavBar(),
+      // home: const ServiceScreen(),
     );
   }
 }

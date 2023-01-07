@@ -1,3 +1,4 @@
+import 'package:apniseva/screens/dashboard/sections/sub_category_modal.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
@@ -24,44 +25,10 @@ class DashServices extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                 onTap: () {
-                  showModalBottomSheet(
+                  showBottomSheet(
                       context: context,
                       builder: (context) {
-                        return Container(
-                          height: 210,
-                          color: Colors.green,
-                          alignment: Alignment.center,
-                          child: ListView.builder(
-                              itemCount: 10,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index){
-                                return Container(
-                                  // color: Colors.green,
-                                  // padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8)
-                                        ),
-                                        child: Container(
-                                          height: 90,
-                                          width: 110,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(image: NetworkImage(DashStrings.serviceImg))
-                                          ),
-                                        ),
-                                      ),
-                                      Text('Sub-cat',
-                                        style: Theme.of(context).textTheme.labelMedium,
-                                      )
-                                    ],
-                                  ),
-                                );
-                              }),
-                        );
+                        return ChooseSubCategory();
                       });
                 },
                 child: Card(

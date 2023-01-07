@@ -15,6 +15,11 @@ class AppTheme {
       displayMedium: TextStyle(),
       displaySmall: TextStyle(),
 
+      bodyMedium: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: Colors.black
+      ),
       headlineLarge: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w600,
@@ -77,18 +82,21 @@ class AppTheme {
     ),
     
     cardTheme: CardTheme(
-      elevation: 0.5,
+      elevation: 0.4,
+      color: Colors.grey.shade200,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8)
       )
     ),
 
-
-
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: primaryColor
       )
+    ),
+
+    appBarTheme: AppBarTheme(
+      backgroundColor: primaryColor
     )
     
   );

@@ -62,14 +62,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     onPressed: (){
                       if(formKey.currentState!.validate()) {
 
-                        authController.loginWithOTP();
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) =>
-                        //         OtpVerificationScreen(
-                        //             phoneNumber: authController.mobileController.text
-                        //         )
-                        //     )
-                        // );
+                        // authController.loginWithOTP();
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) =>
+                                OtpVerificationScreen(
+                                    phoneNumber: authController.mobileController.text
+                                )
+                            )
+                        );
                       } else {
                         return;
                       }
