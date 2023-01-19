@@ -28,12 +28,12 @@ class DashServices extends StatelessWidget {
                   showBottomSheet(
                       context: context,
                       builder: (context) {
-                        return ChooseSubCategory();
+                        return const ChooseSubCategory();
                       });
                 },
                 child: Card(
                   elevation: 1.0,
-                  color: Colors.grey.shade200,
+                  // color: Colors.grey.shade200,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

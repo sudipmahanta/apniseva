@@ -15,13 +15,13 @@ class _ChooseSubCategoryState extends State<ChooseSubCategory> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ServiceScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const ServiceScreen()));
       },
       child: Container(
         height: 190,
         alignment: Alignment.center,
         decoration:  BoxDecoration(
-            color: Colors.grey.shade200,
+            color: Colors.grey.shade100,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),

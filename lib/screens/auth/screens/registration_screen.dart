@@ -61,8 +61,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 47,
                     onPressed: (){
                       if(formKey.currentState!.validate()) {
-
-                        // authController.loginWithOTP();
+                        authController.loginWithOTP();
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) =>
                                 OtpVerificationScreen(

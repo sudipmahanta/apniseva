@@ -34,58 +34,64 @@ class _ServiceScreenState extends State<ServiceScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
                   child: Card(
                     color: Colors.grey.shade50,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: width,
-                          height: height * 0.25,
-                          decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(8)),
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(ServiceStrings.serviceImg)
-                              )
-                          ),
-                        ),
-
-                        ListTile(
-                          title: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: ServiceStrings.serviceType,
-                                    style: Theme.of(context).textTheme.bodyMedium
-                                  ),
-                                  TextSpan(
-                                    text: ServiceStrings.servicePrice,
-                                    style: Theme.of(context).textTheme.labelLarge
-                                  )
-                                ]
-                              )
-                          ),
-                          subtitle: Text(ServiceStrings.serviceDesc,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          trailing: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)
-                              )
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: width,
+                            height: height * 0.25,
+                            decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8)),
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(ServiceStrings.serviceImg)
+                                )
                             ),
-                              onPressed: (){
-                                setState(() {
-                                  add =! add;
-                                });
-                              },
-                              child:  Text(add== false ? 'ADDED' : 'ADD'),
-                          )
-                        ),
-                      ],
+                          ),
+
+                          ListTile(
+                            title: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: ServiceStrings.serviceType,
+                                      style: Theme.of(context).textTheme.bodyMedium
+                                    ),
+                                    TextSpan(
+                                      text: ServiceStrings.servicePrice,
+                                      style: Theme.of(context).textTheme.labelLarge
+                                    )
+                                  ]
+                                )
+                            ),
+                            subtitle: Text(ServiceStrings.serviceDesc,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            trailing: ElevatedButton(
+                              
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                fixedSize: Size(width * 0.25, 37),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)
+                                )
+                              ),
+                                onPressed: (){
+                                  setState(() {
+                                    add =! add;
+                                  });
+                                },
+                                child:  Text(add== false ? 'ADDED' : 'ADD'),
+                            )
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -1,11 +1,14 @@
+import 'package:apniseva/screens/auth/screens/registration_screen.dart';
 import 'package:apniseva/utils/bottom_nav_bar.dart';
 import 'package:apniseva/utils/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../../controller/auth_controller/auth_controller.dart';
 import '../../../utils/color.dart';
 import '../../../utils/theme.dart';
-import '../../dashboard/screens/dashboard_screen.dart';
+
+import 'package:get/get.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String phoneNumber;
@@ -16,6 +19,9 @@ class OtpVerificationScreen extends StatefulWidget {
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
+
+  final authController = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
 
@@ -29,11 +35,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               width: width,
               height: height,
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              // decoration: BoxDecoration(
-              //     image: DecorationImage(
-              //         fit: BoxFit.cover,
-              //         image: AssetImage(backgroundImage))
-              // ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -59,6 +60,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
                   PinCodeTextField(
                     length: 6,
+                    controller: authController.otpController,
                     textStyle: const TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.w400
@@ -115,7 +117,16 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       width: width,
                       height: 47,
                       onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const BottomNavBar()));
+                        if(authController.otp.toString() == authController.otpController.text.toString()) {
+                          debugPrint(authController.otp);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) =>
+                              const BottomNavBar()));
+                        } else {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) =>
+                              const RegistrationScreen()));
+                        }
                       },
                       label: 'SUBMIT'
                   ),

@@ -1,3 +1,4 @@
+import 'package:apniseva/screens/cart/screen/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -17,6 +18,7 @@ class ServiceAppBar extends StatelessWidget implements PreferredSizeWidget{
         child: AppBar(
           titleSpacing: 0,
           elevation: 0,
+          leadingWidth: 30,
           automaticallyImplyLeading: true,
           leading: InkWell(
               onTap: () {
@@ -28,10 +30,15 @@ class ServiceAppBar extends StatelessWidget implements PreferredSizeWidget{
               fontSize: 16
             ),
           ),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              child: Icon(Remix.shopping_cart_2_fill),
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen()));
+              },
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Icon(Remix.shopping_cart_2_fill),
+              ),
             )
           ],
           backgroundColor: primaryColor,

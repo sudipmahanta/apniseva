@@ -4,7 +4,7 @@ import 'color.dart';
 
 class AppTheme {
   static final ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.grey.shade100,
+    scaffoldBackgroundColor: Colors.grey.shade50,
     fontFamily: 'Poppins',
     primaryColor: primaryColor,
 
@@ -47,6 +47,16 @@ class AppTheme {
       titleSmall: TextStyle(
         fontSize: 8,
         color: Colors.grey,
+      ),
+
+      labelLarge: TextStyle(
+        fontSize: 14,
+        color: Colors.black
+      ),
+      labelSmall: TextStyle(
+        fontSize: 10,
+        fontWeight: FontWeight.w700,
+        color: Colors.black
       )
     ),
 
@@ -83,7 +93,7 @@ class AppTheme {
     
     cardTheme: CardTheme(
       elevation: 0.4,
-      color: Colors.grey.shade200,
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8)
       )
@@ -96,9 +106,14 @@ class AppTheme {
     ),
 
     appBarTheme: AppBarTheme(
-      backgroundColor: primaryColor
+      backgroundColor: primaryColor,
+      elevation: 0,
+      titleTextStyle: const TextStyle(
+        fontSize: 16,
+        letterSpacing: 1.2,
+        color: Colors.white,
+      )
     )
-    
   );
 
   static final ThemeData darkTheme = ThemeData(

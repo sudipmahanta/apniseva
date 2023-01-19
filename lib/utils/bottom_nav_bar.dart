@@ -8,7 +8,8 @@ import '../screens/booking/screens/booking_screen.dart';
 import 'color.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
+  const BottomNavBar({Key? key,
+  }) : super(key: key);
 
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
@@ -18,8 +19,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -28,7 +27,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         icon: const Icon(Remix.home_fill),
         title: ("Home"),
         iconSize: 22,
-        textStyle: Theme.of(context).textTheme.titleSmall,
+        textStyle: Theme.of(context).textTheme.titleMedium,
         activeColorPrimary: primaryColor,
         inactiveColorPrimary: Colors.grey.shade400,
       ),
@@ -62,7 +61,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
       screens: screens,
       items: item,
       confineInSafeArea: true,
-      // backgroundColor: w,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
       popAllScreensOnTapOfSelectedTab: true,
@@ -76,7 +74,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
-      navBarStyle: NavBarStyle.style8, // Choose the nav bar style with this property.
+      navBarStyle: NavBarStyle.style8,
     );
   }
 }

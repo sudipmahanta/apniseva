@@ -26,7 +26,7 @@ class _PhoneNumberVerificationState extends State<PhoneNumberVerification> {
       cursorColor: Colors.black,
       cursorRadius: const Radius.circular(10),
       cursorWidth: 1.5,
-      keyboardType: TextInputType.phone,
+      keyboardType: TextInputType.number,
       textInputAction: TextInputAction.done,
       maxLines: 1,
       maxLength: 10,

@@ -1,15 +1,33 @@
+import 'package:apniseva/controller/auth_controller/auth_controller.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_carousel.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_mostBookServices.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_reviews.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_services.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../../../utils/bottom_nav_bar.dart';
 import '../../../utils/input_field.dart';
-import '../widget/dash_appbar.dart';
+import '../sections/dash_appbar.dart';
 
-class DashScreen extends StatelessWidget {
-  const DashScreen({Key? key}) : super(key: key);
+class DashScreen extends StatefulWidget {
+  const DashScreen({Key? key,
+  }) : super(key: key);
+
+  @override
+  State<DashScreen> createState() => _DashScreenState();
+}
+
+class _DashScreenState extends State<DashScreen> {
+
+  final authController = Get.put(AuthController());
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      authController.getUserData();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
