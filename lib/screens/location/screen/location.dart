@@ -1,7 +1,9 @@
 import 'package:apniseva/controller/location_controller/location_controller.dart';
+import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:apniseva/utils/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetLocation extends StatefulWidget {
   const GetLocation({Key? key}) : super(key: key);
@@ -42,7 +44,10 @@ class _GetLocationState extends State<GetLocation> {
             style: Theme.of(context).textTheme.headlineLarge,
           ),
           children:  [
-            locController.isLoading.value == true ? Center(child: CircularProgressIndicator()) : Container(
+            locController.isLoading.value == true ? const Center(
+                child: CircularProgressIndicator()
+            ):
+            Container(
               height: 47,
               margin: const EdgeInsets.symmetric(vertical: 5),
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -66,10 +71,13 @@ class _GetLocationState extends State<GetLocation> {
                       ),
                     );
                   }).toList(),
-                  onChanged: (String? newValue) {
+                  onChanged: (String? newValue) async{
                     setState(() {
                       getLoc = newValue!;
                     });
+                    SharedPreferences pref = await SharedPreferences.getInstance();
+                    pref.setString(ApiStrings.cityName, newValue!);
+
                   },
                 ),
               ),
@@ -77,7 +85,11 @@ class _GetLocationState extends State<GetLocation> {
             PrimaryButton(
                 width: double.maxFinite,
                 height: 47,
-                onPressed: (){},
+                onPressed: () async{
+                  SharedPreferences pref = await SharedPreferences.getInstance();
+                  String? cityName = pref.getString(ApiStrings.cityName);
+                  debugPrint(cityName.toString());
+                },
                 label: 'SAVE'
             )
           ],

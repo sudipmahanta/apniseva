@@ -38,7 +38,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               text: TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: 'Name: ',
+                                    text: AddressStrings.name,
                                     style: Theme.of(context).textTheme.labelMedium
                                   ),
                                   TextSpan(
@@ -54,7 +54,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               text: TextSpan(
                                   children: [
                                     TextSpan(
-                                        text: 'Mobile: ',
+                                        text: AddressStrings.mobile,
                                         style: Theme.of(context).textTheme.labelMedium
                                     ),
                                     TextSpan(
@@ -70,7 +70,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               text: TextSpan(
                                   children: [
                                     TextSpan(
-                                        text: 'Email: ',
+                                        text: AddressStrings.mobile,
                                         style: Theme.of(context).textTheme.labelMedium
                                     ),
                                     TextSpan(
@@ -86,7 +86,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               text: TextSpan(
                                   children: [
                                     TextSpan(
-                                        text: 'Address 1: ',
+                                        text: AddressStrings.address1,
                                         style: Theme.of(context).textTheme.labelMedium
                                     ),
                                     TextSpan(
@@ -102,7 +102,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               text: TextSpan(
                                   children: [
                                     TextSpan(
-                                        text: 'Address 2: ',
+                                        text: AddressStrings.address2,
                                         style: Theme.of(context).textTheme.labelMedium
                                     ),
                                     TextSpan(
@@ -118,7 +118,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               text: TextSpan(
                                   children: [
                                     TextSpan(
-                                        text: 'City: ',
+                                        text: AddressStrings.city,
                                         style: Theme.of(context).textTheme.labelMedium
                                     ),
                                     TextSpan(
@@ -134,7 +134,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               text: TextSpan(
                                   children: [
                                     TextSpan(
-                                        text: 'State: ',
+                                        text: AddressStrings.state,
                                         style: Theme.of(context).textTheme.labelMedium
                                     ),
                                     TextSpan(
@@ -150,7 +150,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               text: TextSpan(
                                   children: [
                                     TextSpan(
-                                        text: 'Pin: ',
+                                        text: AddressStrings.pinCode,
                                         style: Theme.of(context).textTheme.labelMedium
                                     ),
                                     TextSpan(

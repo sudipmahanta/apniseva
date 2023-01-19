@@ -1,6 +1,8 @@
 import 'package:apniseva/utils/buttons.dart';
 import 'package:flutter/material.dart';
 
+import '../cart_strings/cart_strings.dart';
+
 class CartSubTotal extends StatefulWidget {
   const CartSubTotal({Key? key}) : super(key: key);
 
@@ -17,6 +19,7 @@ class _CartSubTotalState extends State<CartSubTotal> {
 
     return Card(
       elevation: 1.5,
+      color: Colors.grey.shade100,
       child: Container(
         width: width,
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
@@ -28,7 +31,7 @@ class _CartSubTotalState extends State<CartSubTotal> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Sub-Total',
+                  Text(CartStrings.subtotal,
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   Text('Rs 1750.0 /-',
@@ -38,7 +41,7 @@ class _CartSubTotalState extends State<CartSubTotal> {
               ),
             ),
 
-            Text('Date',
+            Text(CartStrings.date,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             TextFormField(
@@ -47,7 +50,7 @@ class _CartSubTotalState extends State<CartSubTotal> {
             ),
             SizedBox(height: height * 0.01),
 
-            Text('Time',
+            Text(CartStrings.time,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             TextFormField(

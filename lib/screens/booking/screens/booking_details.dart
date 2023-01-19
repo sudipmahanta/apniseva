@@ -31,7 +31,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                   text: TextSpan(
                       children: [
                         TextSpan(
-                          text: "${BookingStrings.orderID}:  ",
+                          text: "${BookingDetailStrings.orderID}:  ",
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         TextSpan(
@@ -51,7 +51,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                   text: TextSpan(
                       children: [
                         TextSpan(
-                          text: "${BookingStrings.serviceDateTime}:  ",
+                          text: "${BookingDetailStrings.serviceDateTime}:  ",
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         TextSpan(
@@ -140,7 +140,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text('Total'),
+                        Text(BookingDetailStrings.total,
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
                       ],
                     )
                 ),
@@ -156,23 +158,31 @@ class _BookingDetailsState extends State<BookingDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Total Price',
-                          style: Theme.of(context).textTheme.headlineMedium,
+                        Text(BookingDetailStrings.totalPrice,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
-                        Text('Discount',
-                          style: Theme.of(context).textTheme.headlineMedium,
+                        SizedBox(height: height * 0.01),
+
+                        Text(BookingDetailStrings.discount,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
-                        Text('GST',
-                          style: Theme.of(context).textTheme.headlineMedium,
+                        SizedBox(height: height * 0.01),
+
+                        Text(BookingDetailStrings.gst,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
+                        SizedBox(height: height * 0.01),
+
                         FittedBox(
-                          child: Text('GRAND TOTAL',
-                            style: Theme.of(context).textTheme.headlineMedium,
+                          child: Text(BookingDetailStrings.grandTotal,
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                         ),
+                        SizedBox(height: height * 0.01),
+
                         FittedBox(
-                          child: Text('Due Amount',
-                            style: Theme.of(context).textTheme.headlineMedium,
+                          child: Text(BookingDetailStrings.dueAmount,
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                         )
                       ],
@@ -184,19 +194,27 @@ class _BookingDetailsState extends State<BookingDetails> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text('Rs 1200.00',
-                          style: Theme.of(context).textTheme.labelLarge,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
+                        SizedBox(height: height * 0.01),
+
                         Text('Rs 1200.00',
-                          style: Theme.of(context).textTheme.labelLarge,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
+                        SizedBox(height: height * 0.01),
+
                         Text('Rs 1200.00',
-                          style: Theme.of(context).textTheme.labelLarge,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
+                        SizedBox(height: height * 0.01),
+
                         Text('Rs 1200.00',
-                          style: Theme.of(context).textTheme.labelLarge,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
+                        SizedBox(height: height * 0.01),
+
                         Text('Rs 1200.00',
-                          style: Theme.of(context).textTheme.labelLarge,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ],
                     )

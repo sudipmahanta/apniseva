@@ -16,6 +16,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+
   @override
   Widget build(BuildContext context) {
 
@@ -36,7 +37,7 @@ class _CartScreenState extends State<CartScreen> {
                   children: List.generate(
                     2, (index) =>
                       Card(
-                          color: Colors.grey.shade300,
+                          color: Colors.grey.shade100,
                           child: Container(
                             height: 75,
                             alignment: Alignment.center,
@@ -62,10 +63,10 @@ class _CartScreenState extends State<CartScreen> {
 
                 const CartApplyCoupon(),
 
-                CartSubTotal(),
+                const CartSubTotal(),
 
                 RadioListTile(
-                    title: Text('Pay On Delivery',
+                    title: Text(CartStrings.pod,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     toggleable: true,
@@ -75,7 +76,7 @@ class _CartScreenState extends State<CartScreen> {
                 ),
 
                 RadioListTile(
-                    title: Text('Pay Online',
+                    title: Text(CartStrings.payOnline,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     toggleable: true,
@@ -85,7 +86,7 @@ class _CartScreenState extends State<CartScreen> {
                 ),
 
                 RadioListTile(
-                    title: Text('Accept Terms Condition',
+                    title: Text(CartStrings.accept,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     toggleable: true,
@@ -98,7 +99,7 @@ class _CartScreenState extends State<CartScreen> {
                     width: width,
                     height: 47,
                     onPressed: (){},
-                    label: 'BOOK'
+                    label: CartStrings.book
                 )
             ]
           ),
@@ -107,3 +108,4 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 }
+

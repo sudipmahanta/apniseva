@@ -1,4 +1,5 @@
 
+import 'package:apniseva/controller/auth_controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -19,6 +20,14 @@ class MoreScreen extends StatefulWidget {
 }
 
 class _MoreScreenState extends State<MoreScreen> {
+
+  final authController = Get.put(AuthController());
+
+  @override
+  void initState() {
+    authController.getUserData();
+    super.initState();
+  }
 
   List screens = [
     CartScreen(),
@@ -57,7 +66,7 @@ class _MoreScreenState extends State<MoreScreen> {
         child: Column(
           children: [
             Container(
-              height: height * 0.20,
+              height: height * 0.22,
               width: width,
               color: primaryColor,
               padding: const EdgeInsets.only(top: 10),
@@ -107,16 +116,12 @@ class _MoreScreenState extends State<MoreScreen> {
                       ),
                     ),
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(left: 30.0),
                     child: Text(
-                      "User ID",
-                      // 'User ID #2512467',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          letterSpacing: 0.3),
-                    ),
+                      "User ID: ${authController.userModel.value.messages!.status!.userId}",
+                      // style: Theme.of(context).textTheme.bodySmall
+                    )
                   ),
                 ],
               ),
@@ -151,6 +156,7 @@ class _MoreScreenState extends State<MoreScreen> {
                             fit: BoxFit.contain,
                             child: Text(
                               ' ${items[index]}',
+                              style: Theme.of(context).textTheme.labelLarge,
                             ),
                           )),
                     ),

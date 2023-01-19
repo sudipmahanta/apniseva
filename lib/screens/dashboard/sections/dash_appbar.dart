@@ -18,15 +18,6 @@ class DashAppBar extends StatefulWidget implements PreferredSizeWidget{
 
 class _DashAppBarState extends State<DashAppBar> {
 
-  final locController = Get.put(LocationController());
-
-  @override
-  void initState() {
-    Future.delayed(Duration.zero, () {
-      locController.getLoc();
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +33,6 @@ class _DashAppBarState extends State<DashAppBar> {
                 showDialog(context: context, builder: (context) {
                   return const GetLocation();
                 });
-                debugPrint(locController.locationModel.value.messages!.status!.city!.length.toString());
               },
               child: Container(
                   height: 55,

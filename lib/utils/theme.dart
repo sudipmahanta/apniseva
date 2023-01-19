@@ -105,6 +105,16 @@ class AppTheme {
       )
     ),
 
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+          textStyle: TextStyle(
+            fontSize: 11,
+            decoration: TextDecoration.underline,
+            color: primaryColor
+          )
+      ),
+    ),
+
     appBarTheme: AppBarTheme(
       backgroundColor: primaryColor,
       elevation: 0,

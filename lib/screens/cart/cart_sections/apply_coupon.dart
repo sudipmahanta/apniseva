@@ -1,7 +1,5 @@
-import 'package:apniseva/utils/buttons.dart';
+import 'package:apniseva/screens/cart/cart_strings/cart_strings.dart';
 import 'package:flutter/material.dart';
-
-import '../../../utils/color.dart';
 
 class CartApplyCoupon extends StatefulWidget {
   const CartApplyCoupon({Key? key}) : super(key: key);
@@ -19,6 +17,7 @@ class _CartApplyCouponState extends State<CartApplyCoupon> {
 
     return Card(
       elevation: 1.5,
+      color: Colors.grey.shade100,
       child: Container(
         width: width,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
@@ -27,19 +26,19 @@ class _CartApplyCouponState extends State<CartApplyCoupon> {
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: Text('Coupons',
+              child: Text(CartStrings.coupons,
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
 
             TextFormField(
+              // controller: ,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             TextButton(
                 onPressed: (){},
-                child: Text('Apply Coupon')
+                child: Text(CartStrings.applyCoupon),
             ),
-
             SizedBox(
               height: height * 0.03,
             ),
@@ -47,7 +46,7 @@ class _CartApplyCouponState extends State<CartApplyCoupon> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Subtotal',
+                Text(CartStrings.subtotal,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text('Rs 1200.00',
@@ -62,7 +61,7 @@ class _CartApplyCouponState extends State<CartApplyCoupon> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Coupon Applied',
+                Text(CartStrings.couponApplied,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text('Rs 1200.00',
@@ -77,7 +76,7 @@ class _CartApplyCouponState extends State<CartApplyCoupon> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('GST',
+                Text(CartStrings.gst,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text('Rs 1200.00',
