@@ -43,8 +43,7 @@ class OrderController extends GetxController{
         orderDataModel.value = orderModel;
         isLoading.value = false;
       }
-     // pref.setString(ApiStrings.orderID!, orderModel.messages!.status!.orderdtls!.toString());
-      debugPrint("OrderAPI Data:\n${response.body}");
+     //  debugPrint("OrderAPI Data:\n${response.body}");
 
       return true;
     }catch(error) {

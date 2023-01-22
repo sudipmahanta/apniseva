@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import '../../../utils/color.dart';
 import '../../../utils/input_field.dart';
 import '../sections/dash_appbar.dart';
+import 'all_service_screen.dart';
 
 class DashScreen extends StatefulWidget {
   const DashScreen({Key? key,
@@ -71,11 +72,16 @@ class _DashScreenState extends State<DashScreen> {
                         ),
                         Visibility(
                           visible: dashController.dashDataModel.value.messages!.status!.categoryDtl!.length > 6 ? true : false,
-                          child: Text(DashStrings.viewAll,
-                            style: TextStyle(
-                              letterSpacing: 1.3,
-                              fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-                              color: Theme.of(context).textTheme.titleMedium!.color
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> AllServiceScreen(getData: dashController.dashDataModel.value.messages!.status!.categoryDtl!,)));
+                            },
+                            child: Text(DashStrings.viewAll,
+                              style: TextStyle(
+                                letterSpacing: 1.3,
+                                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+                                color: Theme.of(context).textTheme.titleMedium!.color
+                              ),
                             ),
                           ),
                         ),
@@ -91,15 +97,6 @@ class _DashScreenState extends State<DashScreen> {
                       getData: dashController.dashDataModel.value.messages!.status!.bannerDtl!,
                     ),
                     SizedBox(height: height * 0.02),
-
-                    // Align(
-                    //     alignment: Alignment.centerLeft,
-                    //     child: Text('Most Booked Services',
-                    //       style: Theme.of(context).textTheme.headlineLarge,
-                    //     )
-                    // ),
-                    // const DashBookedServices(),
-                    // SizedBox(height: height * 0.03),
 
                     Align(
                         alignment: Alignment.centerLeft,

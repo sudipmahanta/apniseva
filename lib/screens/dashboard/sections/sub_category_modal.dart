@@ -57,16 +57,14 @@ class _ChooseSubCategoryState extends State<ChooseSubCategory> {
                 ),
                 itemCount: widget.getSubData!.length,
                 itemBuilder: (BuildContext context, int index){
-
                   List? data = widget.getSubData;
-
                   return InkWell(
                     onTap: () {
-                      data[index].sub!.isEmpty ? const ServiceScreen() :
+                      data[index].sub!.sub.isEmpty ? const ServiceScreen() :
                       showBottomSheet(
                           context: context,
                           builder: (context) {
-                            return ChooseSubCategory(getSubData: data[index].sub);
+                            return ChooseSubCategory(getSubData: data[index]);
                           });
                     },
                     child: Column(

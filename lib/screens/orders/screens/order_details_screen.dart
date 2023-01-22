@@ -16,14 +16,16 @@ class OrderBookingDetails extends StatefulWidget {
 class _OrderBookingDetailsState extends State<OrderBookingDetails> {
 
   final orderDetailsController = Get.put(OrderDetailsController());
-  var discounted = 0.0;
+  double discounted = 0.0;
   var gst = 0.0;
   var gstPrice = 0.0;
   var totalPrice = 0.0;
 
   @override
   void initState() {
-    orderDetailsController.getOrderDetails();
+    Future.delayed(Duration.zero,() {
+      orderDetailsController.getOrderDetails();
+    });
     super.initState();
   }
 
@@ -36,6 +38,7 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
       List<Orderdtl> orderDetails = orderDetailsController.orderDetailsModel.value.messages!.status!.orderdtls!;
       List<Address> orderAddress = orderDetailsController.orderDetailsModel.value.messages!.status!.address!;
       // List<> addOrder = orderDetailsController.orderDetailsModel.value.messages!.status!.addOrderdtls!;
+
       return Scaffold(
         appBar: PrimaryAppBar(
           title: OrdersDetailStrings.title,
@@ -132,13 +135,17 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                     itemCount: orderDetailsController.orderDetailsModel.value.messages!.status!.orderdtls!.length,
                     itemBuilder: (BuildContext context, int index){
 
-                      for(int x = 0; x < orderDetails.length; x++) {
-                        discounted = double.parse(orderDetails[index].price!) - double.parse(orderDetails[0].couponAmnt!);
-                        gst = double.parse(orderDetailsController.orderDetailsModel.value.messages!.status!.gst!.gst!)/100;
-                        gstPrice = discounted * gst;
-                        totalPrice = discounted + gstPrice;
-                        // debugPrint(totalPrice.toString());
-                      }
+                      calculatePrice(index, orderDetails);
+                      // for(int x = 0; x < orderDetails.length; x++) {
+                      //     discounted = double.parse(orderDetails[index].price!) - double.parse(orderDetails[0].couponAmnt!);
+                      //     gst = double.parse(orderDetailsController.orderDetailsModel.value.messages!.status!.gst!.gst!)/100;
+                      //     gstPrice = discounted * gst;
+                      //     totalPrice = discounted + gstPrice;
+                      //     debugPrint("Discounted Price: ${discounted.toString()}");
+                      //     debugPrint("GST Price: ${gstPrice.toString()}");
+                      //     debugPrint("Total Price: ${totalPrice.toString()}");
+                      //   // debugPrint(totalPrice.toString());
+                      // }
                       return Row(
                         children: [
                           Expanded(
@@ -422,5 +429,20 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
         ),
       );}
     );
+  }
+  calculatePrice(int x,List<Orderdtl> orderDetails ) {
+    for(int x = 0; x < orderDetails.length; x++) {
+      discounted = double.parse(orderDetails[x].price!) -
+          double.parse(orderDetails[0].couponAmnt!);
+      gst = double.parse(
+          orderDetailsController.orderDetailsModel.value.messages!.status!
+              .gst!.gst!) / 100;
+      gstPrice = discounted * gst;
+      totalPrice = discounted + gstPrice;
+      debugPrint("Discounted Price: ${discounted.toString()}");
+      debugPrint("GST Price: ${gstPrice.toString()}");
+      debugPrint("Total Price: ${totalPrice.toString()}");
+      // debugPrint(totalPrice.toString());
+    }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:apniseva/screens/splashScreen/screens/splash_screen.dart';
+import 'package:apniseva/screens/splash_screen/screens/splash_screen.dart';
 
 import 'package:apniseva/utils/theme.dart';
 import 'package:flutter/material.dart';

@@ -37,7 +37,7 @@ class LocationController extends GetxController {
       if(data["status"] == 200){
         locationModel.value = locModel;
       }
-      debugPrint(response.body.toString());
+      debugPrint("LocationAPI Response Code: ${response.statusCode}");
 
       isLoading.value = false;
       return true;

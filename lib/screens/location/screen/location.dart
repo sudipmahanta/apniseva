@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../location_model/location_model.dart';
+
 class GetLocation extends StatefulWidget {
   const GetLocation({Key? key,
   }) : super(key: key);
@@ -17,7 +19,7 @@ class GetLocation extends StatefulWidget {
 
 class _GetLocationState extends State<GetLocation> {
   String getLoc = 'Khurda';
-  String cityId = '26';
+  String cityID = '26';
 
   final locController = Get.put(LocationController());
 
@@ -62,23 +64,24 @@ class _GetLocationState extends State<GetLocation> {
                   value: getLoc.isEmpty ? 'Select your City' : getLoc,
                   isExpanded: true,
                   icon: const Icon(Icons.keyboard_arrow_down),
-                  items: locController.locationModel.value.messages!.status!.city!
-                    .map((items) {
+                  items: locController.locationModel.value.messages!.status!.city!.map((items) {
                     return DropdownMenuItem(
+                      onTap: () async{
+                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                        preferences.setString(ApiStrings.cityID, items.cityId.toString());
+                        preferences.setString(ApiStrings.cityName, getLoc);
+                        debugPrint("CityID: ${items.cityId.toString()}");
+                        debugPrint("CityName: ${items.cityName.toString()}");
+                      },
                       value: items.cityName,
                       child: Text(items.cityName!,
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
-                    );
-                  }).toList(),
+                    );}).toList(),
                   onChanged: (String? newValue) async{
                     setState(() {
                       getLoc = newValue!;
                     });
-                    cityId = locController.locationModel.value.messages!.status!.city!.map((getCityID) => getCityID.cityId!).toString();
-                    SharedPreferences pref = await SharedPreferences.getInstance();
-                    pref.setString(ApiStrings.cityName, getLoc);
-                    pref.setString(ApiStrings.cityID, '23');
                   },
                 ),
               ),
@@ -90,8 +93,7 @@ class _GetLocationState extends State<GetLocation> {
                   SharedPreferences pref = await SharedPreferences.getInstance();
                   String? cityName = pref.getString(ApiStrings.cityName);
                   String? cityID = pref.getString(ApiStrings.cityID);
-                  debugPrint('City Name: $cityName');
-                  debugPrint('CityID: $cityID');
+                  Navigator.pop(context);
                 },
                 label: 'SAVE'
             )

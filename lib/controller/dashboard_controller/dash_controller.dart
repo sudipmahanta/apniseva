@@ -44,7 +44,7 @@ class DashController extends GetxController {
        dashDataModel.value = dashModel;
        isLoading.value = false;
      }
-     debugPrint('DashBoardAPI Data:\n${response.body}');
+     // debugPrint('DashBoardAPI Data:\n${response.body.toString()}');
 
      return true;
    } catch(error) {

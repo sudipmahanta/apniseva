@@ -71,8 +71,7 @@ class _DashServicesState extends State<DashServices> {
                           ),
                           child: Text(
                             // DashStrings.serviceName
-                            data[index].catName!
-                            ,
+                            data[index].catName!,
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
