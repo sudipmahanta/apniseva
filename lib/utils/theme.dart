@@ -20,6 +20,12 @@ class AppTheme {
           fontWeight: FontWeight.w700,
           color: Colors.black
       ),
+      bodySmall: TextStyle(
+          fontSize: 8,
+          fontWeight: FontWeight.w700,
+          color: Colors.white
+      ),
+
       headlineLarge: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w600,
@@ -99,6 +105,12 @@ class AppTheme {
       )
     ),
 
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: primaryColor,
+      iconSize: 14,
+      elevation: 0.5
+    ),
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: primaryColor
@@ -123,7 +135,7 @@ class AppTheme {
         letterSpacing: 1.2,
         color: Colors.white,
       )
-    )
+    ),
   );
 
   static final ThemeData darkTheme = ThemeData(

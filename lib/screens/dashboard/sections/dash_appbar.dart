@@ -3,8 +3,10 @@ import 'package:apniseva/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controller/location_controller/location_controller.dart';
+import '../../../utils/api_strings/api_strings.dart';
 import '../../location/screen/location.dart';
 
 class DashAppBar extends StatefulWidget implements PreferredSizeWidget{
@@ -17,8 +19,23 @@ class DashAppBar extends StatefulWidget implements PreferredSizeWidget{
 }
 
 class _DashAppBarState extends State<DashAppBar> {
+  String? cityName = 'Bhubaneswar';
 
+  getLocString() async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    cityName = pref.getString(ApiStrings.cityName);
+    debugPrint('AppBar: $cityName');
+    return cityName;
+  }
 
+  @override
+  void initState() {
+    getLocString();
+    cityName;
+    super.initState();
+  }
+
+  final locController = Get.put(LocationController());
   @override
   Widget build(BuildContext context) {
 
@@ -38,12 +55,13 @@ class _DashAppBarState extends State<DashAppBar> {
                   height: 55,
                   alignment: Alignment.center,
                   child: Row(
-                    children: const[
-                      Text('Bhubaneswar'),
-                      Icon(Icons.location_on_rounded,
+                    children: [
+                      Text(cityName!),
+                          // locController.locationModel.value.messages!.status!.city!.map((e) => e.cityName).toString()),
+                      const Icon(Icons.location_on_rounded,
                         size: 20,
                       ),
-                      SizedBox(width: 5,)
+                     const SizedBox(width: 5,)
                     ],
                   )
               ),

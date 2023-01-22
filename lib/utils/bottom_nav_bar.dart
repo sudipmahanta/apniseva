@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:remixicon/remixicon.dart';
 
-import '../screens/booking/screens/booking_screen.dart';
+import '../screens/orders/screens/order_screen.dart';
 import 'color.dart';
 
 class BottomNavBar extends StatefulWidget {

@@ -72,7 +72,7 @@ class AuthController {
       );
       debugPrint(response.body.toString());
       model = userDataModelFromJson(response.body);
-      debugPrint(model.messages!.status!.userId.toString());
+      // debugPrint(model.messages!.status!.userId.toString());
 
       if (response.statusCode == 200 && model.status == 200) {
         userModel.value = model;
@@ -81,12 +81,12 @@ class AuthController {
         return true;
       } else {
         isLoading.value = false;
-        Get.snackbar('Error', 'Something went wrong! Please try again later');
+        Get.snackbar('Auth', 'Something went wrong! Please try again later');
         return false;
       }
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar("Error", "Something went wrong! please try again later",
+      Get.snackbar("Auth", "Something went wrong! please try again later",
         colorText: Colors.black,
         backgroundColor: Colors.white54
       );

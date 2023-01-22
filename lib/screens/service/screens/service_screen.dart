@@ -1,10 +1,6 @@
 import 'package:apniseva/screens/service/sections/service_appbar.dart';
 import 'package:apniseva/screens/service/sections/service_strings.dart';
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:remixicon/remixicon.dart';
-
-import '../../../utils/color.dart';
 
 class ServiceScreen extends StatefulWidget {
   const ServiceScreen({Key? key}) : super(key: key);

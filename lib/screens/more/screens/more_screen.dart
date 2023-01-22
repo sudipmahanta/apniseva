@@ -11,6 +11,7 @@ import '../../address/screen/address_screen.dart';
 import '../../auth/screens/registration_screen.dart';
 import '../../cart/screen/cart_screen.dart';
 import '../../dashboard/widget/dash_strings.dart';
+import '../../profile/profile_screen/profile_screen.dart';
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({Key? key}) : super(key: key);
@@ -29,9 +30,9 @@ class _MoreScreenState extends State<MoreScreen> {
     super.initState();
   }
 
-  List screens = [
+  List screens = const [
     CartScreen(),
-    CartScreen(),
+    ProfileScreen(),
     AddressScreen(),
     CartScreen(),
     CartScreen(),
@@ -91,7 +92,7 @@ class _MoreScreenState extends State<MoreScreen> {
                           backgroundColor: Colors.indigo,
                           radius: 10,
                           child: Icon(
-                            Icons.edit,
+                            Icons.verified_user,
                             size: 12,
                           ),
                         )
@@ -117,7 +118,7 @@ class _MoreScreenState extends State<MoreScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 30.0),
+                    padding: const EdgeInsets.only(left: 30.0),
                     child: Text(
                       "User ID: ${authController.userModel.value.messages!.status!.userId}",
                       // style: Theme.of(context).textTheme.bodySmall

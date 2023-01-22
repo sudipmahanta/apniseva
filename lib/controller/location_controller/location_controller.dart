@@ -15,19 +15,18 @@ class LocationController extends GetxController {
   Rx<LocationModel> locationModel = LocationModel().obs;
 
   getLoc() async{
-    isLoading.value = true;
     try {
+      isLoading.value = true;
       LocationModel locModel = LocationModel();
 
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? id = pref.getString(ApiStrings.userID);
+      String url = "${ApiEndPoint.getLoc}=$id";
+      debugPrint(url);
 
       Map<String, String> header = {
         'Content-type': 'application/json; charset=utf-8',
       };
-
-      String url = "${ApiEndPoint.getLoc}=$id";
-      debugPrint(url);
 
       http.Response response = await http.post(
           Uri.parse(url),
@@ -39,13 +38,12 @@ class LocationController extends GetxController {
         locationModel.value = locModel;
       }
       debugPrint(response.body.toString());
-      debugPrint(response.body.runtimeType.toString());
 
       isLoading.value = false;
       return true;
     } catch(e) {
       isLoading.value = false;
-      Get.snackbar("Error", "Something went wrong! please try again later",
+      Get.snackbar("Location", "Something went wrong! please try again later",
           colorText: Colors.black,
           backgroundColor: Colors.white54
       );

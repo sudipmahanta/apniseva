@@ -33,7 +33,7 @@ class ServiceAppBar extends StatelessWidget implements PreferredSizeWidget{
           actions: [
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen()));
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),

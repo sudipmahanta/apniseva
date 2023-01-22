@@ -2,8 +2,13 @@ import 'package:apniseva/screens/dashboard/widget/dash_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 
+import '../model/dash_model.dart';
+
 class DashReviews extends StatelessWidget {
-  const DashReviews({Key? key}) : super(key: key);
+  final List<TestimonialDtl>? getTestimonialDetail;
+  const DashReviews({Key? key,
+    this.getTestimonialDetail
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,18 +16,19 @@ class DashReviews extends StatelessWidget {
     double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
     return SizedBox(
       width: width,
-      height: 170,
+      height: 190,
       child: ListView.builder(
-          itemCount: 10,
+          itemCount: getTestimonialDetail!.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            var data = cardColor[index];
+            ReviewCardColors getColor = cardColor[index];
+            List<TestimonialDtl>? getTestimonial = getTestimonialDetail;
             return Container(
-              width: 120,
-              height: 70,
+              width: 140,
+              height: 80,
               margin: const EdgeInsets.only(right: 10.0),
               decoration: BoxDecoration(
-                color: data.colors,
+                color: getColor.colors,
                 borderRadius: BorderRadius.circular(8)
               ),
               child: Padding(
@@ -34,10 +40,12 @@ class DashReviews extends StatelessWidget {
                       padding: EdgeInsets.only(top: 8.0),
                       child: Icon(Remix.double_quotes_l),
                     ),
-                    Text('Best Services',
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    Text('The way ApniSeva assisted us in completing',
+                    // Text('Best Services',
+                    //   style: Theme.of(context).textTheme.labelMedium,
+                    // ),
+                    Text(getTestimonial![index].message!,
+                      maxLines: 5,
+                      textAlign: TextAlign.justify,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     const Spacer(),
@@ -51,10 +59,10 @@ class DashReviews extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('JhonAdam',
+                            Text(getTestimonial[index].name!,
                               style: Theme.of(context).textTheme.labelSmall,
                             ),
-                            Text('JhonAdam',
+                            Text(getTestimonial[index].createdDate!,
                               style: Theme.of(context).textTheme.titleSmall,
                             )
                           ],

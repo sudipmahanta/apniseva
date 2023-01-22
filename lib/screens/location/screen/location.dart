@@ -1,12 +1,14 @@
 import 'package:apniseva/controller/location_controller/location_controller.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:apniseva/utils/buttons.dart';
+import 'package:apniseva/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GetLocation extends StatefulWidget {
-  const GetLocation({Key? key}) : super(key: key);
+  const GetLocation({Key? key,
+  }) : super(key: key);
 
   @override
   State<GetLocation> createState() => _GetLocationState();
@@ -14,16 +16,8 @@ class GetLocation extends StatefulWidget {
 
 
 class _GetLocationState extends State<GetLocation> {
-  String getLoc = 'Bhubaneswar';
-  var loc = [
-    'Indore',
-    'Bhubaneswar',
-    'bbsr',
-    'Cuttack',
-    'Khurda',
-    'Rourkela',
-    'Bherhampur',
-  ];
+  String getLoc = 'Khurda';
+  String cityId = '26';
 
   final locController = Get.put(LocationController());
 
@@ -44,10 +38,16 @@ class _GetLocationState extends State<GetLocation> {
             style: Theme.of(context).textTheme.headlineLarge,
           ),
           children:  [
-            locController.isLoading.value == true ? const Center(
-                child: CircularProgressIndicator()
-            ):
-            Container(
+            locController.isLoading.value == true ?
+             Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: CircularProgressIndicator(
+                    color: primaryColor,
+                    strokeWidth: 2.5,
+                  ),
+                )
+            ): Container(
               height: 47,
               margin: const EdgeInsets.symmetric(vertical: 5),
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -59,7 +59,7 @@ class _GetLocationState extends State<GetLocation> {
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
-                  value: getLoc.isEmpty ? null : getLoc,
+                  value: getLoc.isEmpty ? 'Select your City' : getLoc,
                   isExpanded: true,
                   icon: const Icon(Icons.keyboard_arrow_down),
                   items: locController.locationModel.value.messages!.status!.city!
@@ -75,9 +75,10 @@ class _GetLocationState extends State<GetLocation> {
                     setState(() {
                       getLoc = newValue!;
                     });
+                    cityId = locController.locationModel.value.messages!.status!.city!.map((getCityID) => getCityID.cityId!).toString();
                     SharedPreferences pref = await SharedPreferences.getInstance();
-                    pref.setString(ApiStrings.cityName, newValue!);
-
+                    pref.setString(ApiStrings.cityName, getLoc);
+                    pref.setString(ApiStrings.cityID, '23');
                   },
                 ),
               ),
@@ -88,7 +89,9 @@ class _GetLocationState extends State<GetLocation> {
                 onPressed: () async{
                   SharedPreferences pref = await SharedPreferences.getInstance();
                   String? cityName = pref.getString(ApiStrings.cityName);
-                  debugPrint(cityName.toString());
+                  String? cityID = pref.getString(ApiStrings.cityID);
+                  debugPrint('City Name: $cityName');
+                  debugPrint('CityID: $cityID');
                 },
                 label: 'SAVE'
             )
