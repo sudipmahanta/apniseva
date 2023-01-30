@@ -1,7 +1,9 @@
-import 'package:apniseva/screens/dashboard/model/dash_model.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+
+import '../models/dash_model.dart';
+import '../widget/dash_strings.dart';
 
 class DashCarousel extends StatelessWidget {
   final List<BannerDtl>? getData;
@@ -14,9 +16,22 @@ class DashCarousel extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     // double height = MediaQuery.of(context).size.height-(MediaQuery.of(context).padding.top + MediaQuery.of(context).padding.bottom);
 
-    return Padding(
+    return Container(
+      alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 20.0),
-      child: CarouselSlider.builder(
+      child: getData!.isEmpty ? Container(
+          width: width * 0.75,
+          height: 80,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(10)
+          ),
+          child: Text(DashCarouselStrings.noData,
+            style: Theme.of(context).textTheme.labelMedium,
+          )
+      ) : CarouselSlider.builder(
           itemCount: getData!.length,
           options: CarouselOptions(
             aspectRatio: 19/7
@@ -50,8 +65,7 @@ class DashCarousel extends StatelessWidget {
               )
             ],
           ),
-        );
-        },
+        );},
 
       ),
     );

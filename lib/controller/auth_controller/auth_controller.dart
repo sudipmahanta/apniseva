@@ -14,6 +14,8 @@ class AuthController {
   final otpController =TextEditingController();
 
   RxBool isLoading = false.obs;
+  String? phone;
+  String? otp;
   Rx<UserDataModel> userModel = UserDataModel(
     messages: Messages(
       status: Status(
@@ -24,37 +26,42 @@ class AuthController {
     )
   ).obs;
 
-  String? phone;
-  String? otp;
 
   loginWithOTP() async{
     SharedPreferences pref = await SharedPreferences.getInstance();
-
     isLoading.value = true;
+
     Map<String, String> mobileNumber = {'contact': mobileController.text.toString()};
     var body = json.encode(mobileNumber);
     var header = {
       "Content-Type": "application/json"
     };
 
-    http.Response response = await http.post(Uri.parse(ApiEndPoint.registerApi),
+    http.Response response = await http.post(Uri.parse(ApiEndPoint.loginOtp),
         headers: header,
         body: body,
     );
     var data = jsonDecode(response.body);
-    debugPrint('Status Code: ${response.statusCode.toString()}');
-    pref.setString(ApiStrings.mobile, data['messages']["status"]["contact_otp"]);
-    var getPhone = data['messages']["status"]["contact_otp"].toString();
-    phone = getPhone;
+    debugPrint('OtpAPI Status Code: ${response.statusCode}');
 
-    var getOtp = data['messages']["status"]["login_otp"].toString();
-    otp = getOtp;
-    mobileController.clear();
+    if(response.statusCode == 200) {
+
+      pref.setString(ApiStrings.mobile,
+          data['messages']["status"]["contact_otp"].toString());
+      pref.setString(ApiStrings.otp,
+          data['messages']["status"]["login_otp"].toString());
+
+      String? otp = pref.getString(ApiStrings.otp);
+      debugPrint("OTP during api: ${otp.toString()}");
+      isLoading.value = false;
+    }else {
+      Get.snackbar('OTP', 'Error occurred while sending OTP.');
+    }
+    otpController.clear();
   }
 
   getUserData() async{
     UserDataModel model = UserDataModel();
-
     try{
       isLoading.value = true;
       SharedPreferences pref = await SharedPreferences.getInstance();
@@ -63,21 +70,28 @@ class AuthController {
       Map<String, String> header = {
         'Content-type': 'application/json',
       };
-      String userDataAPI = '${ApiEndPoint.getUser}=$mobile';
+      Map<String, String> body = {
+        'contact': mobile!
+      };
+
+      String userDataAPI = ApiEndPoint.verifyOtp;
       debugPrint('UserDataApi: $userDataAPI');
 
       http.Response response = await http.post(
           Uri.parse(userDataAPI),
+          body: jsonEncode(body),
           headers: header
       );
-      debugPrint(response.body.toString());
+      // debugPrint("GetUserData: ${response.body}");
       model = userDataModelFromJson(response.body);
-      // debugPrint(model.messages!.status!.userId.toString());
 
       if (response.statusCode == 200 && model.status == 200) {
         userModel.value = model;
         pref.setString(ApiStrings.userID, userModel.value.messages!.status!.userId!.toString());
+        String? userID = pref.getString(ApiStrings.userID);
+        debugPrint("User ID: $userID");
         isLoading.value = false;
+
         return true;
       } else {
         isLoading.value = false;

@@ -1,13 +1,16 @@
-import 'package:apniseva/screens/dashboard/model/dash_model.dart';
+import 'package:apniseva/screens/dashboard/models/subcategory_model.dart';
+import 'package:apniseva/screens/dashboard/widget/dash_strings.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../controller/subcategory_controller/subcategory_controller.dart';
+import '../../../utils/api_strings/api_strings.dart';
 import '../../service/screens/service_screen.dart';
 
 class ChooseSubCategory extends StatefulWidget {
-  final List<CategoryDtlSub>? getSubData;
   const ChooseSubCategory({Key? key,
-  this.getSubData
   }) : super(key: key);
 
   @override
@@ -15,6 +18,15 @@ class ChooseSubCategory extends StatefulWidget {
 }
 
 class _ChooseSubCategoryState extends State<ChooseSubCategory> {
+
+  final subCategoryController = SubCategoryController();
+
+  @override
+  void initState() {
+    subCategoryController.getSubCat();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -44,65 +56,83 @@ class _ChooseSubCategoryState extends State<ChooseSubCategory> {
           ),
           const Divider(),
 
-          Container(
-            height: height * 0.52,
-            alignment: Alignment.topCenter,
-            padding: const EdgeInsets.only(left: 10),
-            child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    mainAxisSpacing: 2,
-                    crossAxisSpacing: 0,
-                    crossAxisCount: 3,
-                    childAspectRatio: 0.74
-                ),
-                itemCount: widget.getSubData!.length,
-                itemBuilder: (BuildContext context, int index){
-                  List? data = widget.getSubData;
-                  return InkWell(
-                    onTap: () {
-                      data[index].sub!.sub.isEmpty ? const ServiceScreen() :
-                      showBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return ChooseSubCategory(getSubData: data[index]);
-                          });
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Card(
-                          elevation: 0.4,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)
-                          ),
-                          child: Container(
-                            height: 110,
-                            width: 110,
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Image.network('${ApiEndPoint.imageAPI}/${data![index].catImg!}',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 10),
-                            // color: Colors.blue,
-                            child: Text(data[index].catName!,
-                              maxLines: 2,
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                          ),
-                        )
-                      ],
+          Obx(() {
+              return Container(
+                height: height * 0.52,
+                // alignment: Alignment.topCenter,
+                padding: const EdgeInsets.only(left: 10),
+                child: subCategoryController.isLoading.value == true ? Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      color: Theme.of(context).primaryColor,
+                    )
+                ) :
+                GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        mainAxisSpacing: 2,
+                        crossAxisSpacing: 0,
+                        crossAxisCount: 3,
+                        childAspectRatio: 0.74
                     ),
-                  );
-                }
-            )
+                    itemCount: subCategoryController.subCategoryDataModel.value.messages!.status!.categoryDtl!.length,
+                    itemBuilder: (BuildContext context, int index){
+                      List<CategoryDtl>? data = subCategoryController.subCategoryDataModel.value.messages!.status!.categoryDtl;
+                      return InkWell(
+                        onTap: () async{
+                          SharedPreferences preferences = await SharedPreferences.getInstance();
+                          preferences.setString(ApiStrings.catID, data[index].catId!);
+                          // preferences.setString(ApiStrings.subCat, data[index].subcat!.toString());
+                          // debugPrint('SubCatData: ${data[index].subcat}');
+                          debugPrint("SubCategory: ${data[index].catName}");
+
+                          if(data[index].subcat == 1){
+                            Get.to(()=> const ServiceScreen());
+                          }else {
+                            showBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return const ChooseSubCategory();
+                                }) ;
+                          }
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Card(
+                              elevation: 0.4,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              child: Container(
+                                height: 110,
+                                width: 110,
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Image.network('${ApiEndPoint.imageAPI}/${data![index].catImg}',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 10),
+                                // color: Colors.blue,
+                                child: Text(data[index].catName!,
+                                  maxLines: 2,
+                                  style: Theme.of(context).textTheme.labelSmall,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    }
+                )
+              );
+            }
           ),
         ],
       ),

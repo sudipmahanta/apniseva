@@ -1,5 +1,6 @@
 
 import 'package:apniseva/controller/auth_controller/auth_controller.dart';
+import 'package:apniseva/screens/orders/screens/order_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -22,19 +23,13 @@ class MoreScreen extends StatefulWidget {
 
 class _MoreScreenState extends State<MoreScreen> {
 
-  final authController = Get.put(AuthController());
-
-  @override
-  void initState() {
-    authController.getUserData();
-    super.initState();
-  }
+  final profileController = Get.put(AuthController());
 
   List screens = const [
     CartScreen(),
     ProfileScreen(),
     AddressScreen(),
-    CartScreen(),
+    BookingScreen(),
     CartScreen(),
     CartScreen(),
     CartScreen(),
@@ -88,12 +83,16 @@ class _MoreScreenState extends State<MoreScreen> {
                             backgroundImage: NetworkImage(DashStrings.bannerImg),
                           ),
                         ),
-                        const CircleAvatar(
-                          backgroundColor: Colors.indigo,
-                          radius: 10,
-                          child: Icon(
-                            Icons.verified_user,
-                            size: 12,
+                        const Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.indigo,
+                            radius: 10,
+                            child: Icon(
+                              Icons.verified_user,
+                              size: 12,
+                            ),
                           ),
                         )
                       ],
@@ -104,24 +103,22 @@ class _MoreScreenState extends State<MoreScreen> {
                   ),
 
                   // User Profile Name
-                  const Padding(
-                    padding: EdgeInsets.only(left: 30.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30.0),
                     child: Text(
-                      // authController.usermodel.value.data!.fullName ??
+                      profileController.userModel.value.messages!.status!.fullname ??
                           'Adam West',
                       style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 0.5,
-                          fontSize: 20,
-                          color: Colors.white
+                        color: Colors.white,
+                        fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 30.0),
                     child: Text(
-                      "User ID: ${authController.userModel.value.messages!.status!.userId}",
-                      // style: Theme.of(context).textTheme.bodySmall
+                      "User ID: ${profileController.userModel.value.messages!.status!.userId}",
+                      style: Theme.of(context).textTheme.bodySmall
                     )
                   ),
                 ],

@@ -2,7 +2,7 @@ import 'package:apniseva/screens/dashboard/widget/dash_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 
-import '../model/dash_model.dart';
+import '../models/dash_model.dart';
 
 class DashReviews extends StatelessWidget {
   final List<TestimonialDtl>? getTestimonialDetail;
@@ -14,10 +14,12 @@ class DashReviews extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
-    return SizedBox(
+    return Container(
       width: width,
       height: 190,
-      child: ListView.builder(
+      alignment: Alignment.center,
+      child: getTestimonialDetail!.isEmpty ? const Text('Your are the first one to share views') :
+      ListView.builder(
           itemCount: getTestimonialDetail!.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {

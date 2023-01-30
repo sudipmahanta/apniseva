@@ -67,7 +67,7 @@ class AppTheme {
     ),
 
     iconTheme: IconThemeData(
-      color: primaryColor
+      color: primaryColor,
     ),
 
     inputDecorationTheme: InputDecorationTheme(

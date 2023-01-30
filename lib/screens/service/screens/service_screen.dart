@@ -1,9 +1,22 @@
+import 'package:apniseva/controller/cart_controller/cart_controller.dart';
+import 'package:apniseva/controller/service_controller/service_controller.dart';
+import 'package:apniseva/screens/dashboard/widget/dash_strings.dart';
 import 'package:apniseva/screens/service/sections/service_appbar.dart';
 import 'package:apniseva/screens/service/sections/service_strings.dart';
+import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
+import 'package:apniseva/utils/color.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/service_model.dart';
+
 
 class ServiceScreen extends StatefulWidget {
-  const ServiceScreen({Key? key}) : super(key: key);
+  final String serviceName;
+  const ServiceScreen({Key? key,
+    this.serviceName = "Service Name"
+  }) : super(key: key);
 
   @override
   State<ServiceScreen> createState() => _ServiceScreenState();
@@ -11,90 +24,100 @@ class ServiceScreen extends StatefulWidget {
 
 class _ServiceScreenState extends State<ServiceScreen> {
 
-  bool add = false;
+  final serviceController = Get.put(ServiceController());
+  final addToCartController = Get.put(CartController());
+
+  // final subCategoryController = Get.put(SubCategoryController());
+
+  @override
+  void initState() {
+    serviceController.getService();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    return Obx(() {
 
-    return Scaffold(
-      appBar: ServiceAppBar(title: ServiceStrings.serviceName),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: Column(
-            children: List.generate(4, (index) =>
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: Card(
-                    color: Colors.grey.shade50,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: width,
-                            height: height * 0.25,
-                            decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(8)),
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(ServiceStrings.serviceImg)
-                                )
+      List<ServiceList> serviceData = serviceController.serviceDataModel.value.messages!.status!.serviceList!;
+
+      return Scaffold(
+          appBar: ServiceAppBar(title: ServiceStrings.serviceName),
+          body: SingleChildScrollView(
+            child: serviceController.isLoading.value == true ? const Center(
+              child: CircularProgressIndicator(),
+            ): Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Column(
+                  children: List.generate(serviceData.length, (index) =>
+                      Card(
+                        elevation: 1.4,
+                        child: ListTile(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)
                             ),
-                          ),
-
-                          ListTile(
+                            tileColor: Colors.grey.shade200,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                padding: const EdgeInsets.all(5.0),
+                                child: Image.network('${ApiEndPoint.imageAPI}/${serviceData[index].serviceImage}',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
                             title: RichText(
                                 text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: ServiceStrings.serviceType,
-                                      style: Theme.of(context).textTheme.bodyMedium
-                                    ),
-                                    TextSpan(
-                                      text: ServiceStrings.servicePrice,
-                                      style: Theme.of(context).textTheme.labelLarge
-                                    )
-                                  ]
+                                    children: [
+                                      TextSpan(
+                                          text: serviceData[index].serviceName,
+                                          style: TextStyle(
+                                            fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+                                            color: Theme.of(context).textTheme.titleSmall!.color,
+                                            fontWeight: Theme.of(context).textTheme.headlineLarge!.fontWeight
+                                          )
+                                      ),
+                                      TextSpan(
+                                          text: ' ₹${serviceData[index].amount}',
+                                          style: Theme.of(context).textTheme.bodyMedium
+                                      )
+                                    ]
                                 )
                             ),
-                            subtitle: Text(ServiceStrings.serviceDesc,
-                              maxLines: 3,
+                            subtitle: Text(serviceData[index].serviceDetails!,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
-                            trailing: ElevatedButton(
-                              
-                              style: ElevatedButton.styleFrom(
-                                elevation: 0,
-                                fixedSize: Size(width * 0.25, 37),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)
-                                )
+                            trailing: InkWell(
+                              onTap: () async{
+                                SharedPreferences preferences = await SharedPreferences.getInstance();
+                              },
+                              child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                      color: primaryColor,
+                                      borderRadius: BorderRadius.circular(8.0)
+                                  ),
+                                  child: Icon(Icons.add_shopping_cart_rounded,
+                                    color: Colors.white,
+                                    size: Theme.of(context).textTheme.headlineLarge!.fontSize,
+                                  )
                               ),
-                                onPressed: (){
-                                  setState(() {
-                                    add =! add;
-                                  });
-                                },
-                                child:  Text(add== false ? 'ADDED' : 'ADD'),
                             )
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
                   ),
-                ),
-            )
-          ),
-        ),
-      ),
+                )
+            ),
+            ),
+      );
+      }
     );
   }
 }

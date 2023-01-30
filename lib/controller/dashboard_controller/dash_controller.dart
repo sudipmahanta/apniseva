@@ -1,4 +1,6 @@
-import 'package:apniseva/screens/dashboard/model/dash_model.dart';
+import 'dart:convert';
+
+import 'package:apniseva/screens/dashboard/models/dash_model.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:get/get.dart';
@@ -19,7 +21,7 @@ class DashController extends GetxController {
      SharedPreferences pref = await SharedPreferences.getInstance();
      String? cityID = pref.getString(ApiStrings.cityID);
      String? userID = pref.getString(ApiStrings.userID);
-     String? dashApi = "${ApiEndPoint.getDash}?user_id=$userID&city_id=$cityID";
+     String? dashApi = ApiEndPoint.getDash;
      debugPrint('City ID: $cityID');
      debugPrint('User ID: $userID');
      debugPrint('DashBoardAPI: $dashApi');
@@ -34,7 +36,7 @@ class DashController extends GetxController {
 
      http.Response response = await http.post(
        Uri.parse(dashApi),
-       // body: body,
+       body: jsonEncode(body),
        headers: header
      );
      debugPrint('DashAPI Status Code: ${response.statusCode.toString()}');
@@ -44,7 +46,7 @@ class DashController extends GetxController {
        dashDataModel.value = dashModel;
        isLoading.value = false;
      }
-     // debugPrint('DashBoardAPI Data:\n${response.body.toString()}');
+     // debugPrint('DashBoardAPI Data:\n${response.body}');
 
      return true;
    } catch(error) {

@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'package:apniseva/screens/dashboard/screens/dashboard_screen.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,9 +18,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    // Timer(const Duration(seconds: 3), () {
-    //   Navigator.push(context, MaterialPageRoute(builder: (context) => const RegistrationScreen()));
-    // });
     super.initState();
     checkLogin();
   }

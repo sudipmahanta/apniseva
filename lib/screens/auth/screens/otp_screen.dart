@@ -1,14 +1,18 @@
-import 'package:apniseva/screens/auth/screens/registration_screen.dart';
+import 'package:apniseva/controller/location_controller/location_controller.dart';
+import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:apniseva/utils/bottom_nav_bar.dart';
 import 'package:apniseva/utils/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controller/auth_controller/auth_controller.dart';
 import '../../../utils/color.dart';
 import '../../../utils/theme.dart';
 
 import 'package:get/get.dart';
+
+import '../../location/screen/location.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String phoneNumber;
@@ -21,6 +25,35 @@ class OtpVerificationScreen extends StatefulWidget {
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   final authController = Get.put(AuthController());
+  final locController = Get.put(LocationController());
+
+
+  @override
+  void initState() {
+    authController.getUserData();
+    super.initState();
+  }
+
+  verifyOTP() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? otp = preferences.getString(ApiStrings.otp);
+    String? cityID = preferences.getString(ApiStrings.cityID);
+
+    if(otp != authController.otpController.text.toString()) {
+      Get.snackbar("OTP", "Incorrect OTP");
+
+    } else if(cityID == null) {
+      // setState(() {
+      authController.getUserData();
+      // });
+      showDialog(context: context, builder: (context) {
+        return const GetLocation();
+      });
+    }else {
+      Get.to(const BottomNavBar());
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +100,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                     appContext: (context),
                     onChanged: (value) {
-                      debugPrint(value);
+                      // debugPrint(value);
                       setState(() {
                         // currentText = value;
                       });},
@@ -116,17 +149,21 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   PrimaryButton(
                       width: width,
                       height: 47,
-                      onPressed: (){
-                        if(authController.otp.toString() == authController.otpController.text.toString()) {
-                          debugPrint(authController.otp);
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) =>
-                              const BottomNavBar()));
-                        } else {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) =>
-                              const RegistrationScreen()));
-                        }
+                      onPressed: () async{
+                        // SharedPreferences preferences = await SharedPreferences.getInstance();
+                        // String? otp = preferences.getString(ApiStrings.otp);
+                        // if(otp == authController.otpController.text.toString()) {
+                        //   debugPrint(otp);
+                        //   Navigator.push(context,
+                        //       MaterialPageRoute(builder: (context) =>
+                        //       const BottomNavBar()));
+                        // } else {
+                        //   Navigator.push(context,
+                        //       MaterialPageRoute(builder: (context) =>
+                        //       const RegistrationScreen()));
+                        // }
+
+                        verifyOTP();
                       },
                       label: 'SUBMIT'
                   ),

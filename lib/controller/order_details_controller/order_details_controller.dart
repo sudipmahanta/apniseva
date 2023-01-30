@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:apniseva/screens/orders/order_details_model/order_details_model.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +22,13 @@ class OrderDetailsController extends GetxController{
       String? userID = preferences.getString(ApiStrings.userID);
       String? orderID = preferences.getString(ApiStrings.orderID);
 
-      String? orderDetailsAPI = "${ApiEndPoint.getOrderDetails}user_id=$userID&order_id=$orderID";
+      String? orderDetailsAPI = ApiEndPoint.getOrderDetails;
       debugPrint(orderDetailsAPI);
 
-      // Map<String, String> body = {
-      //   'user_id': userID!,
-      //   'order_id': orderID!
-      // };
+      Map<String, String> body = {
+        'user_id': userID!,
+        'order_id': orderID!
+      };
 
       Map<String, String> headers = {
         "Content-Type": "application/json; charset=utf-8"
@@ -34,7 +36,7 @@ class OrderDetailsController extends GetxController{
 
       http.Response response = await http.post(
           Uri.parse(orderDetailsAPI),
-          // body: body,
+          body: jsonEncode(body),
           headers: headers
       );
       orderModel = orderDetailsDataModelFromJson(response.body);

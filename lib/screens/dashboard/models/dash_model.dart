@@ -149,7 +149,6 @@ class CategoryDtl {
     this.catImg,
     this.status,
     this.createdDate,
-    this.sub,
   });
 
   String? catId;
@@ -159,7 +158,6 @@ class CategoryDtl {
   String? catImg;
   String? status;
   String? createdDate;
-  List<CategoryDtlSub>? sub;
 
   factory CategoryDtl.fromJson(Map<String, dynamic> json) => CategoryDtl(
     catId: json["cat_id"],
@@ -169,7 +167,6 @@ class CategoryDtl {
     catImg: json["cat_img"],
     status: json["status"],
     createdDate: json["created_date"],
-    sub: List<CategoryDtlSub>.from(json["sub"].map((x) => CategoryDtlSub.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -180,95 +177,6 @@ class CategoryDtl {
     "cat_img": catImg,
     "status": status,
     "created_date": createdDate,
-    "sub": List<dynamic>.from(sub!.map((x) => x.toJson())),
-  };
-}
-
-class CategoryDtlSub {
-  CategoryDtlSub({
-    this.catId,
-    this.catName,
-    this.parentId,
-    this.cityIds,
-    this.catImg,
-    this.status,
-    this.createdDate,
-    this.sub,
-  });
-
-  String? catId;
-  String? catName;
-  String? parentId;
-  String? cityIds;
-  String? catImg;
-  String? status;
-  String? createdDate;
-  List<SubSub>? sub;
-
-  factory CategoryDtlSub.fromJson(Map<String, dynamic> json) => CategoryDtlSub(
-    catId: json["cat_id"],
-    catName: json["cat_name"],
-    parentId: json["parent_id"],
-    cityIds: json["city_ids"],
-    catImg: json["cat_img"],
-    status: json["status"],
-    createdDate: json["created_date"],
-    sub: List<SubSub>.from(json["sub"].map((x) => SubSub.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "cat_id": catId,
-    "cat_name": catName,
-    "parent_id": parentId,
-    "city_ids": cityIds,
-    "cat_img": catImg,
-    "status": status,
-    "created_date": createdDate,
-    "sub": List<dynamic>.from(sub!.map((x) => x.toJson())),
-  };
-}
-
-class SubSub {
-  SubSub({
-    this.catId,
-    this.catName,
-    this.parentId,
-    this.cityIds,
-    this.catImg,
-    this.status,
-    this.createdDate,
-    this.sub,
-  });
-
-  String? catId;
-  String? catName;
-  String? parentId;
-  String? cityIds;
-  String? catImg;
-  String? status;
-  String? createdDate;
-  List<dynamic>? sub;
-
-  factory SubSub.fromJson(Map<String, dynamic> json) => SubSub(
-    catId: json["cat_id"],
-    catName: json["cat_name"],
-    parentId: json["parent_id"],
-    cityIds: json["city_ids"],
-    catImg: json["cat_img"],
-    status: json["status"],
-    createdDate: json["created_date"],
-    sub: List<dynamic>.from(json["sub"].map((x) => x)),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "cat_id": catId,
-    "cat_name": catName,
-    "parent_id": parentId,
-    "city_ids": cityIds,
-    "cat_img": catImg,
-    "status": status,
-    "created_date": createdDate,
-    "sub": List<dynamic>.from(sub!.map((x) => x)),
   };
 }
 
@@ -425,10 +333,10 @@ class UserDtl {
   });
 
   String? id;
-  dynamic fullName;
+  String? fullName;
   dynamic userName;
   dynamic password;
-  dynamic email;
+  String? email;
   String? contactNo;
   dynamic alterCnum;
   dynamic profileImage;

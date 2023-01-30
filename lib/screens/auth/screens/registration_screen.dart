@@ -16,7 +16,7 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
 
-  final formKey = GlobalKey<FormState>();
+  final _key = GlobalKey<FormState>();
   final authController = Get.put(AuthController());
 
   @override
@@ -49,7 +49,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 SizedBox(height: height * 0.015) ,
 
                 Form(
-                    key: formKey,
+                    key: _key,
                     child: PhoneNumberVerification(
                       controller: authController.mobileController,
                     )
@@ -60,17 +60,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     width: width,
                     height: 47,
                     onPressed: (){
-                      if(formKey.currentState!.validate()) {
+                      if(_key.currentState!.validate()) {
                         authController.loginWithOTP();
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) =>
-                                OtpVerificationScreen(
-                                    phoneNumber: authController.mobileController.text
-                                )
-                            )
+                        Get.to(OtpVerificationScreen(
+                            phoneNumber: authController.mobileController.text)
                         );
-                      } else {
-                        return;
                       }
                     },
                     label: 'GET OTP'

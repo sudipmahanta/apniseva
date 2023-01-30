@@ -58,25 +58,65 @@ class Status {
     this.addOrderdtls,
     this.gst,
     this.address,
+    this.transaction,
   });
 
   List<Orderdtl>? orderdtls;
-  List<dynamic>? addOrderdtls;
+  List<AddOrderdtl>? addOrderdtls;
   Gst? gst;
   List<Address>? address;
+  List<Transaction>? transaction;
 
   factory Status.fromJson(Map<String, dynamic> json) => Status(
     orderdtls: List<Orderdtl>.from(json["Orderdtls"].map((x) => Orderdtl.fromJson(x))),
-    addOrderdtls: List<dynamic>.from(json["add_Orderdtls"].map((x) => x)),
+    addOrderdtls: List<AddOrderdtl>.from(json["add_Orderdtls"].map((x) => AddOrderdtl.fromJson(x))),
     gst: Gst.fromJson(json["gst"]),
     address: List<Address>.from(json["address"].map((x) => Address.fromJson(x))),
+    transaction: List<Transaction>.from(json["transaction"].map((x) => Transaction.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "Orderdtls": List<dynamic>.from(orderdtls!.map((x) => x.toJson())),
-    "add_Orderdtls": List<dynamic>.from(addOrderdtls!.map((x) => x)),
+    "add_Orderdtls": List<dynamic>.from(addOrderdtls!.map((x) => x.toJson())),
     "gst": gst!.toJson(),
     "address": List<dynamic>.from(address!.map((x) => x.toJson())),
+    "transaction": List<dynamic>.from(transaction!.map((x) => x.toJson())),
+  };
+}
+
+class AddOrderdtl {
+  AddOrderdtl({
+    this.addServiceId,
+    this.addServiceDetails,
+    this.addServicePrice,
+    this.orderId,
+    this.qtty,
+    this.createdDate,
+  });
+
+  String? addServiceId;
+  String? addServiceDetails;
+  String? addServicePrice;
+  String? orderId;
+  String? qtty;
+  String? createdDate;
+
+  factory AddOrderdtl.fromJson(Map<String, dynamic> json) => AddOrderdtl(
+    addServiceId: json["add_service_id"],
+    addServiceDetails: json["add_service_details"],
+    addServicePrice: json["add_service_price"],
+    orderId: json["order_id"],
+    qtty: json["qtty"],
+    createdDate: json["created_date"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "add_service_id": addServiceId,
+    "add_service_details": addServiceDetails,
+    "add_service_price": addServicePrice,
+    "order_id": orderId,
+    "qtty": qtty,
+    "created_date": createdDate,
   };
 }
 
@@ -225,19 +265,19 @@ class Orderdtl {
   String? userId;
   String? shippingType;
   dynamic shippingCharge;
-  dynamic vendorId;
+  String? vendorId;
   String? orderId;
   String? addressId;
   String? paymentMode;
-  dynamic status;
+  String? status;
   dynamic reason;
   String? txn;
   String? couponCode;
   String? couponAmnt;
   DateTime? bookingDate;
   String? bookingTime;
-  dynamic verifyOtp;
-  dynamic vendorCommisionByorder;
+  String? verifyOtp;
+  String? vendorCommisionByorder;
   String? createdDate;
   String? updateDate;
 
@@ -293,5 +333,61 @@ class Orderdtl {
     "vendor_commision_byorder": vendorCommisionByorder,
     "created_date": createdDate,
     "update_date": updateDate,
+  };
+}
+
+class Transaction {
+  Transaction({
+    this.transactionId,
+    this.orderId,
+    this.paidAmount,
+    this.paymentMode,
+    this.paymentId,
+    this.datetime,
+    this.vendorId,
+    this.userId,
+    this.createdDate,
+    this.updatedDate,
+    this.paymentStatus,
+  });
+
+  String? transactionId;
+  String? orderId;
+  String? paidAmount;
+  String? paymentMode;
+  String? paymentId;
+  String? datetime;
+  String? vendorId;
+  String? userId;
+  String? createdDate;
+  String? updatedDate;
+  String? paymentStatus;
+
+  factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
+    transactionId: json["transaction_id"],
+    orderId: json["order_id"],
+    paidAmount: json["paid_amount"],
+    paymentMode: json["payment_mode"],
+    paymentId: json["payment_id"],
+    datetime: json["datetime"],
+    vendorId: json["vendor_id"],
+    userId: json["user_id"],
+    createdDate: json["created_date"],
+    updatedDate: json["updated_date"],
+    paymentStatus: json["payment_status"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "transaction_id": transactionId,
+    "order_id": orderId,
+    "paid_amount": paidAmount,
+    "payment_mode": paymentMode,
+    "payment_id": paymentId,
+    "datetime": datetime,
+    "vendor_id": vendorId,
+    "user_id": userId,
+    "created_date": createdDate,
+    "updated_date": updatedDate,
+    "payment_status": paymentStatus,
   };
 }

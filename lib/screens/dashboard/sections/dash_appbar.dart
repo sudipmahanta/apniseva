@@ -3,10 +3,8 @@ import 'package:apniseva/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controller/location_controller/location_controller.dart';
-import '../../../utils/api_strings/api_strings.dart';
 import '../../location/screen/location.dart';
 
 class DashAppBar extends StatefulWidget implements PreferredSizeWidget{
@@ -19,23 +17,17 @@ class DashAppBar extends StatefulWidget implements PreferredSizeWidget{
 }
 
 class _DashAppBarState extends State<DashAppBar> {
-  String? cityName = 'Bhubaneswar';
 
-  getLocString() async{
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    cityName = pref.getString(ApiStrings.cityName);
-    debugPrint('AppBar: $cityName');
-    return cityName;
-  }
+  final locController = Get.put(LocationController());
+  String? cityName = 'Set Loc';
 
   @override
   void initState() {
-    getLocString();
+    locController.getLoc();
     cityName;
     super.initState();
   }
 
-  final locController = Get.put(LocationController());
   @override
   Widget build(BuildContext context) {
 
@@ -69,7 +61,7 @@ class _DashAppBarState extends State<DashAppBar> {
 
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen()));
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),

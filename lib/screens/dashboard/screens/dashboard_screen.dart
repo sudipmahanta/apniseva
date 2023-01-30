@@ -1,5 +1,6 @@
 import 'package:apniseva/controller/auth_controller/auth_controller.dart';
 import 'package:apniseva/controller/dashboard_controller/dash_controller.dart';
+import 'package:apniseva/controller/subcategory_controller/subcategory_controller.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_carousel.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_mostBookServices.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_reviews.dart';
@@ -25,12 +26,13 @@ class _DashScreenState extends State<DashScreen> {
 
   final authController = Get.put(AuthController());
   final dashController = Get.put(DashController());
+  final subCatController = Get.put(SubCategoryController());
 
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      // authController.getUserData();
       dashController.getDashboard();
+      subCatController.getSubCat();
     });
     super.initState();
   }
@@ -87,9 +89,8 @@ class _DashScreenState extends State<DashScreen> {
                         ),
                       ],
                     ),
-                    DashServices(
+                    DashCategory(
                       getData: dashController.dashDataModel.value.messages!.status!.categoryDtl!,
-                      // itemCount: 6,
                     ),
                     SizedBox(height: height * 0.02),
 

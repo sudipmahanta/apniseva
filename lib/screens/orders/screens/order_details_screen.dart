@@ -26,8 +26,16 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
     Future.delayed(Duration.zero,() {
       orderDetailsController.getOrderDetails();
     });
+
     super.initState();
   }
+
+  Future<void> refresh() async {
+    return  Future.delayed(Duration.zero,() {
+      orderDetailsController.getOrderDetails();
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +44,8 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
 
     return Obx(() {
       List<Orderdtl> orderDetails = orderDetailsController.orderDetailsModel.value.messages!.status!.orderdtls!;
+      List<AddOrderdtl> addOrderDetails = orderDetailsController.orderDetailsModel.value.messages!.status!.addOrderdtls!;
       List<Address> orderAddress = orderDetailsController.orderDetailsModel.value.messages!.status!.address!;
-      // List<> addOrder = orderDetailsController.orderDetailsModel.value.messages!.status!.addOrderdtls!;
 
       return Scaffold(
         appBar: PrimaryAppBar(
@@ -50,123 +58,173 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
               color: Theme.of(context).primaryColor,
             )
         ) :
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+        RefreshIndicator(
+          onRefresh: refresh,
+          color: Theme.of(context).primaryColor,
+          strokeWidth: 2.0,
           child: ListView(
             children: [
-              // OrderID
-              RichText(
-                  text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: OrdersDetailStrings.orderID,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        TextSpan(
-                          text: orderDetails[0].orderId,
-                          style: Theme.of(context).textTheme.labelSmall,
-                        )
-                      ]
-                  )
-              ),
-              SizedBox(height: height * 0.005),
 
-              // Service Date & Time
-              RichText(
-                  text: TextSpan(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextSpan(
-                          text: OrdersDetailStrings.scheduleDate,
-                          style: Theme.of(context).textTheme.titleLarge,
+                        // OrderID
+                        RichText(
+                            text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: OrdersDetailStrings.orderID,
+                                    style: Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  TextSpan(
+                                    text: orderDetails[0].orderId,
+                                    style: Theme.of(context).textTheme.labelSmall,
+                                  )
+                                ]
+                            )
                         ),
-                        TextSpan(
-                          text: orderDetails[0].createdDate,
-                          style: Theme.of(context).textTheme.labelSmall,
-                        )
-                      ]
-                  )
-              ),
-              SizedBox(height: height * 0.015,),
+                        SizedBox(height: height * 0.005),
 
-              //Time
-              RichText(
-                  text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: OrdersDetailStrings.scheduleTime,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        TextSpan(
-                          text: orderDetails[0].bookingTime,
+                        Text(orderDetails[0].createdDate!,
                           style: Theme.of(context).textTheme.labelSmall,
-                        )
-                      ]
-                  )
+                        ),
+                      ],
+                    ),
+
+                    Visibility(
+                      visible: orderDetails[0].verifyOtp == '1' ? false : true,
+                      child: Container(
+                        // height: 50,
+                        width: 80,
+                        padding: const EdgeInsets.all(5.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(8)
+                        ),
+                        child: Column(
+                          children: [
+                            Text('OTP',
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
+                            Text(orderDetails[0].verifyOtp!,
+                              style: TextStyle(
+                                fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
+                                color: const Color(0xFF0FFA4E)
+                              ),
+                            )
+                          ],
+                        ),
+
+                      ),
+                    )
+                    ],
+                ),
               ),
               SizedBox(height: height * 0.045,),
 
-              //HeadLine
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              // HeadLine
+              const ProductHeader(),
+              Column(
                 children: [
-                  //Service
-                  Expanded(
-                    child: Text(OrdersDetailStrings.service,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                  ),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: orderDetailsController.orderDetailsModel.value.messages!.status!.orderdtls!.length,
+                      itemBuilder: (BuildContext context, int index){
 
-                  // Price
-                  Expanded(
-                    child: Text(OrdersDetailStrings.price,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                  ),
+                        calculatePrice(index, orderDetails);
+                        return Row(
+                          children: [
+                            Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                                  child: Text(orderDetails[index].productname!,
+                                    textAlign: TextAlign.start,
+                                    style: Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                )
+                            ),
 
+                            Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(orderDetails[index].price!,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                )
+                            ),
+                          ],
+                        );
+                      }),
                 ],
               ),
 
-              SizedBox(
-                height: height * 0.435,
-                child: ListView.builder(
-                    itemCount: orderDetailsController.orderDetailsModel.value.messages!.status!.orderdtls!.length,
-                    itemBuilder: (BuildContext context, int index){
+              Visibility(
+                visible: addOrderDetails.isNotEmpty? true : false,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Column(
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: double.maxFinite,
+                          color: Colors.grey.shade200,
+                          child: Text('Additional Products',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+                              color: Theme.of(context).textTheme.titleMedium!.color
 
-                      calculatePrice(index, orderDetails);
-                      // for(int x = 0; x < orderDetails.length; x++) {
-                      //     discounted = double.parse(orderDetails[index].price!) - double.parse(orderDetails[0].couponAmnt!);
-                      //     gst = double.parse(orderDetailsController.orderDetailsModel.value.messages!.status!.gst!.gst!)/100;
-                      //     gstPrice = discounted * gst;
-                      //     totalPrice = discounted + gstPrice;
-                      //     debugPrint("Discounted Price: ${discounted.toString()}");
-                      //     debugPrint("GST Price: ${gstPrice.toString()}");
-                      //     debugPrint("Total Price: ${totalPrice.toString()}");
-                      //   // debugPrint(totalPrice.toString());
-                      // }
-                      return Row(
-                        children: [
-                          Expanded(
-                              child: Text(orderDetails[index].productname!,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.labelMedium,
-                              )
+                            ),
                           ),
+                        ),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: orderDetailsController.orderDetailsModel.value.messages!.status!.addOrderdtls!.length,
+                            itemBuilder: (BuildContext context, int index){
 
-                          Expanded(
-                              child: Text(orderDetails[index].price!,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.labelMedium,
-                              )
-                          ),
-                        ],
-                      );
-                    }),
+                              calculatePrice(index, orderDetails);
+                              return Row(
+                                children: [
+                                  Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                                        child: Text(addOrderDetails[index].addServiceDetails!,
+                                          textAlign: TextAlign.start,
+                                          style: Theme.of(context).textTheme.labelLarge,
+                                        ),
+                                      )
+                                  ),
+
+                                  Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Text(addOrderDetails[index].addServicePrice!,
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context).textTheme.labelLarge,
+                                        ),
+                                      )
+                                  ),
+                                ],
+                              );
+                            }),
+                      ],
+                    ),
+                  )
               ),
               const Divider(thickness: 1.0,),
 
+              // Transaction Details
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,193 +295,11 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                   ),
                 ],
               ),
-              SizedBox(height: height * 0.04),
-              const Divider(thickness: 1.0),
+              SizedBox(height: height * 0.04,),
 
-              // Address and Service
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(OrdersDetailStrings.deliveryAddress),
+              AddressDetails(getAddress: orderAddress[0]),
 
-                        //Name
-                        RichText(
-                            text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: OrdersDetailStrings.name,
-                                    style: Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                  TextSpan(
-                                    text: orderAddress[0].firstName,
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                  )
-                                ]
-                            )
-                        ),
-                        SizedBox(height: height * 0.01),
-
-                        //Mobile No
-                        RichText(
-                            text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: OrdersDetailStrings.mobileNo,
-                                    style: Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                  TextSpan(
-                                    text: orderAddress[0].number,
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                  )
-                                ]
-                            )
-                        ),
-                        SizedBox(height: height * 0.01),
-                        //Email
-                        RichText(
-                            text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: OrdersDetailStrings.email,
-                                    style: Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                  TextSpan(
-                                    text: orderAddress[0].email,
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                  )
-                                ]
-                            )
-                        ),
-                        SizedBox(height: height * 0.01),
-                        //Address 1
-                        RichText(
-                            text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: OrdersDetailStrings.address1,
-                                    style: Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                  TextSpan(
-                                    text: orderAddress[0].address1,
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                  )
-                                ]
-                            )
-                        ),
-                        SizedBox(height: height * 0.01),
-                        //Address 2
-                        RichText(
-                            text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: OrdersDetailStrings.address2,
-                                    style: Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                  TextSpan(
-                                    text: orderAddress[0].adress2,
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                  )
-                                ]
-                            )
-                        ),
-                        SizedBox(height: height * 0.01),
-                        //City
-                        RichText(
-                            text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: OrdersDetailStrings.city,
-                                    style: Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                  TextSpan(
-                                    text: orderAddress[0].cityName,
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                  )
-                                ]
-                            )
-                        ),
-                        SizedBox(height: height * 0.01),
-                        //State
-                        RichText(
-                            text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: OrdersDetailStrings.state,
-                                    style: Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                  TextSpan(
-                                    text: orderAddress[0].state,
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                  )
-                                ]
-                            )
-                        ),
-                        SizedBox(height: height * 0.01),
-                        //Pin
-                        RichText(
-                            text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: OrdersDetailStrings.pin,
-                                    style: Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                  TextSpan(
-                                    text: orderAddress[0].pincode,
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                  )
-                                ]
-                            )
-                        ),
-                        SizedBox(height: height * 0.01),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(OrdersDetailStrings.scheduleDetails),
-                          RichText(
-                              text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: OrdersDetailStrings.scheduleDate,
-                                      style: Theme.of(context).textTheme.titleLarge,
-                                    ),
-                                    TextSpan(
-                                      text: orderDetails[0].bookingDate.toString(),
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                    )
-                                  ]
-                              )
-                          ),
-                          SizedBox(height: height * 0.01),
-
-                          //Service Time
-                          RichText(
-                              text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: OrdersDetailStrings.scheduleTime,
-                                      style: Theme.of(context).textTheme.titleLarge,
-                                    ),
-                                    TextSpan(
-                                      text: orderDetails[0].bookingTime,
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                    )
-                                  ]
-                              )
-                          ),
-                          SizedBox(height: height * 0.01),
-                        ],
-                      )
-                  )
-                ],
-              )
+              OrderSchedule(getOrderSchedule: orderDetails[0]),
             ],
           ),
         ),
@@ -446,3 +322,156 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
     }
   }
 }
+
+
+class ProductHeader extends StatelessWidget {
+  const ProductHeader({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey.shade200,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //Service
+          Expanded(
+            child: Text(OrdersDetailStrings.service,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ),
+
+          // Price
+          Expanded(
+            child: Text(OrdersDetailStrings.price,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }
+}
+
+class AddressDetails extends StatelessWidget {
+  final Address? getAddress;
+  const AddressDetails({Key? key,
+    this.getAddress,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10)
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.maxFinite,
+              padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
+              // color: Colors.grey.shade50,
+              child: Text('Address Details',
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
+                  color: Theme.of(context).textTheme.titleLarge!.color
+                ),
+              ),
+            ),
+            Divider(
+              height: 0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(getAddress!.firstName!,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  Text(getAddress!.number!,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  Text(getAddress!.email!,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  Text(getAddress!.address1!,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  Text(getAddress!.adress2!,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  Text(getAddress!.state!,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  Text(getAddress!.pincode!,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class OrderSchedule extends StatelessWidget {
+  final Orderdtl? getOrderSchedule;
+  const OrderSchedule({Key? key, this.getOrderSchedule}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.maxFinite,
+              padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
+              // color: Colors.grey.shade50,
+              child: Text('Schedule At',
+                style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
+                    color: Theme.of(context).textTheme.titleLarge!.color
+                ),
+              ),
+            ),
+            const Divider(
+              height: 0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(getOrderSchedule!.bookingDate!.toLocal().toString(),
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  Text(getOrderSchedule!.bookingTime.toString(),
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

@@ -21,6 +21,7 @@ class LocationController extends GetxController {
 
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? id = pref.getString(ApiStrings.userID);
+      debugPrint(id);
       String url = "${ApiEndPoint.getLoc}=$id";
       debugPrint(url);
 
@@ -37,8 +38,8 @@ class LocationController extends GetxController {
       if(data["status"] == 200){
         locationModel.value = locModel;
       }
-      debugPrint("LocationAPI Response Code: ${response.statusCode}");
 
+      debugPrint("LocationAPI Response Code: ${response.statusCode.toString()}");
       isLoading.value = false;
       return true;
     } catch(e) {

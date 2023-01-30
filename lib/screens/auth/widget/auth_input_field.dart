@@ -15,13 +15,13 @@ class _PhoneNumberVerificationState extends State<PhoneNumberVerification> {
   Widget build(BuildContext context) {
     return TextFormField(
       style: Theme.of(context).textTheme.labelLarge,
-      validator:  (value) {
-        if(value!.isEmpty && value.length != 10){
-          return 'Invalid Mobile Number';
-        } else {
-          return null;
-        }
-      },
+      // validator:  (value) {
+      //   if(value!.isEmpty && value.length != 10){
+      //     return 'Invalid Mobile Number';
+      //   } else {
+      //     return null;
+      //   }
+      // },
       controller: widget.controller,
       cursorColor: Colors.black,
       cursorRadius: const Radius.circular(10),

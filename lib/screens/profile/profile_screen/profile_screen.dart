@@ -1,5 +1,7 @@
+import 'package:apniseva/controller/auth_controller/auth_controller.dart';
 import 'package:apniseva/screens/dashboard/widget/dash_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../profile_sections/profile_app_bar.dart';
@@ -13,6 +15,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  final profileController = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
 
@@ -50,57 +55,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         style: Theme.of(context).textTheme.headlineSmall
                     ),
                     TextSpan(
-                        text: 'User ID',
+                        text: profileController.userModel.value.messages!.status!.userId,
                         style: Theme.of(context).textTheme.titleLarge
                     ),
 
                   ]
                 )
             ),
-            SizedBox(height: height * 0.03,),
+            SizedBox(height: height * 0.01),
 
             RichText(
                text: TextSpan(
                    children: [
                      TextSpan(
                           text: 'Name: ',
-                          style: Theme.of(context).textTheme.headlineMedium
+                          style: Theme.of(context).textTheme.headlineSmall
                       ),
                      TextSpan(
-                          text: 'Sudip Mahanta',
-                          style: Theme.of(context).textTheme.labelLarge
+                          text: profileController.userModel.value.messages!.status!.fullname,
+                          style: Theme.of(context).textTheme.titleLarge
                       ),
                    ]
                )
             ),
-            SizedBox(height: height * 0.03,),
+            SizedBox(height: height * 0.01),
 
             RichText(
                 text: TextSpan(
                     children: [
                       TextSpan(
                           text: 'Email: ',
-                          style: Theme.of(context).textTheme.headlineMedium
+                          style: Theme.of(context).textTheme.headlineSmall
                       ),
                       TextSpan(
-                          text: 'sudipmahanta999@gmail.com',
-                          style: Theme.of(context).textTheme.labelLarge
+                          text: profileController.userModel.value.messages!.status!.email,
+                          style: Theme.of(context).textTheme.titleLarge
                       ),
                     ]
                 )
             ),
-            SizedBox(height: height * 0.03,),
+            SizedBox(height: height * 0.01,),
 
             RichText(
                 text: TextSpan(
                     children: [
                       TextSpan(
                           text: 'Mobile No: ',
-                          style: Theme.of(context).textTheme.headlineMedium
+                          style: Theme.of(context).textTheme.headlineSmall
                       ),
                       TextSpan(
-                          text: '7852965860',
-                          style: Theme.of(context).textTheme.labelLarge
+                          text: profileController.userModel.value.messages!.status!.contact,
+                          style: Theme.of(context).textTheme.titleLarge
                       ),
                     ]
                 )

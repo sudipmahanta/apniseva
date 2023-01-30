@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class OrderController extends GetxController{
       OrderDataModel orderModel = OrderDataModel();
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? userID = pref.getString(ApiStrings.userID);
-      String? orderAPI = "${ApiEndPoint.getOrder}=$userID";
+      String? orderAPI = ApiEndPoint.getOrder;
 
       debugPrint(userID);
       debugPrint(orderAPI);
@@ -33,7 +35,7 @@ class OrderController extends GetxController{
 
       http.Response response = await http.post(
         Uri.parse(orderAPI),
-        // body: body
+        body: jsonEncode(body),
         headers: header
       );
       debugPrint('OrderAPI Status Code: ${response.statusCode}');

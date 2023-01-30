@@ -8,4 +8,9 @@ class ApiStrings {
   static String otp = 'login_otp';
 
   static String orderID = 'order_id';
+  static String catID = 'cat_id';
+  static String subCat = 'sub_cat';
+  static String serviceID = 'service_id';
+  static String categoryID = 'category_id';
+  static String productQty = 'product_qty';
 }
