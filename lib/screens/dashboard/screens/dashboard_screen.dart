@@ -1,8 +1,5 @@
-import 'package:apniseva/controller/auth_controller/auth_controller.dart';
 import 'package:apniseva/controller/dashboard_controller/dash_controller.dart';
-import 'package:apniseva/controller/subcategory_controller/subcategory_controller.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_carousel.dart';
-import 'package:apniseva/screens/dashboard/sections/dash_mostBookServices.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_reviews.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_services.dart';
 import 'package:apniseva/screens/dashboard/widget/dash_strings.dart';
@@ -24,15 +21,12 @@ class DashScreen extends StatefulWidget {
 
 class _DashScreenState extends State<DashScreen> {
 
-  final authController = Get.put(AuthController());
   final dashController = Get.put(DashController());
-  final subCatController = Get.put(SubCategoryController());
 
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
       dashController.getDashboard();
-      subCatController.getSubCat();
     });
     super.initState();
   }
@@ -76,13 +70,16 @@ class _DashScreenState extends State<DashScreen> {
                           visible: dashController.dashDataModel.value.messages!.status!.categoryDtl!.length > 6 ? true : false,
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=> AllServiceScreen(getData: dashController.dashDataModel.value.messages!.status!.categoryDtl!,)));
+                              Get.to(()=> AllServiceScreen(getData: dashController.dashDataModel.value.messages!.status!.categoryDtl!));
                             },
-                            child: Text(DashStrings.viewAll,
-                              style: TextStyle(
-                                letterSpacing: 1.3,
-                                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-                                color: Theme.of(context).textTheme.titleMedium!.color
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                              child: Text(DashStrings.viewAll,
+                                style: TextStyle(
+                                  letterSpacing: 1.3,
+                                  fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
+                                  color: Theme.of(context).textTheme.titleMedium!.color
+                                ),
                               ),
                             ),
                           ),
@@ -95,7 +92,7 @@ class _DashScreenState extends State<DashScreen> {
                     SizedBox(height: height * 0.02),
 
                     DashCarousel(
-                      getData: dashController.dashDataModel.value.messages!.status!.bannerDtl!,
+                      getData: dashController.dashDataModel.value.messages!.status!.offerDtl!,
                     ),
                     SizedBox(height: height * 0.02),
 

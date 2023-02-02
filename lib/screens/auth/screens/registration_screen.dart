@@ -1,10 +1,14 @@
 import 'package:apniseva/controller/auth_controller/auth_controller.dart';
+import 'package:apniseva/screens/splash_screen/widgets/spalsh_string.dart';
 import 'package:apniseva/utils/buttons.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../utils/api_strings/api_strings.dart';
 import '../../../utils/theme.dart';
 import '../widget/auth_input_field.dart';
+import '../widget/auth_strings.dart';
 import 'otp_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -18,6 +22,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   final _key = GlobalKey<FormState>();
   final authController = Get.put(AuthController());
+  String? errorLabel;
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,15 +41,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Spacer(),
-                SizedBox(height: height * 0.15),
 
-                Text('Let\'s get started',
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Image.asset(SplashStrings.apniSevaLogo),
+                ),
+                SizedBox(height: height * 0.10),
+
+                Text(AuthString.getStarted,
                     style: AppTheme.lightTheme.textTheme.headlineLarge
                 ),
                 SizedBox(
                   width: width * 0.65,
-                  child: Text('Enter your 10 digit mobile number to create your account or login',
-                      style: AppTheme.lightTheme.textTheme.titleMedium
+                  child: Text(AuthString.enterMobileNo,
+                      style: AppTheme.lightTheme.textTheme.titleLarge
                   ),
                 ),
                 SizedBox(height: height * 0.015) ,
@@ -52,6 +63,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     key: _key,
                     child: PhoneNumberVerification(
                       controller: authController.mobileController,
+                      validator: (value) {
+                        if(value!.isEmpty && value.length != 10){
+                          return errorLabel = AuthString.validation;
+                          // return ;
+                        }
+                      },
                     )
                 ),
                 SizedBox(height: height * 0.02),
@@ -59,15 +76,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 PrimaryButton(
                     width: width,
                     height: 47,
-                    onPressed: (){
+                    onPressed: () async{
                       if(_key.currentState!.validate()) {
+                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                        preferences.setString(ApiStrings.mobile, authController.mobileController.text);
                         authController.loginWithOTP();
-                        Get.to(OtpVerificationScreen(
-                            phoneNumber: authController.mobileController.text)
+                        Get.to(
+                            OtpVerificationScreen(
+                                phoneNumber: authController.mobileController.text)
                         );
+                      }else{
+                        Get.snackbar('Login Error', errorLabel!);
                       }
                     },
-                    label: 'GET OTP'
+                    label: AuthString.getOTP
                 ),
 
                 const Spacer(),

@@ -1,8 +1,10 @@
 import 'package:apniseva/screens/address/widget/address_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../section/address_appbar.dart';
+import 'address_form_screen.dart';
 
 class AddressScreen extends StatefulWidget {
   const AddressScreen({Key? key}) : super(key: key);
@@ -16,7 +18,7 @@ class _AddressScreenState extends State<AddressScreen> {
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
+    // double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
 
     return Scaffold(
       appBar: AddressAppBar(
@@ -168,7 +170,9 @@ class _AddressScreenState extends State<AddressScreen> {
           )
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: (){
+          Get.to(() => const AddressFormScreen());
+        },
         child: const Icon(Remix.add_circle_line),
       ),
     );

@@ -14,8 +14,6 @@ class AuthController {
   final otpController =TextEditingController();
 
   RxBool isLoading = false.obs;
-  String? phone;
-  String? otp;
   Rx<UserDataModel> userModel = UserDataModel(
     messages: Messages(
       status: Status(
@@ -29,23 +27,23 @@ class AuthController {
 
   loginWithOTP() async{
     SharedPreferences pref = await SharedPreferences.getInstance();
+    String? mobileNumber = pref.getString(ApiStrings.mobile);
     isLoading.value = true;
 
-    Map<String, String> mobileNumber = {'contact': mobileController.text.toString()};
-    var body = json.encode(mobileNumber);
-    var header = {
+    Map<String, String> body = {'contact': mobileNumber!};
+
+    Map<String, String> header = {
       "Content-Type": "application/json"
     };
 
     http.Response response = await http.post(Uri.parse(ApiEndPoint.loginOtp),
         headers: header,
-        body: body,
+        body: jsonEncode(body),
     );
     var data = jsonDecode(response.body);
     debugPrint('OtpAPI Status Code: ${response.statusCode}');
 
     if(response.statusCode == 200) {
-
       pref.setString(ApiStrings.mobile,
           data['messages']["status"]["contact_otp"].toString());
       pref.setString(ApiStrings.otp,
@@ -57,6 +55,7 @@ class AuthController {
     }else {
       Get.snackbar('OTP', 'Error occurred while sending OTP.');
     }
+
     otpController.clear();
   }
 

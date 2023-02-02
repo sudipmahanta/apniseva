@@ -1,12 +1,16 @@
 class CartStrings{
   static String title = 'Cart';
+
   static String coupons = 'Coupons';
   static String applyCoupon = 'Apply Coupon';
-  static String subtotal = 'Sub Total';
-  static String couponApplied = 'Coupon Applied';
+  static String couponApplied = 'Coupon Amount';
   static String gst = 'GST';
 
+  static String total = 'Total';
+
   static String subTotal = 'Sub Total';
+
+  static String schedule = 'Schedule';
   static String date = 'Date';
   static String time = 'Time';
 

@@ -13,4 +13,5 @@ class ApiStrings {
   static String serviceID = 'service_id';
   static String categoryID = 'category_id';
   static String productQty = 'product_qty';
+  static String cartID = 'cart_id';
 }

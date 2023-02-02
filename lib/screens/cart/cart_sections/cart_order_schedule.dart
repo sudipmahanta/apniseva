@@ -1,16 +1,15 @@
-import 'package:apniseva/utils/buttons.dart';
 import 'package:flutter/material.dart';
 
 import '../cart_strings/cart_strings.dart';
 
-class CartSubTotal extends StatefulWidget {
-  const CartSubTotal({Key? key}) : super(key: key);
+class CartOrderScheduleTotal extends StatefulWidget {
+  const CartOrderScheduleTotal({Key? key,}) : super(key: key);
 
   @override
-  State<CartSubTotal> createState() => _CartSubTotalState();
+  State<CartOrderScheduleTotal> createState() => _CartOrderScheduleTotalState();
 }
 
-class _CartSubTotalState extends State<CartSubTotal> {
+class _CartOrderScheduleTotalState extends State<CartOrderScheduleTotal> {
   @override
   Widget build(BuildContext context) {
 
@@ -20,6 +19,7 @@ class _CartSubTotalState extends State<CartSubTotal> {
     return Card(
       elevation: 1.5,
       color: Colors.grey.shade100,
+
       child: Container(
         width: width,
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
@@ -28,25 +28,16 @@ class _CartSubTotalState extends State<CartSubTotal> {
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(CartStrings.subtotal,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  Text('Rs 1750.0 /-',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  )
-                ],
+              child: Text(CartStrings.schedule,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
-
             Text(CartStrings.date,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             TextFormField(
               onTap: () {},
-              readOnly: true,
+              // readOnly: true,
             ),
             SizedBox(height: height * 0.01),
 
@@ -55,8 +46,9 @@ class _CartSubTotalState extends State<CartSubTotal> {
             ),
             TextFormField(
               onTap: () {},
-              readOnly: true,
+              // readOnly: true,
             ),
+            SizedBox(height: height * 0.01),
           ],
         ),
       ),

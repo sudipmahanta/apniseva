@@ -18,8 +18,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    Future.delayed(const Duration(seconds: 3), () {
+      checkLogin();
+    });
     super.initState();
-    checkLogin();
+
   }
 
   checkLogin() async {
@@ -36,7 +39,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset(SplashStrings.apniSevaLogo),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Image.asset(SplashStrings.apniSevaLogo),
+        ),
       ),
     );
   }

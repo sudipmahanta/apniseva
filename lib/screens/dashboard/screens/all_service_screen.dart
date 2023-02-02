@@ -1,8 +1,12 @@
 import 'package:apniseva/screens/dashboard/models/dash_model.dart';
 import 'package:apniseva/screens/profile/profile_sections/profile_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/api_endpoint_strings/api_endpoint_strings.dart';
+import '../../../utils/api_strings/api_strings.dart';
+import '../../service/screens/service_screen.dart';
+import '../sections/sub_category_modal.dart';
 
 class AllServiceScreen extends StatefulWidget {
   final List<CategoryDtl>? getData;
@@ -25,20 +29,22 @@ class _AllServiceScreenState extends State<AllServiceScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-           Container(
+           SizedBox(
              // width: double.maxFinite,
              height: MediaQuery.of(context).size.height,
              child: ListView.builder(
                itemCount: categoryData!.length,
                  itemBuilder: (BuildContext context, int index){
                  return InkWell(
-                   onTap: () {
-                     // categoryData.isEmpty ? const ServiceScreen() :
-                     // showBottomSheet(
-                     //     context: context,
-                     //     builder: (context) {
-                     //       return ChooseSubCategory(getSubData: categoryData[index]);
-                     //     });
+                   onTap: () async{
+                     SharedPreferences preferences = await SharedPreferences.getInstance();
+                     preferences.setString(ApiStrings.catID, categoryData[index].catId!);
+                     categoryData.isEmpty ? const ServiceScreen() :
+                     showBottomSheet(
+                         context: context,
+                         builder: (context) {
+                           return const ChooseSubCategory();
+                         });
                    },
                    child: Container(
                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),

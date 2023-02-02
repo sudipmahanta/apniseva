@@ -6,7 +6,7 @@ import '../models/dash_model.dart';
 import '../widget/dash_strings.dart';
 
 class DashCarousel extends StatelessWidget {
-  final List<BannerDtl>? getData;
+  final List<OfferDtl>? getData;
   const DashCarousel({Key? key,
   this.getData,
   }) : super(key: key);
@@ -34,10 +34,10 @@ class DashCarousel extends StatelessWidget {
       ) : CarouselSlider.builder(
           itemCount: getData!.length,
           options: CarouselOptions(
-            aspectRatio: 19/7
+            aspectRatio: 16/7
           ),
           itemBuilder: (context, int index, int pageIndexView) {
-            List<BannerDtl>? data = getData;
+            List<OfferDtl>? data = getData;
         return Container(
           width: width,
           margin: const EdgeInsets.symmetric(horizontal: 1),
@@ -46,20 +46,20 @@ class DashCarousel extends StatelessWidget {
             color: Colors.grey.shade200,
             borderRadius: BorderRadius.circular(8),
             image: DecorationImage(
-              fit: BoxFit.cover,
-                image: NetworkImage('${ApiEndPoint.imageAPI}/${data![index].image}')
+              fit: BoxFit.contain,
+                image: NetworkImage('${ApiEndPoint.imageAPI}/${data![index].img}')
             ),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 3.5, horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 decoration: BoxDecoration(
-                  color: Colors.black12,
+                  color: Colors.black54,
                   borderRadius: BorderRadius.circular(8)
                 ),
-                child: Text(data[index].bannerTitle!,
+                child: Text(data[index].code!,
                   style: Theme.of(context).textTheme.bodySmall
                 ),
               )

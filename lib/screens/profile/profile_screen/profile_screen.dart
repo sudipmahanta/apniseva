@@ -116,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfileScreen()));
+          Get.to(()=> const EditProfileScreen());
         },
         label: Row(
           children: const [

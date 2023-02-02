@@ -6,9 +6,15 @@ class ApiEndPoint {
  static String getDash = '$baseUrl/user_home';
  static String subCat = '$baseUrl/SubCategory';
  static String service = '$baseUrl/user_service_list';
+
  static String addToCart = '$baseUrl/addto_to_cart';
+ static String cartDetails = '$baseUrl/view_cart';
+ static String removeItems = '$baseUrl/Remove_cart';
+ static String applyCoupon = '$baseUrl/apply_coupon';
 
  static String getOrder = '$baseUrl/customer_allorder';
  static String getOrderDetails = "$baseUrl/UserGetSingleOrder";
  static String imageAPI = 'http://collegeprojectz.com/apniseva/uploads/';
+
+ static String addressAPI = '$baseUrl/add_address';
 }

@@ -13,7 +13,7 @@ class DashReviews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
+    // double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
     return Container(
       width: width,
       height: 190,
@@ -61,15 +61,16 @@ class DashReviews extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(getTestimonial[index].name!,
-                              style: Theme.of(context).textTheme.labelSmall,
+                            FittedBox(
+                              child: Text(getTestimonial[index].name!,
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
                             ),
                             Text(getTestimonial[index].createdDate!,
                               style: Theme.of(context).textTheme.titleSmall,
                             )
                           ],
                         )
-
                       ],
                     )
                   ],

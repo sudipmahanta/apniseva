@@ -1,4 +1,3 @@
-import 'package:apniseva/controller/auth_controller/auth_controller.dart';
 import 'package:apniseva/controller/dashboard_controller/dash_controller.dart';
 import 'package:apniseva/controller/location_controller/location_controller.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
@@ -7,6 +6,8 @@ import 'package:apniseva/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+String? nameCity;
 
 class GetLocation extends StatefulWidget {
   const GetLocation({Key? key,
@@ -17,7 +18,7 @@ class GetLocation extends StatefulWidget {
 }
 
 class _GetLocationState extends State<GetLocation> {
-  String getLoc = 'Khurda';
+  String? getLoc = 'Khurda';
 
   final locController = Get.put(LocationController());
   final dashController = Get.put(DashController());
@@ -35,7 +36,7 @@ class _GetLocationState extends State<GetLocation> {
     return Obx(() {
         return SimpleDialog(
           contentPadding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-          title: Text('Location',
+          title: Text('Choose Location',
             style: Theme.of(context).textTheme.headlineLarge,
           ),
           children:  [
@@ -70,9 +71,7 @@ class _GetLocationState extends State<GetLocation> {
                       onTap: () async{
                         SharedPreferences preferences = await SharedPreferences.getInstance();
                         preferences.setString(ApiStrings.cityID, items.cityId.toString());
-                        preferences.setString(ApiStrings.cityName, getLoc);
-                        debugPrint("CityID: ${items.cityId.toString()}");
-                        debugPrint("CityName: ${items.cityName.toString()}");
+                        preferences.setString(ApiStrings.cityName, items.cityName.toString());
                       },
                       value: items.cityName,
                       child: Text(items.cityName!,
@@ -80,8 +79,9 @@ class _GetLocationState extends State<GetLocation> {
                       ),
                     );}).toList(),
                   onChanged: (String? newValue) async{
+                    getLoc = newValue!;
                     setState(() {
-                      getLoc = newValue!;
+
                     });
                   },
                 ),

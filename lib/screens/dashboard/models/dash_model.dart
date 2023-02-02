@@ -56,21 +56,21 @@ class Status {
   Status({
     this.userDtl,
     this.testimonialDtl,
-    this.bannerDtl,
+    this.searchDtl,
     this.offerDtl,
     this.categoryDtl,
   });
 
   List<UserDtl>? userDtl;
   List<TestimonialDtl>? testimonialDtl;
-  List<BannerDtl>? bannerDtl;
+  List<SearchDtl>? searchDtl;
   List<OfferDtl>? offerDtl;
   List<CategoryDtl>? categoryDtl;
 
   factory Status.fromJson(Map<String, dynamic> json) => Status(
     userDtl: List<UserDtl>.from(json["user_dtl"].map((x) => UserDtl.fromJson(x))),
     testimonialDtl: List<TestimonialDtl>.from(json["testimonial_dtl"].map((x) => TestimonialDtl.fromJson(x))),
-    bannerDtl: List<BannerDtl>.from(json["banner_dtl"].map((x) => BannerDtl.fromJson(x))),
+    searchDtl: List<SearchDtl>.from(json["search_dtl"].map((x) => SearchDtl.fromJson(x))),
     offerDtl: List<OfferDtl>.from(json["offer_dtl"].map((x) => OfferDtl.fromJson(x))),
     categoryDtl: List<CategoryDtl>.from(json["category_dtl"].map((x) => CategoryDtl.fromJson(x))),
   );
@@ -78,65 +78,9 @@ class Status {
   Map<String, dynamic> toJson() => {
     "user_dtl": List<dynamic>.from(userDtl!.map((x) => x.toJson())),
     "testimonial_dtl": List<dynamic>.from(testimonialDtl!.map((x) => x.toJson())),
-    "banner_dtl": List<dynamic>.from(bannerDtl!.map((x) => x.toJson())),
+    "search_dtl": List<dynamic>.from(searchDtl!.map((x) => x.toJson())),
     "offer_dtl": List<dynamic>.from(offerDtl!.map((x) => x.toJson())),
     "category_dtl": List<dynamic>.from(categoryDtl!.map((x) => x.toJson())),
-  };
-}
-
-class BannerDtl {
-  BannerDtl({
-    this.bannerId,
-    this.bannerTitle,
-    this.bannerSubtitle,
-    this.description,
-    this.urrl,
-    this.type,
-    this.orderby,
-    this.image,
-    this.cityId,
-    this.createdDate,
-    this.updatedDate,
-  });
-
-  String? bannerId;
-  String? bannerTitle;
-  String? bannerSubtitle;
-  String? description;
-  String? urrl;
-  String? type;
-  String? orderby;
-  String? image;
-  String? cityId;
-  String? createdDate;
-  String? updatedDate;
-
-  factory BannerDtl.fromJson(Map<String, dynamic> json) => BannerDtl(
-    bannerId: json["banner_id"],
-    bannerTitle: json["banner_title"],
-    bannerSubtitle: json["banner_subtitle"],
-    description: json["description"],
-    urrl: json["urrl"],
-    type: json["type"],
-    orderby: json["orderby"],
-    image: json["image"],
-    cityId: json["city_id"],
-    createdDate: json["created_date"],
-    updatedDate: json["updated_date"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "banner_id": bannerId,
-    "banner_title": bannerTitle,
-    "banner_subtitle": bannerSubtitle,
-    "description": description,
-    "urrl": urrl,
-    "type": type,
-    "orderby": orderby,
-    "image": image,
-    "city_id": cityId,
-    "created_date": createdDate,
-    "updated_date": updatedDate,
   };
 }
 
@@ -241,6 +185,70 @@ class OfferDtl {
     "img": img,
     "create_date": createDate,
     "update_date": updateDate,
+  };
+}
+
+class SearchDtl {
+  SearchDtl({
+    this.serviceId,
+    this.serviceName,
+    this.cityId,
+    this.serviceImage,
+    this.serviceDetails,
+    this.serviceReguPrice,
+    this.serviceSalePrice,
+    this.catId,
+    this.status,
+    this.priceId,
+    this.amount,
+    this.createdDate,
+    this.updatedDate,
+  });
+
+  String? serviceId;
+  String? serviceName;
+  String? cityId;
+  String? serviceImage;
+  String? serviceDetails;
+  dynamic serviceReguPrice;
+  dynamic serviceSalePrice;
+  String? catId;
+  String? status;
+  String? priceId;
+  String? amount;
+  String? createdDate;
+  String? updatedDate;
+
+  factory SearchDtl.fromJson(Map<String, dynamic> json) => SearchDtl(
+    serviceId: json["service_id"],
+    serviceName: json["service_name"],
+    cityId: json["city_id"],
+    serviceImage: json["service_image"],
+    serviceDetails: json["service_details"],
+    serviceReguPrice: json["service_regu_price"],
+    serviceSalePrice: json["service_sale_price"],
+    catId: json["cat_id"],
+    status: json["status"],
+    priceId: json["price_id"],
+    amount: json["amount"],
+    createdDate: json["created_date"],
+    updatedDate: json["updated_date"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "service_id": serviceId,
+    "service_name": serviceName,
+    "city_id": cityId,
+    "service_image": serviceImage,
+    "service_details": serviceDetails,
+    "service_regu_price": serviceReguPrice,
+    "service_sale_price": serviceSalePrice,
+    "cat_id": catId,
+    "status": status,
+    "price_id": priceId,
+    "amount": amount,
+    "created_date": createdDate,
+    "updated_date": updatedDate,
   };
 }
 

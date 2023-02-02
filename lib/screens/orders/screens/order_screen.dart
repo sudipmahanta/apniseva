@@ -21,7 +21,6 @@ class _BookingScreenState extends State<BookingScreen> {
 
   final orderController = Get.put(OrderController());
 
-
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
@@ -83,22 +82,6 @@ class _BookingScreenState extends State<BookingScreen> {
                             ),
                             const Spacer(),
 
-                            //Product Name
-                            /*RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "${OrderStrings.productName}:  ",
-                                      style: Theme.of(context).textTheme.titleLarge,
-                                    ),
-                                    TextSpan(
-                                      text: orderData[index].productname!,
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                    ),
-                                  ]
-                                )
-                            ),*/
-
                             // Service Date & Time
                             RichText(
                                 text: TextSpan(
@@ -156,7 +139,7 @@ class _BookingScreenState extends State<BookingScreen> {
                                     SharedPreferences pref = await SharedPreferences.getInstance();
                                     pref.setString(ApiStrings.orderID, orderData[index].orderId.toString());
                                     debugPrint(orderData[index].orderId.toString());
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderBookingDetails()));
+                                    Get.to(()=> const OrderBookingDetails());
                                   },
                                   child: Row(
                                     children: [

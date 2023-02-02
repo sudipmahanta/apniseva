@@ -385,7 +385,7 @@ class AddressDetails extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(
+            const Divider(
               height: 0,
             ),
             Padding(

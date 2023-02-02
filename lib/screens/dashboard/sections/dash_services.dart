@@ -1,4 +1,3 @@
-import 'package:apniseva/controller/subcategory_controller/subcategory_controller.dart';
 import 'package:apniseva/screens/dashboard/models/dash_model.dart';
 import 'package:apniseva/screens/dashboard/sections/sub_category_modal.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
@@ -7,7 +6,6 @@ import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/dash_model.dart';
 
 class DashCategory extends StatefulWidget {
   final List<CategoryDtl>? getData;
@@ -42,7 +40,7 @@ class _DashCategoryState extends State<DashCategory> {
                 onTap: () async{
                   SharedPreferences preferences = await SharedPreferences.getInstance();
                   preferences.setString(ApiStrings.catID, data[index].catId!);
-                  debugPrint("Category: ${data[index].catName}");
+                  // debugPrint("Category: ${data[index].catName}");
 
                   showBottomSheet(
                       context: context,

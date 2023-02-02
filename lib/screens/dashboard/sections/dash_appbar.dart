@@ -1,4 +1,5 @@
 import 'package:apniseva/screens/cart/screen/cart_screen.dart';
+import 'package:apniseva/screens/splash_screen/widgets/spalsh_string.dart';
 import 'package:apniseva/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,12 +20,14 @@ class DashAppBar extends StatefulWidget implements PreferredSizeWidget{
 class _DashAppBarState extends State<DashAppBar> {
 
   final locController = Get.put(LocationController());
-  String? cityName = 'Set Loc';
+  String? cityName = 'Location';
 
   @override
   void initState() {
-    locController.getLoc();
-    cityName;
+    Future.delayed(Duration.zero, (){
+      locController.getLoc();
+    });
+
     super.initState();
   }
 
@@ -35,7 +38,11 @@ class _DashAppBarState extends State<DashAppBar> {
         preferredSize: widget.preferredSize,
         child: AppBar(
           automaticallyImplyLeading: false,
-          // backgroundColor: primaryColor,
+          title: Image.asset(SplashStrings.apniSevaLogo,
+            height: 55,
+            width: 90,
+            color: Colors.white,
+          ),
           actions: [
             InkWell(
               onTap: () {
@@ -49,7 +56,6 @@ class _DashAppBarState extends State<DashAppBar> {
                   child: Row(
                     children: [
                       Text(cityName!),
-                          // locController.locationModel.value.messages!.status!.city!.map((e) => e.cityName).toString()),
                       const Icon(Icons.location_on_rounded,
                         size: 20,
                       ),

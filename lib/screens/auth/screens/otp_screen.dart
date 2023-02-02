@@ -13,6 +13,8 @@ import '../../../utils/theme.dart';
 import 'package:get/get.dart';
 
 import '../../location/screen/location.dart';
+import '../../splash_screen/widgets/spalsh_string.dart';
+import '../widget/auth_strings.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String phoneNumber;
@@ -26,7 +28,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   final authController = Get.put(AuthController());
   final locController = Get.put(LocationController());
-
 
   @override
   void initState() {
@@ -76,22 +77,29 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     height: height * 0.2,
                   ),
 
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Image.asset(SplashStrings.apniSevaLogo),
+                  ),
+                  SizedBox(height: height * 0.10),
+
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FittedBox(
                         fit: BoxFit.contain,
-                        child: Text('OTP Verification',
+                        child: Text(AuthString.otpVerification,
                           style: AppTheme.lightTheme.textTheme.headlineLarge,
                         ),
                       ),
-                      Text('Enter OTP sent to your mobile no ${widget.phoneNumber.toString()}',
-                          style: AppTheme.lightTheme.textTheme.titleMedium
+                      Text('${AuthString.enterOTP} +91- ${widget.phoneNumber.toString()}',
+                          style: AppTheme.lightTheme.textTheme.titleLarge
                       ),
                     ],
                   ),
 
                   PinCodeTextField(
+                    cursorColor: Theme.of(context).primaryColor,
                     length: 6,
                     controller: authController.otpController,
                     textStyle: const TextStyle(
@@ -110,62 +118,21 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         borderRadius: BorderRadius.circular(8),
                         activeFillColor: primaryColor,
                         selectedColor: primaryColor,
-                        activeColor: Colors.black,
-                        inactiveColor: Colors.black,
-                        errorBorderColor: Colors.red,
+                        activeColor: primaryColor,
+                        inactiveColor: primaryColor,
+                        errorBorderColor: primaryColor,
                         fieldOuterPadding: EdgeInsets.zero
                     ),
                   ),
-                  const SizedBox(height: 5),
-
-                  Container(
-                    width: width,
-                    height: 45,
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.13),
-                        borderRadius: BorderRadius.circular(8)
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.info_outlined,
-                          color: Colors.red,
-                        ),
-                        SizedBox(width: 10),
-                        Text('Automatically reading  OTP',
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
+                  SizedBox(height: height * 0.05),
 
                   PrimaryButton(
                       width: width,
                       height: 47,
-                      onPressed: () async{
-                        // SharedPreferences preferences = await SharedPreferences.getInstance();
-                        // String? otp = preferences.getString(ApiStrings.otp);
-                        // if(otp == authController.otpController.text.toString()) {
-                        //   debugPrint(otp);
-                        //   Navigator.push(context,
-                        //       MaterialPageRoute(builder: (context) =>
-                        //       const BottomNavBar()));
-                        // } else {
-                        //   Navigator.push(context,
-                        //       MaterialPageRoute(builder: (context) =>
-                        //       const RegistrationScreen()));
-                        // }
-
+                      onPressed: () {
                         verifyOTP();
                       },
-                      label: 'SUBMIT'
+                      label: AuthString.submit
                   ),
                   SizedBox(height: height * 0.03),
 
@@ -181,11 +148,23 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   Align(
                     alignment: Alignment.center,
                     child: TextButton(
-                        onPressed: (){},
-                        child: const Text('Resend OTP',
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
+                        onPressed: (){
+                          authController.loginWithOTP();
+                        },
+                        child:  Text('Resend OTP',
+
+                          style: Theme.of(context).textTheme.labelLarge
+                        )
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: TextButton(
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                        child:  Text('Edit Mobile Number',
+                            style: Theme.of(context).textTheme.labelSmall
                         )
                     ),
                   ),

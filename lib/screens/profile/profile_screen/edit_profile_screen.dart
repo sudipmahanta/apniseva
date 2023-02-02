@@ -1,6 +1,5 @@
 import 'package:apniseva/utils/buttons.dart';
-import 'package:apniseva/utils/color.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -33,9 +32,9 @@ class EditProfileScreen extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Badge(
+              child: badges.Badge(
                 // badgeColor: primaryColor,
-                position: const BadgePosition(
+                position: badges.BadgePosition.custom(
                     bottom: 2,
                     end: 10
                 ),
