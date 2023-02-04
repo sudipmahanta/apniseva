@@ -17,5 +17,5 @@ class CartStrings{
   static String pod = 'Pay On Delivery';
   static String payOnline = 'Pay Online';
   static String accept = 'Accept Terms Condition';
-  static String book = 'BOOK';
+  static String confirmBooking = 'Confirm Booking';
 }

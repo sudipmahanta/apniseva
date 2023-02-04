@@ -1,3 +1,4 @@
+import 'package:apniseva/controller/cart_controller/cart_controller.dart';
 import 'package:apniseva/screens/cart/screen/cart_screen.dart';
 import 'package:apniseva/screens/splash_screen/widgets/spalsh_string.dart';
 import 'package:apniseva/utils/color.dart';
@@ -20,12 +21,14 @@ class DashAppBar extends StatefulWidget implements PreferredSizeWidget{
 class _DashAppBarState extends State<DashAppBar> {
 
   final locController = Get.put(LocationController());
+  final cartController = Get.put(CartController());
   String? cityName = 'Location';
 
   @override
   void initState() {
     Future.delayed(Duration.zero, (){
       locController.getLoc();
+      cartController.getCartData();
     });
 
     super.initState();
@@ -67,7 +70,7 @@ class _DashAppBarState extends State<DashAppBar> {
 
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen()));
+                Get.to(()=> const CartScreen());
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),

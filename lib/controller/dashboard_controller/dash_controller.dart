@@ -44,18 +44,69 @@ class DashController extends GetxController {
 
      if(response.statusCode == 200 && dashModel.status == 200){
        dashDataModel.value = dashModel;
-       isLoading.value = false;
      }
-     // debugPrint('DashBoardAPI Data:\n${response.body}');
-
+     isLoading.value = false;
      return true;
+
+
    } catch(error) {
      isLoading.value = false;
      Get.snackbar("Dashboard", "Something went wrong! please try again later",
          colorText: Colors.black,
          backgroundColor: Colors.white54
      );
+     debugPrint(error.toString());
      return false;
    }
+  }
+}
+
+class SearchApi{
+  static Future<List<SearchDtl>?> getSearchResult(String query) async{
+    try{
+      DashDataModel dashModel = DashDataModel();
+
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? cityID = pref.getString(ApiStrings.cityID);
+      String? userID = pref.getString(ApiStrings.userID);
+      String? dashApi = ApiEndPoint.getDash;
+
+      Map<String, String> body = {
+        "user_id" : userID!,
+        "city_id" : cityID!
+      };
+      Map<String, String> header = {
+        "Content-Type": "application/json; charset=utf-8"
+      };
+
+      http.Response response = await http.post(
+          Uri.parse(dashApi),
+          body: jsonEncode(body),
+          headers: header
+      );
+      debugPrint('DashAPI Status Code: ${response.statusCode.toString()}');
+
+      if(response.statusCode == 200 && dashModel.status == 200){
+        dashModel = dashDataModelFromJson(response.body);
+        final List? serviceName = dashModel.messages!.status!.searchDtl;
+
+        return serviceName?.map((json) => SearchDtl.fromJson(json)).where((search) {
+          final serviceNameLower = search.serviceName!.toLowerCase();
+          final queryLower = query.toLowerCase();
+          return serviceNameLower.contains(queryLower);
+        }).toList();
+      }
+      else{
+        throw Exception();
+      }
+
+    } catch(error) {
+      Get.snackbar("Dashboard", "Something went wrong! please try again later",
+          colorText: Colors.black,
+          backgroundColor: Colors.white54
+      );
+      debugPrint(error.toString());
+    }
+    return null;
   }
 }

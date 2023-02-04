@@ -2,6 +2,7 @@ import 'package:apniseva/controller/cart_controller/cart_controller.dart';
 import 'package:apniseva/screens/cart/cart_sections/cart_order_schedule.dart';
 import 'package:apniseva/screens/cart/cart_strings/cart_strings.dart';
 import 'package:apniseva/screens/cart/models/cart_details_model.dart';
+import 'package:apniseva/screens/cart/screen/select_address_screen.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
 
+  int? selected = 1;
   final cartController = Get.put(CartController());
 
   @override
@@ -63,7 +65,7 @@ class _CartScreenState extends State<CartScreen> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: cartController.cartDetailsDataModel.value.messages!.status!.toString() == 'Your Cart Is Empty' ? const Text('Cart is empty') : Column(
+                child: cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isEmpty ? Text('Empty'): Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Column(
@@ -113,16 +115,22 @@ class _CartScreenState extends State<CartScreen> {
 
                       const CartOrderScheduleTotal(),
 
-                      // RadioListTile(
-                      //     title: Text(CartStrings.pod,
-                      //       style: Theme.of(context).textTheme.titleLarge,
-                      //     ),
-                      //     toggleable: true,
-                      //     value: 0,
-                      //     groupValue: 1,
-                      //     onChanged: (value){}
-                      // ),
-                      //
+                      RadioListTile(
+                          title: Text(CartStrings.pod,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          toggleable: true,
+                          value: 0,
+                          groupValue: selected,
+                          onChanged: (value) {
+                            setState(() {
+                              selected = value;
+                            });
+                            debugPrint(selected.toString());
+                            // SharedPreferences preferences = await SharedPreferences.getInstance();
+                          }
+                      ),
+
                       // RadioListTile(
                       //     title: Text(CartStrings.payOnline,
                       //       style: Theme.of(context).textTheme.titleLarge,
@@ -142,21 +150,30 @@ class _CartScreenState extends State<CartScreen> {
                       //     groupValue: 1,
                       //     onChanged: (value){}
                       // ),
-
-                      PrimaryButton(
-                          width: width,
-                          height: 47,
-                          onPressed: (){
-
-                          },
-                          label: CartStrings.book
-                      ),
-                      SizedBox(height: height * 0.01,)
                   ]
                 ),
               ),
             ),
-          )
+          ),
+            bottomNavigationBar: BottomAppBar(
+              child: Container(
+                  width: width,
+                  height: 65,
+                  color: Colors.white,
+                  alignment: Alignment.center,
+                  child: PrimaryButton(
+                      width: width * 0.95,
+                      height: 47,
+                      onPressed: () async{
+
+                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                        Future.delayed(Duration.zero,(){
+                          // Get.to(()=> const SelectAddressScreen());
+                        });
+                        },
+                      label: CartStrings.confirmBooking)
+              ),
+            )
         );
       }
     );

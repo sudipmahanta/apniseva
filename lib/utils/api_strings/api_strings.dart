@@ -14,4 +14,12 @@ class ApiStrings {
   static String categoryID = 'category_id';
   static String productQty = 'product_qty';
   static String cartID = 'cart_id';
+  static String addressID = 'address_id';
+  static String paymentMode = 'payment_mode';
+
+  static String date = 'date';
+  static String time = 'time';
+  static String couponCode = 'coupon_code';
+  static String couponCharge = 'coupon_charge';
+  static String gst = 'gst';
 }

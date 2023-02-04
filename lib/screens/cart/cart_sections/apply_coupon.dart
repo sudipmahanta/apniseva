@@ -18,11 +18,6 @@ class _CartApplyCouponState extends State<CartApplyCoupon> {
   final couponController = Get.put(CartController());
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;

@@ -31,7 +31,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   @override
   void initState() {
-    authController.getUserData();
+    Future.delayed(Duration.zero, (){
+      authController.getUserData();
+    });
     super.initState();
   }
 

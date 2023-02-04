@@ -7,6 +7,10 @@ class DashStrings {
   static String productName = 'Ac Repair Services';
 }
 
+class DashServicesStrings{
+  static String noData = 'No Service Available';
+}
+
 class DashCarouselStrings{
-  static String noData = 'No Image';
+  static String noData = 'No Offers Available';
 }

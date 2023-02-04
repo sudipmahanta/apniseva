@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
 
+import '../../address/screen/address_form_screen.dart';
 import '../../address/screen/address_screen.dart';
 
 class CartAppBar extends StatelessWidget implements PreferredSizeWidget{
@@ -20,7 +22,7 @@ class CartAppBar extends StatelessWidget implements PreferredSizeWidget{
           actions: [
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const AddressScreen()));
+               Get.to(()=> const AddressFormScreen());
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),

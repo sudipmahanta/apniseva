@@ -24,7 +24,7 @@ class AddressController extends GetxController{
 sendAddress() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   String? userID = preferences.getString(ApiStrings.userID);
-  String? cityName = preferences.getString(ApiStrings.cityName);
+  String? cityID = preferences.getString(ApiStrings.cityID);
   String? addressAPI = ApiEndPoint.addressAPI;
 
   try{
@@ -37,7 +37,7 @@ sendAddress() async {
       'phone': phone.text,
       'address1': address1.text,
       'address2': address2.text,
-      'city': cityName!,
+      'city': cityID!,
       'state': state.text,
       'zip': pinCode.text,
     };

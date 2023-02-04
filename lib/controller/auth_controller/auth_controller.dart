@@ -90,12 +90,7 @@ class AuthController {
         String? userID = pref.getString(ApiStrings.userID);
         debugPrint("User ID: $userID");
         isLoading.value = false;
-
         return true;
-      } else {
-        isLoading.value = false;
-        Get.snackbar('Auth', 'Something went wrong! Please try again later');
-        return false;
       }
     } catch (e) {
       isLoading.value = false;

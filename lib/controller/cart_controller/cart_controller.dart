@@ -20,6 +20,8 @@ class CartController extends GetxController{
   Rx<CouponDataModel> couponDataModel = CouponDataModel().obs;
 
   TextEditingController couponTextController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
 
   addToCart() async{
     // try{
@@ -61,15 +63,9 @@ class CartController extends GetxController{
           snackPosition: SnackPosition.BOTTOM
         );
       }
+      isLoading.value = false;
       return true;
-    // }catch(e){
-    //   isLoading.value = false;
-    //   Get.snackbar('Add to Cart', 'Something went wrong',
-    //       colorText: Colors.black,
-    //       backgroundColor: Colors.white54
-    //   );
-    //   return false;
-    // }
+
   }
 
   getCartData() async{
@@ -102,11 +98,12 @@ class CartController extends GetxController{
       if(response.statusCode == 200 && cartModel.status == 200){
         cartDetailsDataModel.value = cartModel;
       }
+      isLoading.value = false;
 
-      isLoading.value = false;
       return true;
-    }catch(e){
+    } catch(e){
       isLoading.value = false;
+
       Get.snackbar('Cart', 'Something went wrong',
           colorText: Colors.black,
           backgroundColor: Colors.white54
@@ -164,14 +161,14 @@ class CartController extends GetxController{
       Map<String, String> body = {
         'user_id': userID!,
         'city_id': cityID!,
-        'coupon_id': couponCode
+        'coupon_code': couponCode
       };
 
       Map<String, String> header = {
         "Content-Type": "application/json; charset=utf-8"
       };
 
-      http.Response response = await http.put(
+      http.Response response = await http.post(
         Uri.parse(couponAPI),
         body: jsonEncode(body),
         headers: header
@@ -184,5 +181,30 @@ class CartController extends GetxController{
         couponDataModel.value = couponModel;
       }
       isLoading.value = false;
+  }
+
+  checkOut() async{
+    try{
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      String? userID = preferences.getString(ApiStrings.userID);
+      String? addressID = preferences.getString(ApiStrings.addressID);
+
+      Map<String, String> body = {
+        'user_id': userID!,
+        'paymentmode': '',
+        'productname':'',
+        'qty': '',
+        'image': '',
+        'date': dateController.text,
+        'time': timeController.text,
+        'cupone_code': couponTextController.text,
+        'cupone_charge': '',
+        'gst': '',
+        'address_id': ''
+      };
+
+    }catch(e){
+      Get.snackbar('CheckOut', 'Something went wrong');
+    }
   }
 }

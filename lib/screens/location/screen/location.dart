@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String? nameCity;
-
 class GetLocation extends StatefulWidget {
   const GetLocation({Key? key,
   }) : super(key: key);

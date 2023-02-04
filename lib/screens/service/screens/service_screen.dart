@@ -24,7 +24,6 @@ class ServiceScreen extends StatefulWidget {
 
 class _ServiceScreenState extends State<ServiceScreen> {
 
-  bool selectedTile = false;
   final serviceController = Get.put(ServiceController());
   final addToCartController = Get.put(CartController());
 
@@ -57,7 +56,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
                     return Card(
                       elevation: 1.4,
                       child: ListTile(
-                        selected: selectedTile,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0)
                           ),
@@ -103,9 +101,8 @@ class _ServiceScreenState extends State<ServiceScreen> {
                               preferences.setString(ApiStrings.serviceID, serviceData[index].serviceId!);
                               preferences.setString(ApiStrings.catID, serviceData[index].catId!);
                               preferences.setString(ApiStrings.productQty, '1');
-                              addToCartController.addToCart();
-                              setState(() {
-                                selectedTile =!selectedTile;
+                              Future.delayed(Duration.zero, (){
+                                addToCartController.addToCart();
                               });
                             },
                             child: Container(

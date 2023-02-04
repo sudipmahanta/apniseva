@@ -1,5 +1,6 @@
 import 'package:apniseva/screens/dashboard/models/dash_model.dart';
 import 'package:apniseva/screens/dashboard/sections/sub_category_modal.dart';
+import 'package:apniseva/screens/dashboard/widget/dash_strings.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 
@@ -21,11 +22,27 @@ class _DashCategoryState extends State<DashCategory> {
 
   @override
   Widget build(BuildContext context) {
+
+    double width = MediaQuery.of(context).size.width;
+    // double height = MediaQuery.of(context).size.height-(MediaQuery.of(context).padding.top + MediaQuery.of(context).padding.bottom);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 80),
-        child: GridView.builder(
+        child: widget.getData!.isEmpty? Container(
+          width: width * 0.75,
+          height: 80,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: Text(DashServicesStrings.noData,
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
+        ) : GridView.builder(
             shrinkWrap: true,
             itemCount: widget.getData!.length < 6 ? widget.getData!.length : 6,
             physics: const NeverScrollableScrollPhysics(),
