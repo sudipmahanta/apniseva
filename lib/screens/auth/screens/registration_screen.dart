@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../controller/location_controller/location_controller.dart';
 import '../../../utils/api_strings/api_strings.dart';
 import '../../../utils/theme.dart';
 import '../widget/auth_input_field.dart';
@@ -21,9 +22,9 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
 
   final _key = GlobalKey<FormState>();
-  final authController = Get.put(AuthController());
+  final AuthController authController = Get.put(AuthController());
+  final LocationController locController = Get.put(LocationController());
   String? errorLabel;
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +64,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     key: _key,
                     child: PhoneNumberVerification(
                       controller: authController.mobileController,
-                      validator: (value) {
-                        if(value!.isEmpty && value.length != 10){
-                          return errorLabel = AuthString.validation;
-                          // return ;
-                        }
-                      },
                     )
                 ),
                 SizedBox(height: height * 0.02),
@@ -77,10 +72,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     width: width,
                     height: 47,
                     onPressed: () async{
-                      if(_key.currentState!.validate()) {
-                        SharedPreferences preferences = await SharedPreferences.getInstance();
-                        preferences.setString(ApiStrings.mobile, authController.mobileController.text);
-                        authController.loginWithOTP();
+                      if(authController.mobileController.text.isEmpty){
+                        errorLabel = AuthString.validation;
+                      }
+                      else if(_key.currentState!.validate()) {
+
+                        Future.delayed(Duration.zero,(){
+                          authController.loginWithOTP();
+                        });
+
                         Get.to(
                             OtpVerificationScreen(
                                 phoneNumber: authController.mobileController.text)

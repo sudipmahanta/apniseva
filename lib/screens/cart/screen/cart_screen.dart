@@ -23,7 +23,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
 
-  int? selected = 1;
+  String error = '';
   final cartController = Get.put(CartController());
 
   @override
@@ -49,7 +49,7 @@ class _CartScreenState extends State<CartScreen> {
     double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
 
     return Obx(() {
-      List<AllCart> cartData = cartController.cartDetailsDataModel.value.messages!.status!.allCart!;
+      List<AllCart>? cartData = cartController.cartDetailsDataModel.value.messages!.status!.allCart!;
         return Scaffold(
           appBar: CartAppBar(
             title: CartStrings.title,
@@ -63,14 +63,19 @@ class _CartScreenState extends State<CartScreen> {
           RefreshIndicator(
             onRefresh: refresh,
             child: SingleChildScrollView(
-              child: Padding(
+              child: cartController.cartDetailsDataModel.value.status == 200 ?
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isEmpty ? Text('Empty'): Column(
+                child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Column(
                         children: List.generate(
                           cartData.length, (index) {
+                            cartController.productName = cartData[index].servicename;
+                            cartController.price = cartData[index].price;
+                            cartController.image = cartData[index].image;
+                            cartController.qty = cartData[index].qty;
                             return Card(
                                 color: Colors.grey.shade200,
                                 child: Container(
@@ -99,7 +104,10 @@ class _CartScreenState extends State<CartScreen> {
                                       onTap: () async{
                                         SharedPreferences preferences = await SharedPreferences.getInstance();
                                         preferences.setString(ApiStrings.cartID, cartData[index].cartId!);
-                                        cartController.removeItem();
+
+                                        Future.delayed(Duration.zero,() {
+                                          cartController.removeItem();
+                                        });
                                         refresh();
                                       },
                                       child: const Icon(Remix.delete_bin_6_fill,
@@ -115,19 +123,19 @@ class _CartScreenState extends State<CartScreen> {
 
                       const CartOrderScheduleTotal(),
 
-                      RadioListTile(
+                      RadioListTile<String>(
                           title: Text(CartStrings.pod,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           toggleable: true,
-                          value: 0,
-                          groupValue: selected,
-                          onChanged: (value) {
+                          value: 'Cash',
+                          groupValue: cartController.paymentMode,
+                          onChanged: (value) async {
                             setState(() {
-                              selected = value;
+                              cartController.paymentMode = value;
                             });
-                            debugPrint(selected.toString());
-                            // SharedPreferences preferences = await SharedPreferences.getInstance();
+                            debugPrint(cartController.paymentMode.toString());
+                            SharedPreferences preferences = await SharedPreferences.getInstance();
                           }
                       ),
 
@@ -152,7 +160,9 @@ class _CartScreenState extends State<CartScreen> {
                       // ),
                   ]
                 ),
-              ),
+              ) :
+              const Center(child: Text('Empty'))
+
             ),
           ),
             bottomNavigationBar: BottomAppBar(
@@ -165,11 +175,20 @@ class _CartScreenState extends State<CartScreen> {
                       width: width * 0.95,
                       height: 47,
                       onPressed: () async{
+                        if(cartController.paymentMode == null){
+                          return;
+                        }else{
 
-                        SharedPreferences preferences = await SharedPreferences.getInstance();
-                        Future.delayed(Duration.zero,(){
-                          // Get.to(()=> const SelectAddressScreen());
-                        });
+                          Future.delayed(Duration.zero,(){
+                            // cartController.getCartData();
+                          });
+                        }
+
+                        // SharedPreferences preferences = await SharedPreferences.getInstance();
+                        // Future.delayed(Duration.zero,(){
+                        //   // Get.to(()=> const SelectAddressScreen());
+                        // });
+
                         },
                       label: CartStrings.confirmBooking)
               ),

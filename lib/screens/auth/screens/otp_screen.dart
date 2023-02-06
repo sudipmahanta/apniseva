@@ -32,6 +32,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   void initState() {
     Future.delayed(Duration.zero, (){
+
       authController.getUserData();
     });
     super.initState();
@@ -46,9 +47,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       Get.snackbar("OTP", "Incorrect OTP");
 
     } else if(cityID == null) {
-      // setState(() {
-      authController.getUserData();
-      // });
+
+      Future.delayed(Duration.zero,(){
+        authController.getUserData();
+      });
+
       showDialog(context: context, builder: (context) {
         return const GetLocation();
       });

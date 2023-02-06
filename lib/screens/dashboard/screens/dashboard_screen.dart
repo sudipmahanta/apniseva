@@ -21,7 +21,7 @@ class DashScreen extends StatefulWidget {
 
 class _DashScreenState extends State<DashScreen> {
 
-  final dashController = Get.put(DashController());
+  final DashController dashController = Get.put(DashController());
 
   @override
   void initState() {

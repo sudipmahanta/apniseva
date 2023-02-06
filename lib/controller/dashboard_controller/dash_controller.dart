@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DashController extends GetxController {
 
-  Rx isLoading = false.obs;
+  RxBool isLoading = false.obs;
   Rx<DashDataModel> dashDataModel = DashDataModel().obs;
 
   getDashboard() async{
@@ -22,9 +22,6 @@ class DashController extends GetxController {
      String? cityID = pref.getString(ApiStrings.cityID);
      String? userID = pref.getString(ApiStrings.userID);
      String? dashApi = ApiEndPoint.getDash;
-     debugPrint('City ID: $cityID');
-     debugPrint('User ID: $userID');
-     debugPrint('DashBoardAPI: $dashApi');
 
      Map<String, String> body = {
        "user_id" : userID!,
@@ -59,6 +56,8 @@ class DashController extends GetxController {
      return false;
    }
   }
+
+
 }
 
 class SearchApi{

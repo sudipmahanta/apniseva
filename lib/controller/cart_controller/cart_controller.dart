@@ -14,6 +14,12 @@ import '../../screens/cart/models/remove_items_model.dart';
 
 class CartController extends GetxController{
   Rx isLoading = false.obs;
+  String? paymentMode = "Cash";
+  String? productName;
+  String? price;
+  String? qty;
+  String? image;
+
   Rx<AddToCartDataModel> addToCartDataModel = AddToCartDataModel().obs;
   Rx<CartDetailsDataModel> cartDetailsDataModel = CartDetailsDataModel().obs;
   Rx<RemoveItemDataModel> removeItemDataModel = RemoveItemDataModel().obs;
@@ -63,6 +69,7 @@ class CartController extends GetxController{
           snackPosition: SnackPosition.BOTTOM
         );
       }
+      preferences.remove(ApiStrings.catID);
       isLoading.value = false;
       return true;
 
@@ -92,28 +99,26 @@ class CartController extends GetxController{
           headers: headers
       );
 
-      debugPrint(response.statusCode.toString());
+      // debugPrint(response.statusCode.toString());
       cartModel = cartDetailsDataModelFromJson(response.body);
+      debugPrint(cartModel.toString());
 
       if(response.statusCode == 200 && cartModel.status == 200){
         cartDetailsDataModel.value = cartModel;
       }
       isLoading.value = false;
+   } catch(e){
+    isLoading.value = false;
+    Get.snackbar('Cart', e.toString(),
+        colorText: Colors.black,
+        backgroundColor: Colors.white54
+    );
+    return false;
+   }
 
-      return true;
-    } catch(e){
-      isLoading.value = false;
-
-      Get.snackbar('Cart', 'Something went wrong',
-          colorText: Colors.black,
-          backgroundColor: Colors.white54
-      );
-      return false;
-    }
   }
 
   removeItem() async{
-    // try{
       isLoading.value = true;
       RemoveItemDataModel removeItemModel = RemoveItemDataModel();
       SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -138,13 +143,9 @@ class CartController extends GetxController{
 
       if(response.statusCode == 200 && removeItemModel.status == 200){
         removeItemDataModel.value == removeItemModel;
-        Get.snackbar('Cart', removeItemDataModel.value.messages!.status.toString());
+      }else{
+        Get.snackbar('Cart', 'Cart is empty');
       }
-      isLoading.value = false;
-    // }catch(e){
-    //   isLoading.value = false;
-    //   Get.snackbar('Service Remove', 'Something went wrong!');
-    // }
   }
 
   applyCoupon() async{
@@ -186,25 +187,41 @@ class CartController extends GetxController{
   checkOut() async{
     try{
       SharedPreferences preferences = await SharedPreferences.getInstance();
+      String? checkOutApi = ApiEndPoint.checkout;
       String? userID = preferences.getString(ApiStrings.userID);
       String? addressID = preferences.getString(ApiStrings.addressID);
+      String? gstAmount = preferences.getString(ApiStrings.gstAmount);
 
-      Map<String, String> body = {
+      Map<String, dynamic> body = {
         'user_id': userID!,
-        'paymentmode': '',
-        'productname':'',
-        'qty': '',
-        'image': '',
+        'paymentmode': paymentMode!,
+        'productname': [productName],
+        'qty': [qty],
+        'image': [image],
         'date': dateController.text,
         'time': timeController.text,
         'cupone_code': couponTextController.text,
         'cupone_charge': '',
-        'gst': '',
-        'address_id': ''
+        'gst': gstAmount!,
+        'address_id': addressID!
       };
 
+      Map<String, String> headers = {
+        "Content-Type": "application/json; charset=utf-8"
+      };
+
+      http.Response response = await http.post(
+        Uri.parse(checkOutApi),
+        body: jsonEncode(body),
+        headers: headers
+      );
+
+      if(response.statusCode == 200){
+
+      }
+
     }catch(e){
-      Get.snackbar('CheckOut', 'Something went wrong');
+      Get.snackbar('CheckOut', e.toString());
     }
   }
 }

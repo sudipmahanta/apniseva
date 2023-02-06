@@ -21,5 +21,5 @@ class ApiStrings {
   static String time = 'time';
   static String couponCode = 'coupon_code';
   static String couponCharge = 'coupon_charge';
-  static String gst = 'gst';
+  static String gstAmount = 'gst_amount';
 }

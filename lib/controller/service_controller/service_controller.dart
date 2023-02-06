@@ -18,8 +18,8 @@ class ServiceController extends GetxController{
       ServiceDataModel serviceModel = ServiceDataModel();
 
       SharedPreferences preferences = await SharedPreferences.getInstance();
-      String? userID= preferences.getString(ApiStrings.userID);
-      String? cityID= preferences.getString(ApiStrings.cityID);
+      String? userID = preferences.getString(ApiStrings.userID);
+      String? cityID = preferences.getString(ApiStrings.cityID);
       String? categoryID = preferences.getString(ApiStrings.catID);
 
       String? serviceAPI = ApiEndPoint.service;
@@ -44,6 +44,7 @@ class ServiceController extends GetxController{
         serviceDataModel.value = serviceModel;
         isLoading.value = false;
       }
+
     }catch(e) {
       isLoading.value = false;
       Get.snackbar('Service', 'Something went wrong! Try after sometime');

@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/api_endpoint_strings/api_endpoint_strings.dart';
 import '../../utils/api_strings/api_strings.dart';
 
-class AuthController {
+class AuthController extends GetxController {
   final mobileController = TextEditingController();
   final otpController =TextEditingController();
 
@@ -27,10 +27,9 @@ class AuthController {
 
   loginWithOTP() async{
     SharedPreferences pref = await SharedPreferences.getInstance();
-    String? mobileNumber = pref.getString(ApiStrings.mobile);
     isLoading.value = true;
 
-    Map<String, String> body = {'contact': mobileNumber!};
+    Map<String, String> body = {'contact': mobileController.text};
 
     Map<String, String> header = {
       "Content-Type": "application/json"
@@ -40,12 +39,13 @@ class AuthController {
         headers: header,
         body: jsonEncode(body),
     );
-    var data = jsonDecode(response.body);
+    Map data = jsonDecode(response.body);
     debugPrint('OtpAPI Status Code: ${response.statusCode}');
 
     if(response.statusCode == 200) {
       pref.setString(ApiStrings.mobile,
           data['messages']["status"]["contact_otp"].toString());
+
       pref.setString(ApiStrings.otp,
           data['messages']["status"]["login_otp"].toString());
 
@@ -61,10 +61,11 @@ class AuthController {
 
   getUserData() async{
     UserDataModel model = UserDataModel();
-    try{
+    // try{
       isLoading.value = true;
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? mobile = pref.getString(ApiStrings.mobile);
+      String userDataAPI = ApiEndPoint.verifyOtp;
 
       Map<String, String> header = {
         'Content-type': 'application/json',
@@ -72,8 +73,6 @@ class AuthController {
       Map<String, String> body = {
         'contact': mobile!
       };
-
-      String userDataAPI = ApiEndPoint.verifyOtp;
       debugPrint('UserDataApi: $userDataAPI');
 
       http.Response response = await http.post(
@@ -92,15 +91,14 @@ class AuthController {
         isLoading.value = false;
         return true;
       }
-    } catch (e) {
-      isLoading.value = false;
-      Get.snackbar("Auth", "Something went wrong! please try again later",
-        colorText: Colors.black,
-        backgroundColor: Colors.white54
-      );
-      debugPrint(e.toString());
-      return false;
-    }
+    // } catch (e) {
+    //   isLoading.value = false;
+    //   Get.snackbar("Auth", e.toString(),
+    //     colorText: Colors.black,
+    //     backgroundColor: Colors.white54
+    //   );
+    //   return false;
+    // }
   }
 
   clear() {

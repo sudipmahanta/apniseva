@@ -1,3 +1,4 @@
+
 import 'package:apniseva/controller/cart_controller/cart_controller.dart';
 import 'package:apniseva/controller/service_controller/service_controller.dart';
 import 'package:apniseva/screens/service/sections/service_appbar.dart';
@@ -15,7 +16,7 @@ import '../models/service_model.dart';
 class ServiceScreen extends StatefulWidget {
   final String serviceName;
   const ServiceScreen({Key? key,
-    this.serviceName = "Service Name"
+    this.serviceName = "Service"
   }) : super(key: key);
 
   @override
@@ -101,6 +102,8 @@ class _ServiceScreenState extends State<ServiceScreen> {
                               preferences.setString(ApiStrings.serviceID, serviceData[index].serviceId!);
                               preferences.setString(ApiStrings.catID, serviceData[index].catId!);
                               preferences.setString(ApiStrings.productQty, '1');
+                              debugPrint(addToCartController.productName.toString());
+
                               Future.delayed(Duration.zero, (){
                                 addToCartController.addToCart();
                               });
