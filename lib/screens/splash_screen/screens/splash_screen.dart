@@ -27,8 +27,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   checkLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    String? mobile = pref.getString(ApiStrings.mobile);
-    if(mobile == null) {
+    String? userID = pref.getString(ApiStrings.userID);
+    if(userID == null) {
       Get.offAll(() => const RegistrationScreen());
     } else {
       Get.offAll(() => const BottomNavBar());

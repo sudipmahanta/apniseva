@@ -14,7 +14,7 @@ class ApiEndPoint {
  static String checkout = '$baseUrl/submitcheckout';
 
  static String getOrder = '$baseUrl/customer_allorder';
- static String getOrderDetails = "$baseUrl/UserGetSingleOrder";
+ static String getOrderDetails = "$baseUrl/single_order_user";
  static String imageAPI = 'http://collegeprojectz.com/apniseva/uploads/';
 
  static String addressAPI = '$baseUrl/add_address';

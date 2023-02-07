@@ -18,12 +18,14 @@ class AddressScreen extends StatefulWidget {
 class _AddressScreenState extends State<AddressScreen> {
 
   final addressController = Get.put(CartController());
+  int _selectedRadioButton = 0;
 
   @override
   void initState() {
     Future.delayed(Duration.zero,() {
       addressController.getCartData();
     });
+    _selectedRadioButton = -1;
     super.initState();
   }
 
@@ -86,7 +88,16 @@ class _AddressScreenState extends State<AddressScreen> {
                                               ]
                                           )
                                       ),
-                                      Radio(value: 0, groupValue: 1, onChanged: (value){})
+                                      Radio(
+                                          value: index,
+                                          toggleable: true,
+                                          groupValue: _selectedRadioButton,
+                                          onChanged: (value){
+                                            setState(() {
+                                              _selectedRadioButton = value!;
+                                            });
+                                            debugPrint(addressData.addressId);
+                                          })
                                     ],
                                   ),
 

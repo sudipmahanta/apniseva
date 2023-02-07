@@ -61,7 +61,7 @@ class AuthController extends GetxController {
 
   getUserData() async{
     UserDataModel model = UserDataModel();
-    // try{
+
       isLoading.value = true;
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? mobile = pref.getString(ApiStrings.mobile);
@@ -80,7 +80,7 @@ class AuthController extends GetxController {
           body: jsonEncode(body),
           headers: header
       );
-      // debugPrint("GetUserData: ${response.body}");
+      debugPrint("GetUserResponse: ${response.body}");
       model = userDataModelFromJson(response.body);
 
       if (response.statusCode == 200 && model.status == 200) {
@@ -91,14 +91,6 @@ class AuthController extends GetxController {
         isLoading.value = false;
         return true;
       }
-    // } catch (e) {
-    //   isLoading.value = false;
-    //   Get.snackbar("Auth", e.toString(),
-    //     colorText: Colors.black,
-    //     backgroundColor: Colors.white54
-    //   );
-    //   return false;
-    // }
   }
 
   clear() {

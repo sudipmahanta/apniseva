@@ -51,7 +51,7 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
         appBar: PrimaryAppBar(
           title: OrdersDetailStrings.title,
         ),
-        body: orderDetailsController.isLoading.value == true ?
+        body: orderDetailsController.isLoading.value == false ?
         Center(
             child: CircularProgressIndicator(
               strokeWidth: 2.5,

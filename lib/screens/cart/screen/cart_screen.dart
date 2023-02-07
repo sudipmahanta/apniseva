@@ -2,7 +2,6 @@ import 'package:apniseva/controller/cart_controller/cart_controller.dart';
 import 'package:apniseva/screens/cart/cart_sections/cart_order_schedule.dart';
 import 'package:apniseva/screens/cart/cart_strings/cart_strings.dart';
 import 'package:apniseva/screens/cart/models/cart_details_model.dart';
-import 'package:apniseva/screens/cart/screen/select_address_screen.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +23,14 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
 
   String error = '';
-  final cartController = Get.put(CartController());
+  final CartController cartController = Get.put(CartController());
 
   @override
   void initState() {
     Future.delayed(Duration.zero,() {
       cartController.getCartData();
       cartController.applyCoupon();
+      cartController.clear();
     });
     super.initState();
   }
@@ -60,110 +60,108 @@ class _CartScreenState extends State<CartScreen> {
               strokeWidth: 1.5,
             ),
           ) :
-          RefreshIndicator(
-            onRefresh: refresh,
-            child: SingleChildScrollView(
-              child: cartController.cartDetailsDataModel.value.status == 200 ?
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: List.generate(
-                          cartData.length, (index) {
-                            cartController.productName = cartData[index].servicename;
-                            cartController.price = cartData[index].price;
-                            cartController.image = cartData[index].image;
-                            cartController.qty = cartData[index].qty;
-                            return Card(
-                                color: Colors.grey.shade200,
-                                child: Container(
-                                  height: 75,
-                                  alignment: Alignment.center,
-                                  child: ListTile(
-                                    contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                                    leading: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        width: 60,
-                                        height: 75,
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Image.network("${ApiEndPoint.imageAPI}/${cartData[index].image}",
-                                          fit: BoxFit.contain,
-                                        ),
+          SingleChildScrollView(
+            child: cartController.cartDetailsDataModel.value.status == 200 ?
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: List.generate(
+                        cartData.length, (index) {
+                          /*cartController.productName!.add(cartData[index].servicename);
+                          cartController.price!.add(cartData[index].price);
+                          cartController.image!.add(cartData[index].image);
+                          cartController.qty!.add(cartData[index].qty);*/
+                          return Card(
+                              color: Colors.grey.shade200,
+                              child: Container(
+                                height: 75,
+                                alignment: Alignment.center,
+                                child: ListTile(
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                                  leading: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      width: 60,
+                                      height: 75,
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Image.network("${ApiEndPoint.imageAPI}/${cartData[index].image}",
+                                        fit: BoxFit.contain,
                                       ),
                                     ),
-                                    title: Text(cartData[index].servicename!,
-                                      style: Theme.of(context).textTheme.headlineSmall,
-                                    ),
-                                    subtitle: Text('₹ ${cartData[index].price}',
-                                      style: Theme.of(context).textTheme.titleLarge,
-                                    ),
-                                    trailing: InkWell(
-                                      onTap: () async{
-                                        SharedPreferences preferences = await SharedPreferences.getInstance();
-                                        preferences.setString(ApiStrings.cartID, cartData[index].cartId!);
+                                  ),
+                                  title: Text(cartData[index].servicename!,
+                                    style: Theme.of(context).textTheme.headlineSmall,
+                                  ),
+                                  subtitle: Text('₹ ${cartData[index].price}',
+                                    style: Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  trailing: InkWell(
+                                    onTap: () async{
+                                      SharedPreferences preferences = await SharedPreferences.getInstance();
+                                      preferences.setString(ApiStrings.cartID, cartData[index].cartId!);
 
-                                        Future.delayed(Duration.zero,() {
-                                          cartController.removeItem();
-                                        });
-                                        refresh();
-                                      },
-                                      child: const Icon(Remix.delete_bin_6_fill,
-                                        color: Color(0xFFDC4D42),
-                                      ),
-                                    ),),
-                                )
-                            );}
+                                      Future.delayed(Duration.zero,() {
+                                        cartController.removeItem();
+                                      });
+                                      cartController.clear();
+                                      refresh();
+                                      debugPrint(cartController.productName.toString());
+                                    },
+                                    child: const Icon(Remix.delete_bin_6_fill,
+                                      color: Color(0xFFDC4D42),
+                                    ),
+                                  ),),
+                              )
+                          );}
+                      ),
+                    ),
+
+                    const CartApplyCoupon(),
+
+                    const CartOrderScheduleTotal(),
+
+                    RadioListTile<String>(
+                        title: Text(CartStrings.pod,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
-                      ),
+                        toggleable: true,
+                        value: 'cash',
+                        groupValue: cartController.paymentMode,
+                        onChanged: (value) async {
+                          setState(() {
+                            cartController.paymentMode = value;
+                          });
+                          debugPrint(cartController.paymentMode.toString());
+                        }
+                    ),
 
-                      const CartApplyCoupon(),
+                    // RadioListTile(
+                    //     title: Text(CartStrings.payOnline,
+                    //       style: Theme.of(context).textTheme.titleLarge,
+                    //     ),
+                    //     toggleable: true,
+                    //     value: 0,
+                    //     groupValue: 1,
+                    //     onChanged: (value){}
+                    // ),
+                    //
+                    // RadioListTile(
+                    //     title: Text(CartStrings.accept,
+                    //       style: Theme.of(context).textTheme.titleLarge,
+                    //     ),
+                    //     toggleable: true,
+                    //     value: 1,
+                    //     groupValue: 1,
+                    //     onChanged: (value){}
+                    // ),
+                ]
+              ),
+            ) :
+            const Center(child: Text('Empty'))
 
-                      const CartOrderScheduleTotal(),
-
-                      RadioListTile<String>(
-                          title: Text(CartStrings.pod,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          toggleable: true,
-                          value: 'Cash',
-                          groupValue: cartController.paymentMode,
-                          onChanged: (value) async {
-                            setState(() {
-                              cartController.paymentMode = value;
-                            });
-                            debugPrint(cartController.paymentMode.toString());
-                            SharedPreferences preferences = await SharedPreferences.getInstance();
-                          }
-                      ),
-
-                      // RadioListTile(
-                      //     title: Text(CartStrings.payOnline,
-                      //       style: Theme.of(context).textTheme.titleLarge,
-                      //     ),
-                      //     toggleable: true,
-                      //     value: 0,
-                      //     groupValue: 1,
-                      //     onChanged: (value){}
-                      // ),
-                      //
-                      // RadioListTile(
-                      //     title: Text(CartStrings.accept,
-                      //       style: Theme.of(context).textTheme.titleLarge,
-                      //     ),
-                      //     toggleable: true,
-                      //     value: 1,
-                      //     groupValue: 1,
-                      //     onChanged: (value){}
-                      // ),
-                  ]
-                ),
-              ) :
-              const Center(child: Text('Empty'))
-
-            ),
           ),
             bottomNavigationBar: BottomAppBar(
               child: Container(
@@ -175,20 +173,21 @@ class _CartScreenState extends State<CartScreen> {
                       width: width * 0.95,
                       height: 47,
                       onPressed: () async{
-                        if(cartController.paymentMode == null){
-                          return;
-                        }else{
+                        if(cartController.dateController.text.isEmpty){
 
+                          Get.snackbar('Date', 'Select Date');
+                        }else if(cartController.timeController.text.isEmpty){
+
+                          Get.snackbar('Date', 'Select Time');
+                        }else if(cartController.paymentMode == null){
+
+                          Get.snackbar('Cart', 'Select Payment method');
+                        } else{
                           Future.delayed(Duration.zero,(){
-                            // cartController.getCartData();
+                            cartController.checkOut();
                           });
                         }
-
-                        // SharedPreferences preferences = await SharedPreferences.getInstance();
-                        // Future.delayed(Duration.zero,(){
-                        //   // Get.to(()=> const SelectAddressScreen());
-                        // });
-
+                        refresh();
                         },
                       label: CartStrings.confirmBooking)
               ),

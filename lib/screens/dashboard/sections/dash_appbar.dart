@@ -21,14 +21,12 @@ class DashAppBar extends StatefulWidget implements PreferredSizeWidget{
 class _DashAppBarState extends State<DashAppBar> {
 
   final locController = Get.put(LocationController());
-  final cartController = Get.put(CartController());
   String? cityName = 'Location';
 
   @override
   void initState() {
     Future.delayed(Duration.zero, (){
       locController.getLoc();
-      cartController.getCartData();
     });
 
     super.initState();

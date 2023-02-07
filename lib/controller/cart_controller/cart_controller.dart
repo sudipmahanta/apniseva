@@ -10,20 +10,23 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../screens/cart/models/add_to_cart_model.dart';
+import '../../screens/cart/models/checkout_data_model.dart';
 import '../../screens/cart/models/remove_items_model.dart';
+import '../../screens/sucessful/screen/sucessfull_screen.dart';
 
 class CartController extends GetxController{
   Rx isLoading = false.obs;
-  String? paymentMode = "Cash";
-  String? productName;
-  String? price;
-  String? qty;
-  String? image;
+  String? paymentMode = "cash";
+  List? productName=[];
+  List? price=[];
+  List? qty=[];
+  List? image=[];
 
   Rx<AddToCartDataModel> addToCartDataModel = AddToCartDataModel().obs;
   Rx<CartDetailsDataModel> cartDetailsDataModel = CartDetailsDataModel().obs;
   Rx<RemoveItemDataModel> removeItemDataModel = RemoveItemDataModel().obs;
   Rx<CouponDataModel> couponDataModel = CouponDataModel().obs;
+  Rx<CheckOutDataModel> checkoutDataModel = CheckOutDataModel().obs;
 
   TextEditingController couponTextController = TextEditingController();
   TextEditingController dateController = TextEditingController();
@@ -109,7 +112,7 @@ class CartController extends GetxController{
       isLoading.value = false;
    } catch(e){
     isLoading.value = false;
-    Get.snackbar('Cart', e.toString(),
+    Get.snackbar('Cart', "Error: ${e.toString()}",
         colorText: Colors.black,
         backgroundColor: Colors.white54
     );
@@ -180,28 +183,42 @@ class CartController extends GetxController{
 
       if(response.statusCode == 200 && couponModel.status == 200){
         couponDataModel.value = couponModel;
+        preferences.setString(ApiStrings.couponCharge, couponDataModel.value.messages!.status!.couponDetails!.couponAmount!);
+        preferences.setString(ApiStrings.gstAmount, couponDataModel.value.messages!.status!.gst!.gstAmount!);
       }
       isLoading.value = false;
   }
 
   checkOut() async{
-    try{
+    // try{
+      CheckOutDataModel checkOutModel = CheckOutDataModel();
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String? checkOutApi = ApiEndPoint.checkout;
       String? userID = preferences.getString(ApiStrings.userID);
       String? addressID = preferences.getString(ApiStrings.addressID);
+      String? couponAmount = preferences.getString(ApiStrings.couponCharge);
       String? gstAmount = preferences.getString(ApiStrings.gstAmount);
+
+      debugPrint(paymentMode);
+      debugPrint(productName.toString());
+      debugPrint(qty.toString());
+      debugPrint(image.toString());
+      debugPrint(price.toString());
+      debugPrint(dateController.text.toString());
+      debugPrint(timeController.text.toString());
+      debugPrint(couponTextController.text.toString());
 
       Map<String, dynamic> body = {
         'user_id': userID!,
         'paymentmode': paymentMode!,
-        'productname': [productName],
-        'qty': [qty],
-        'image': [image],
+        'productname': productName,
+        'price': price!,
+        'qty': qty!,
+        'image': image!,
         'date': dateController.text,
         'time': timeController.text,
         'cupone_code': couponTextController.text,
-        'cupone_charge': '',
+        'cupone_charge': couponAmount!,
         'gst': gstAmount!,
         'address_id': addressID!
       };
@@ -216,12 +233,28 @@ class CartController extends GetxController{
         headers: headers
       );
 
+      debugPrint(body.toString());
+      debugPrint("Checkout API: ${response.statusCode.toString()}");
+      debugPrint(response.body.toString());
+      checkOutModel = checkOutDataModelFromJson(response.body);
+
       if(response.statusCode == 200){
-
+        checkoutDataModel.value = checkOutModel;
+        Get.to(()=> const SucessfullScreen());
       }
+      Get.snackbar('Submit', checkoutDataModel.value.messages.toString());
 
-    }catch(e){
-      Get.snackbar('CheckOut', e.toString());
-    }
+
+    // }catch(e){
+    //   Get.snackbar('CheckOut', e.toString());
+    // }
+  }
+
+  clear() {
+    productName!.clear();
+    image!.clear();
+    qty!.clear();
+    price!.clear();
+    image!.clear();
   }
 }

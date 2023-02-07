@@ -49,7 +49,8 @@ class _CartApplyCouponState extends State<CartApplyCoupon> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+
                       Future.delayed(Duration.zero,() {
                         couponController.applyCoupon();
                       });
