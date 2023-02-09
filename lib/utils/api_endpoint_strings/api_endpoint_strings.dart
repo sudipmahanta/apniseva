@@ -11,7 +11,7 @@ class ApiEndPoint {
  static String cartDetails = '$baseUrl/view_cart';
  static String removeItems = '$baseUrl/Remove_cart';
  static String applyCoupon = '$baseUrl/apply_coupon';
- static String checkout = '$baseUrl/submitcheckout';
+ static String checkout = '$baseUrl/checkout';
 
  static String getOrder = '$baseUrl/customer_allorder';
  static String getOrderDetails = "$baseUrl/single_order_user";

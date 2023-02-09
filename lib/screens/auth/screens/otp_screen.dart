@@ -51,12 +51,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       Future.delayed(Duration.zero,(){
         authController.getUserData();
       });
-
+      preferences.getString(ApiStrings.cityID);
       showDialog(context: context, builder: (context) {
         return const GetLocation();
       });
     }else {
-      Get.to(const BottomNavBar());
+      Get.to(()=>const BottomNavBar());
 
     }
   }
@@ -68,117 +68,120 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-            child: Container(
-              width: width,
-              height: height,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Spacer(),
-                  SizedBox(
-                    height: height * 0.2,
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Image.asset(SplashStrings.apniSevaLogo),
-                  ),
-                  SizedBox(height: height * 0.10),
-
-                  Column(
+          body: SafeArea(
+            child: SingleChildScrollView(
+                child: Container(
+                  width: width,
+                  height: height,
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FittedBox(
-                        fit: BoxFit.contain,
-                        child: Text(AuthString.otpVerification,
-                          style: AppTheme.lightTheme.textTheme.headlineLarge,
+                      const Spacer(),
+                      SizedBox(
+                        height: height * 0.2,
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Image.asset(SplashStrings.apniSevaLogo),
+                      ),
+                      SizedBox(height: height * 0.10),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(AuthString.otpVerification,
+                              style: AppTheme.lightTheme.textTheme.headlineLarge,
+                            ),
+                          ),
+                          Text('${AuthString.enterOTP} +91- ${widget.phoneNumber.toString()}',
+                              style: AppTheme.lightTheme.textTheme.titleLarge
+                          ),
+                        ],
+                      ),
+
+                      PinCodeTextField(
+                        cursorColor: Theme.of(context).primaryColor,
+                        length: 6,
+                        controller: authController.otpController,
+                        textStyle: const TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.w400
+                        ),
+                        appContext: (context),
+                        onChanged: (value) {
+                          // debugPrint(value);
+                          setState(() {
+                            // currentText = value;
+                          });},
+                        keyboardType: TextInputType.number,
+                        pinTheme: PinTheme(
+                            borderWidth: 1.5,
+                            borderRadius: BorderRadius.circular(8),
+                            activeFillColor: primaryColor,
+                            selectedColor: primaryColor,
+                            activeColor: primaryColor,
+                            inactiveColor: primaryColor,
+                            errorBorderColor: primaryColor,
+                            fieldOuterPadding: EdgeInsets.zero
                         ),
                       ),
-                      Text('${AuthString.enterOTP} +91- ${widget.phoneNumber.toString()}',
-                          style: AppTheme.lightTheme.textTheme.titleLarge
+                      SizedBox(height: height * 0.05),
+
+                      PrimaryButton(
+                          width: width,
+                          height: 47,
+                          onPressed: () {
+                            verifyOTP();
+                          },
+                          label: AuthString.submit
                       ),
+                      SizedBox(height: height * 0.03),
+
+                      const Align(
+                        alignment: Alignment.center,
+                        child: Text('Didn\'t received OTP? ',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+
+                      Align(
+                        alignment: Alignment.center,
+                        child: TextButton(
+                            onPressed: (){
+                              Future.delayed(Duration.zero, (){
+                                authController.loginWithOTP();
+                              });
+
+                            },
+                            child:  Text('Resend OTP',
+
+                              style: Theme.of(context).textTheme.labelLarge
+                            )
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: TextButton(
+                            onPressed: (){
+                              Navigator.pop(context);
+                            },
+                            child:  Text('Edit Mobile Number',
+                                style: Theme.of(context).textTheme.labelSmall
+                            )
+                        ),
+                      ),
+                      const Spacer(),
                     ],
                   ),
-
-                  PinCodeTextField(
-                    cursorColor: Theme.of(context).primaryColor,
-                    length: 6,
-                    controller: authController.otpController,
-                    textStyle: const TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.w400
-                    ),
-                    appContext: (context),
-                    onChanged: (value) {
-                      // debugPrint(value);
-                      setState(() {
-                        // currentText = value;
-                      });},
-                    keyboardType: TextInputType.number,
-                    pinTheme: PinTheme(
-                        borderWidth: 1.5,
-                        borderRadius: BorderRadius.circular(8),
-                        activeFillColor: primaryColor,
-                        selectedColor: primaryColor,
-                        activeColor: primaryColor,
-                        inactiveColor: primaryColor,
-                        errorBorderColor: primaryColor,
-                        fieldOuterPadding: EdgeInsets.zero
-                    ),
-                  ),
-                  SizedBox(height: height * 0.05),
-
-                  PrimaryButton(
-                      width: width,
-                      height: 47,
-                      onPressed: () {
-                        verifyOTP();
-                      },
-                      label: AuthString.submit
-                  ),
-                  SizedBox(height: height * 0.03),
-
-                  const Align(
-                    alignment: Alignment.center,
-                    child: Text('Didn\'t received OTP? ',
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-
-                  Align(
-                    alignment: Alignment.center,
-                    child: TextButton(
-                        onPressed: (){
-                          authController.loginWithOTP();
-                        },
-                        child:  Text('Resend OTP',
-
-                          style: Theme.of(context).textTheme.labelLarge
-                        )
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: TextButton(
-                        onPressed: (){
-                          Navigator.pop(context);
-                        },
-                        child:  Text('Edit Mobile Number',
-                            style: Theme.of(context).textTheme.labelSmall
-                        )
-                    ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-            )
-        ),
-      ),
-    );
+                )
+            ),
+          ),
+        );
   }
 }

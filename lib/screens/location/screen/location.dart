@@ -33,74 +33,75 @@ class _GetLocationState extends State<GetLocation> {
   Widget build(BuildContext context) {
     return Obx(() {
         return SimpleDialog(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-          title: Text('Choose Location',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-          children:  [
-            locController.isLoading.value == true ?
-            Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: CircularProgressIndicator(
-                    color: primaryColor,
-                    strokeWidth: 2.5,
-                  ),
-                )
-            ):
-
-            Container(
-              height: 47,
-              margin: const EdgeInsets.symmetric(vertical: 5),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey.shade300
-                ),
-                borderRadius: BorderRadius.circular(10)
+              contentPadding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+              title: Text('Choose Location',
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  value: getLoc,
-                  isExpanded: true,
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                  items: locController.locationModel.value.messages!.status!.city!.map((items) {
-                    return DropdownMenuItem(
-                      onTap: () async{
-                        SharedPreferences preferences = await SharedPreferences.getInstance();
-                        preferences.setString(ApiStrings.cityID, items.cityId.toString());
-                        preferences.setString(ApiStrings.cityName, items.cityName.toString());
-                      },
-                      value: items.cityName,
-                      child: Text(items.cityName!,
-                        style: Theme.of(context).textTheme.labelMedium,
+
+              children:  [
+                locController.isLoading.value == true ?
+                Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: CircularProgressIndicator(
+                        color: primaryColor,
+                        strokeWidth: 2.5,
                       ),
-                    );}).toList(),
-                  onChanged: (String? newValue) async{
-                    getLoc = newValue!;
-                    setState(() {
+                    )
+                ):
 
-                    });
-                  },
+                Container(
+                  height: 47,
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey.shade300
+                    ),
+                    borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      value: getLoc,
+                      isExpanded: true,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: locController.locationModel.value.messages!.status!.city!.map((items) {
+                        return DropdownMenuItem(
+                          onTap: () async{
+                            SharedPreferences preferences = await SharedPreferences.getInstance();
+                            preferences.setString(ApiStrings.cityID, items.cityId.toString());
+                            preferences.setString(ApiStrings.cityName, items.cityName.toString());
+                          },
+                          value: items.cityName,
+                          child: Text(items.cityName!,
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                        );}).toList(),
+                      onChanged: (String? newValue) async{
+                        setState(() {
+                          getLoc = newValue!;
+                        });
+                      },
+                    ),
+                  ),
                 ),
-              ),
-            ),
 
-            PrimaryButton(
-                width: double.maxFinite,
-                height: 47,
-                onPressed: () {
-                  setState(() {
-                    dashController.getDashboard();
-                  });
-                  Navigator.pop(context);
-                },
-                label: 'SAVE'
-            )
-          ],
-        );
+                PrimaryButton(
+                    width: double.maxFinite,
+                    height: 47,
+                    onPressed: () {
+                      setState(() {
+                        dashController.getDashboard();
+                      });
+                      Navigator.pop(context);
+                    },
+                    label: 'SAVE'
+                )
+              ],
+            );
       }
     );
+
   }
 }
 

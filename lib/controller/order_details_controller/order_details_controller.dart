@@ -12,12 +12,12 @@ import '../../utils/api_strings/api_strings.dart';
 
 class OrderDetailsController extends GetxController{
   RxBool isLoading = false.obs;
-  Rx<OrderDetailsDataModel> orderDetailsModel = OrderDetailsDataModel().obs;
+  Rx<OrderDetailDataModel> orderDetailsModel = OrderDetailDataModel().obs;
 
   getOrderDetails() async{
     try{
       isLoading.value = true;
-      OrderDetailsDataModel orderModel = OrderDetailsDataModel();
+      OrderDetailDataModel orderModel = OrderDetailDataModel();
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String? userID = preferences.getString(ApiStrings.userID);
       String? orderID = preferences.getString(ApiStrings.orderID);
@@ -39,20 +39,23 @@ class OrderDetailsController extends GetxController{
           body: jsonEncode(body),
           headers: headers
       );
-      orderModel = orderDetailsDataModelFromJson(response.body);
+      debugPrint(response.statusCode.toString());
+      orderModel = orderDetailDataModelFromJson(response.body);
+      debugPrint(orderModel.toString());
 
       if(response.statusCode == 200 && orderModel.status! == 200) {
         orderDetailsModel.value = orderModel;
         isLoading.value = false;
       }
-      debugPrint("OrderAPI: \n ${response.statusCode}");
 
-    } catch(error) {
+
+    } catch(e) {
       isLoading.value = false;
-      Get.snackbar("Order Details", 'Something went wrong! Please try after sometime',
-          colorText: Colors.black,
-          backgroundColor: Colors.white54
-      );
+      debugPrint(e.toString());
+      // Get.snackbar("Order Details", e.toString(),
+      //     colorText: Colors.black,
+      //     backgroundColor: Colors.white54
+      // );
       return false;
     }
   }

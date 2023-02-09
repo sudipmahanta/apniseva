@@ -64,19 +64,19 @@ class AuthController extends GetxController {
 
       isLoading.value = true;
       SharedPreferences pref = await SharedPreferences.getInstance();
-      String? mobile = pref.getString(ApiStrings.mobile);
-      String userDataAPI = ApiEndPoint.verifyOtp;
+      String mobile = pref.getString(ApiStrings.mobile)!;
+      String verifyOtp = ApiEndPoint.verifyOtp;
 
       Map<String, String> header = {
         'Content-type': 'application/json',
       };
       Map<String, String> body = {
-        'contact': mobile!
+        'contact': mobile
       };
-      debugPrint('UserDataApi: $userDataAPI');
+      debugPrint('UserDataApi: $verifyOtp');
 
       http.Response response = await http.post(
-          Uri.parse(userDataAPI),
+          Uri.parse(verifyOtp),
           body: jsonEncode(body),
           headers: header
       );
@@ -85,12 +85,12 @@ class AuthController extends GetxController {
 
       if (response.statusCode == 200 && model.status == 200) {
         userModel.value = model;
-        pref.setString(ApiStrings.userID, userModel.value.messages!.status!.userId!.toString());
+        pref.setString(ApiStrings.userID, userModel.value.messages!.status!.userId!);
         String? userID = pref.getString(ApiStrings.userID);
         debugPrint("User ID: $userID");
-        isLoading.value = false;
         return true;
       }
+    isLoading.value = false;
   }
 
   clear() {

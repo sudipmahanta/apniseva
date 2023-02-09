@@ -102,7 +102,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
                               preferences.setString(ApiStrings.serviceID, serviceData[index].serviceId!);
                               preferences.setString(ApiStrings.catID, serviceData[index].catId!);
                               preferences.setString(ApiStrings.productQty, '1');
-                              debugPrint(addToCartController.productName.toString());
 
                               Future.delayed(Duration.zero, (){
                                 addToCartController.addToCart();

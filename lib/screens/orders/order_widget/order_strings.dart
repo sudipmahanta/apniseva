@@ -2,8 +2,8 @@ class OrderStrings {
   static String title = 'My Order History';
   static String orderID = 'Order ID: ';
   static String productName = 'Product Name: ';
-  static String serviceDate = 'Service Date: ';
-  static String serviceTime = 'Service Time: ';
+  static String scheduleDate = 'Schedule Date: ';
+  static String scheduleTime = 'Schedule Time: ';
   static String orderDate = 'Order Date: ';
   static String viewDetails = 'View Details';
 }
@@ -21,6 +21,7 @@ class OrdersDetailStrings {
   static String gst = 'GST: ';
   static String grandTotal = 'Grand Total: ';
   static String dueAmount = 'Due Amount: ';
+  static String paidAmount = 'Paid Amount: ';
 
   static String deliveryAddress = 'Delivery Address';
   static String name = 'Name: ';

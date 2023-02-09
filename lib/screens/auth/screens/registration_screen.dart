@@ -23,7 +23,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   final _key = GlobalKey<FormState>();
   final AuthController authController = Get.put(AuthController());
-  final LocationController locController = Get.put(LocationController());
   String? errorLabel;
 
   @override

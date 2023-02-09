@@ -244,6 +244,7 @@ class _SelectAddressScreenState extends State<SelectAddressScreen> {
                     SharedPreferences preferences = await SharedPreferences.getInstance();
                     String? addressId = preferences.getString(ApiStrings.addressID);
                     debugPrint(addressId);
+                    Navigator.pop(context);
                     },
                   label: 'Select Address')
           ),

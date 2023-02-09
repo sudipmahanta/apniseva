@@ -79,6 +79,7 @@ class CartController extends GetxController{
   }
 
   getCartData() async{
+    clear();
     try{
       isLoading.value = true;
       CartDetailsDataModel cartModel = CartDetailsDataModel();
@@ -102,20 +103,31 @@ class CartController extends GetxController{
           headers: headers
       );
 
-      // debugPrint(response.statusCode.toString());
+      debugPrint(response.statusCode.toString());
       cartModel = cartDetailsDataModelFromJson(response.body);
-      debugPrint(cartModel.toString());
 
       if(response.statusCode == 200 && cartModel.status == 200){
         cartDetailsDataModel.value = cartModel;
       }
+
+
+      for(int i=0; i < cartDetailsDataModel.value.messages!.status!.allCart!.length; i++){
+        var cartData = cartDetailsDataModel.value.messages!.status!.allCart![i];
+
+        productName?.add(cartData.servicename);
+        image!.add(cartData.image);
+        qty!.add(cartData.qty);
+        price!.add(cartData.price);
+      }
+      // debugPrint('ProductName: ${productName.toString()}');
+      // debugPrint('Image: ${image.toString()}');
+      // debugPrint('Quantity: ${qty.toString()}');
+      // debugPrint('Price: ${price.toString()}');
+
       isLoading.value = false;
    } catch(e){
     isLoading.value = false;
-    Get.snackbar('Cart', "Error: ${e.toString()}",
-        colorText: Colors.black,
-        backgroundColor: Colors.white54
-    );
+    debugPrint(e.toString());
     return false;
    }
 
@@ -190,64 +202,48 @@ class CartController extends GetxController{
   }
 
   checkOut() async{
-    // try{
-      CheckOutDataModel checkOutModel = CheckOutDataModel();
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      String? checkOutApi = ApiEndPoint.checkout;
-      String? userID = preferences.getString(ApiStrings.userID);
-      String? addressID = preferences.getString(ApiStrings.addressID);
-      String? couponAmount = preferences.getString(ApiStrings.couponCharge);
-      String? gstAmount = preferences.getString(ApiStrings.gstAmount);
+    CheckOutDataModel checkOutModel = CheckOutDataModel();
 
-      debugPrint(paymentMode);
-      debugPrint(productName.toString());
-      debugPrint(qty.toString());
-      debugPrint(image.toString());
-      debugPrint(price.toString());
-      debugPrint(dateController.text.toString());
-      debugPrint(timeController.text.toString());
-      debugPrint(couponTextController.text.toString());
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? userID = preferences.getString(ApiStrings.userID);
+    String? couponAmount = preferences.getString(ApiStrings.couponCharge);
+    String? gstAmount = preferences.getString(ApiStrings.gstAmount);
+    String? addressID = preferences.getString(ApiStrings.addressID);
+    String? checkOutAPI = ApiEndPoint.checkout;
 
-      Map<String, dynamic> body = {
-        'user_id': userID!,
-        'paymentmode': paymentMode!,
-        'productname': productName,
-        'price': price!,
-        'qty': qty!,
-        'image': image!,
-        'date': dateController.text,
-        'time': timeController.text,
-        'cupone_code': couponTextController.text,
-        'cupone_charge': couponAmount!,
-        'gst': gstAmount!,
-        'address_id': addressID!
-      };
+    Map<String, dynamic> body = {
+      'user_id': userID!,
+      'paymentmode': paymentMode!,
+      'date': dateController.text,
+      'time': timeController.text,
+      'productname': productName.toString(),
+      'price': price.toString(),
+      'qty': qty.toString(),
+      'image': image.toString(),
+      'cupone_code': couponTextController.text,
+      'cupone_charge': couponAmount!,
+      'gst': gstAmount!,
+      'address_id': addressID!
+    };
 
-      Map<String, String> headers = {
-        "Content-Type": "application/json; charset=utf-8"
-      };
+    Map<String, String> headers = {
+      "Content-Type": "application/json; charset=utf-8"
+    };
 
-      http.Response response = await http.post(
-        Uri.parse(checkOutApi),
-        body: jsonEncode(body),
-        headers: headers
-      );
+    http.Response response = await http.post(
+      Uri.parse(checkOutAPI),
+      body: jsonEncode(body),
+      headers: headers
+    );
 
-      debugPrint(body.toString());
-      debugPrint("Checkout API: ${response.statusCode.toString()}");
-      debugPrint(response.body.toString());
-      checkOutModel = checkOutDataModelFromJson(response.body);
+    debugPrint(response.body.toString());
+    checkOutModel = checkOutDataModelFromJson(response.body);
+    if(response.statusCode == 200 && checkOutModel.status == 200){
+      checkoutDataModel.value = checkOutModel;
+      Get.snackbar('Cart', 'Submitted');
+    }
 
-      if(response.statusCode == 200){
-        checkoutDataModel.value = checkOutModel;
-        Get.to(()=> const SucessfullScreen());
-      }
-      Get.snackbar('Submit', checkoutDataModel.value.messages.toString());
-
-
-    // }catch(e){
-    //   Get.snackbar('CheckOut', e.toString());
-    // }
+    clear();
   }
 
   clear() {

@@ -1,4 +1,5 @@
 import 'package:apniseva/controller/dashboard_controller/dash_controller.dart';
+import 'package:apniseva/controller/order_details_controller/order_details_controller.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_carousel.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_reviews.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_services.dart';
@@ -22,11 +23,13 @@ class DashScreen extends StatefulWidget {
 class _DashScreenState extends State<DashScreen> {
 
   final DashController dashController = Get.put(DashController());
+  // final OrderDetailsController orderDetailsController = Get.put(OrderDetailsController());
 
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
       dashController.getDashboard();
+      // orderDetailsController.getOrderDetails();
     });
     super.initState();
   }

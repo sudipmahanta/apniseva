@@ -2,6 +2,7 @@ import 'package:apniseva/controller/cart_controller/cart_controller.dart';
 import 'package:apniseva/screens/cart/screen/cart_screen.dart';
 import 'package:apniseva/screens/splash_screen/widgets/spalsh_string.dart';
 import 'package:apniseva/utils/color.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
@@ -21,14 +22,15 @@ class DashAppBar extends StatefulWidget implements PreferredSizeWidget{
 class _DashAppBarState extends State<DashAppBar> {
 
   final locController = Get.put(LocationController());
+  final cartController = Get.put(CartController());
   String? cityName = 'Location';
 
   @override
   void initState() {
     Future.delayed(Duration.zero, (){
       locController.getLoc();
+      cartController.getCartData();
     });
-
     super.initState();
   }
 
@@ -70,9 +72,18 @@ class _DashAppBarState extends State<DashAppBar> {
               onTap: () {
                 Get.to(()=> const CartScreen());
               },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: Icon(Remix.shopping_cart_2_fill),
+              child: Container(
+                height: 55,
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                alignment: Alignment.center,
+                child: const Icon(Remix.shopping_cart_2_fill) /*:  badges.Badge(
+                  position: badges.BadgePosition.topEnd(top: -5, end: -5),
+                    showBadge: cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isEmpty ? false : true,
+                    badgeContent: Text(cartController.cartDetailsDataModel.value.messages!.status!.allCart!.length.toString(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    child: const Icon(Remix.shopping_cart_2_fill)
+                ),*/
               ),
             )
           ],

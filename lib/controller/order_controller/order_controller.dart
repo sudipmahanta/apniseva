@@ -45,12 +45,13 @@ class OrderController extends GetxController{
         orderDataModel.value = orderModel;
         isLoading.value = false;
       }
-     //  debugPrint("OrderAPI Data:\n${response.body}");
+      debugPrint("OrderAPI Data:\n${response.body}");
 
       return true;
     }catch(error) {
       isLoading.value = false;
-      Get.snackbar("Orders", "Something went wrong! please try again later",
+      debugPrint(error.toString());
+      Get.snackbar("Orders", error.toString(),
           colorText: Colors.black,
           backgroundColor: Colors.white54
       );

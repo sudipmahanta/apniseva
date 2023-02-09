@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../profile/profile_sections/profile_app_bar.dart';
 import '../order_details_model/order_details_model.dart';
+import '../order_model/order_model.dart';
 import '../order_widget/order_strings.dart';
 
 class OrderBookingDetails extends StatefulWidget {
@@ -16,17 +17,12 @@ class OrderBookingDetails extends StatefulWidget {
 class _OrderBookingDetailsState extends State<OrderBookingDetails> {
 
   final orderDetailsController = Get.put(OrderDetailsController());
-  double discounted = 0.0;
-  var gst = 0.0;
-  var gstPrice = 0.0;
-  var totalPrice = 0.0;
 
   @override
   void initState() {
     Future.delayed(Duration.zero,() {
       orderDetailsController.getOrderDetails();
     });
-
     super.initState();
   }
 
@@ -43,15 +39,12 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
     double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
 
     return Obx(() {
-      List<Orderdtl> orderDetails = orderDetailsController.orderDetailsModel.value.messages!.status!.orderdtls!;
-      List<AddOrderdtl> addOrderDetails = orderDetailsController.orderDetailsModel.value.messages!.status!.addOrderdtls!;
-      List<Address> orderAddress = orderDetailsController.orderDetailsModel.value.messages!.status!.address!;
 
       return Scaffold(
         appBar: PrimaryAppBar(
           title: OrdersDetailStrings.title,
         ),
-        body: orderDetailsController.isLoading.value == false ?
+        body: orderDetailsController.isLoading.value == true ?
         Center(
             child: CircularProgressIndicator(
               strokeWidth: 2.5,
@@ -66,7 +59,7 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
             children: [
 
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,7 +77,7 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                                     style: Theme.of(context).textTheme.titleLarge,
                                   ),
                                   TextSpan(
-                                    text: orderDetails[0].orderId,
+                                    text: orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.orderId,
                                     style: Theme.of(context).textTheme.labelSmall,
                                   )
                                 ]
@@ -92,14 +85,15 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                         ),
                         SizedBox(height: height * 0.005),
 
-                        Text(orderDetails[0].createdDate!,
+                        Text(orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.bookingDate!,
                           style: Theme.of(context).textTheme.labelSmall,
                         ),
                       ],
                     ),
 
                     Visibility(
-                      visible: orderDetails[0].verifyOtp == '1' ? false : true,
+                      visible: orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.verifyOtp!.isEmpty &&
+                          orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.verifyOtp == '1' ? true : false,
                       child: Container(
                         // height: 50,
                         width: 80,
@@ -114,7 +108,7 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                             Text('OTP',
                               style: Theme.of(context).textTheme.headlineMedium,
                             ),
-                            Text(orderDetails[0].verifyOtp!,
+                            Text(orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.verifyOtp!,
                               style: TextStyle(
                                 fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
                                 color: const Color(0xFF0FFA4E)
@@ -125,10 +119,10 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
 
                       ),
                     )
-                    ],
+                  ],
                 ),
               ),
-              SizedBox(height: height * 0.045,),
+              SizedBox(height: height * 0.045),
 
               // HeadLine
               const ProductHeader(),
@@ -137,16 +131,15 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                   ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: orderDetailsController.orderDetailsModel.value.messages!.status!.orderdtls!.length,
+                      itemCount: orderDetailsController.orderDetailsModel.value.messages!.status!.allOrders!.length,
                       itemBuilder: (BuildContext context, int index){
-
-                        calculatePrice(index, orderDetails);
+                        List<AllOrder>? allOrders = orderDetailsController.orderDetailsModel.value.messages!.status!.allOrders!;
                         return Row(
                           children: [
                             Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-                                  child: Text(orderDetails[index].productname!,
+                                  child: Text(allOrders[index].productName!,
                                     textAlign: TextAlign.start,
                                     style: Theme.of(context).textTheme.labelLarge,
                                   ),
@@ -156,7 +149,7 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                             Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
-                                  child: Text(orderDetails[index].price!,
+                                  child: Text("₹ ${allOrders[index].price!}",
                                     textAlign: TextAlign.center,
                                     style: Theme.of(context).textTheme.labelMedium,
                                   ),
@@ -169,7 +162,7 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
               ),
 
               Visibility(
-                visible: addOrderDetails.isNotEmpty? true : false,
+                visible:  orderDetailsController.orderDetailsModel.value.messages!.status!.additinalOrders!.isEmpty ? true : false,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: Column(
@@ -178,28 +171,27 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                         Container(
                           width: double.maxFinite,
                           color: Colors.grey.shade200,
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Text('Additional Products',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
                               color: Theme.of(context).textTheme.titleMedium!.color
-
                             ),
                           ),
                         ),
                         ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: orderDetailsController.orderDetailsModel.value.messages!.status!.addOrderdtls!.length,
+                            itemCount: orderDetailsController.orderDetailsModel.value.messages!.status!.additinalOrders!.length,
                             itemBuilder: (BuildContext context, int index){
 
-                              calculatePrice(index, orderDetails);
                               return Row(
                                 children: [
                                   Expanded(
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-                                        child: Text(addOrderDetails[index].addServiceDetails!,
+                                        child: Text(orderDetailsController.orderDetailsModel.value.messages!.status!.additinalOrders![index].productName!,
                                           textAlign: TextAlign.start,
                                           style: Theme.of(context).textTheme.labelLarge,
                                         ),
@@ -209,7 +201,7 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                                   Expanded(
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),
-                                        child: Text(addOrderDetails[index].addServicePrice!,
+                                        child: Text("₹ ${orderDetailsController.orderDetailsModel.value.messages!.status!.additinalOrders![index].price!}",
                                           textAlign: TextAlign.center,
                                           style: Theme.of(context).textTheme.labelLarge,
                                         ),
@@ -259,6 +251,14 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                             child: Text(OrdersDetailStrings.dueAmount,
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
+                          ),
+
+                          SizedBox(height: height * 0.01),
+
+                          FittedBox(
+                            child: Text(OrdersDetailStrings.paidAmount,
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
                           )
                         ],
                       )
@@ -268,28 +268,33 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(discounted.toString(),
+                          Text('₹ ${orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.totalPrice.toString()}',
                             style: Theme.of(context).textTheme.headlineMedium,
                           ),
                           SizedBox(height: height * 0.01),
 
-                          Text(orderDetails[0].couponAmnt.toString(),
+                          Text('₹ ${orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.discount.toString()}',
                             style: Theme.of(context).textTheme.headlineMedium,
                           ),
                           SizedBox(height: height * 0.01),
 
-                          Text(orderDetailsController.orderDetailsModel.value.messages!.status!.gst!.gst!,
+                          Text('₹ ${orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.gst}',
                             style: Theme.of(context).textTheme.headlineMedium,
                           ),
                           SizedBox(height: height * 0.01),
 
-                          Text(totalPrice.toString(),
+                          Text('₹ ${orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.grandTotal.toString()}',
                             style: Theme.of(context).textTheme.headlineMedium,
                           ),
                           SizedBox(height: height * 0.01),
-                          Text(totalPrice.toString(),
+                          Text('₹ ${orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.dueAmount.toString()}',
                             style: Theme.of(context).textTheme.headlineMedium,
                           ),
+                          SizedBox(height: height * 0.01),
+                          Text('₹ ${orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.paidAmount}',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+
                         ],
                       )
                   ),
@@ -297,29 +302,15 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
               ),
               SizedBox(height: height * 0.04,),
 
-              AddressDetails(getAddress: orderAddress[0]),
+              AddressDetails(getAddress: orderDetailsController.orderDetailsModel.value.messages!.status!.address!),
 
-              OrderSchedule(getOrderSchedule: orderDetails[0]),
+              OrderSchedule(getOrderSchedule: orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!),
+              SizedBox(height: height * 0.05,)
             ],
           ),
         ),
       );}
     );
-  }
-  calculatePrice(int x,List<Orderdtl> orderDetails ) {
-    for(int x = 0; x < orderDetails.length; x++) {
-      discounted = double.parse(orderDetails[x].price!) -
-          double.parse(orderDetails[0].couponAmnt!);
-      gst = double.parse(
-          orderDetailsController.orderDetailsModel.value.messages!.status!
-              .gst!.gst!) / 100;
-      gstPrice = discounted * gst;
-      totalPrice = discounted + gstPrice;
-      debugPrint("Discounted Price: ${discounted.toString()}");
-      debugPrint("GST Price: ${gstPrice.toString()}");
-      debugPrint("Total Price: ${totalPrice.toString()}");
-      // debugPrint(totalPrice.toString());
-    }
   }
 }
 
@@ -330,6 +321,7 @@ class ProductHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
       color: Colors.grey.shade200,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -358,7 +350,7 @@ class ProductHeader extends StatelessWidget {
 }
 
 class AddressDetails extends StatelessWidget {
-  final Address? getAddress;
+  final List<Address>? getAddress;
   const AddressDetails({Key? key,
     this.getAddress,
   }) : super(key: key);
@@ -393,25 +385,25 @@ class AddressDetails extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(getAddress!.firstName!,
+                  Text(getAddress![0].firstName!,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
-                  Text(getAddress!.number!,
+                  Text(getAddress![0].number!,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
-                  Text(getAddress!.email!,
+                  Text(getAddress![0].email!,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
-                  Text(getAddress!.address1!,
+                  Text(getAddress![0].address1!,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
-                  Text(getAddress!.adress2!,
+                  Text(getAddress![0].adress2!,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
-                  Text(getAddress!.state!,
+                  Text(getAddress![0].state!,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
-                  Text(getAddress!.pincode!,
+                  Text(getAddress![0].pincode!,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                 ],
@@ -424,9 +416,8 @@ class AddressDetails extends StatelessWidget {
   }
 }
 
-
 class OrderSchedule extends StatelessWidget {
-  final Orderdtl? getOrderSchedule;
+  final OtherDtl? getOrderSchedule;
   const OrderSchedule({Key? key, this.getOrderSchedule}) : super(key: key);
 
   @override
@@ -459,10 +450,10 @@ class OrderSchedule extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(getOrderSchedule!.bookingDate!.toLocal().toString(),
+                  Text("Schedule Date: ${getOrderSchedule!.bookingDate}",
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
-                  Text(getOrderSchedule!.bookingTime.toString(),
+                  Text("Schedule Time: ${getOrderSchedule!.bookingTime}",
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                 ],
@@ -474,4 +465,3 @@ class OrderSchedule extends StatelessWidget {
     );
   }
 }
-
