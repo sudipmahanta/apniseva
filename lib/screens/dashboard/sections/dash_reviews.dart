@@ -2,7 +2,7 @@ import 'package:apniseva/screens/dashboard/widget/dash_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 
-import '../models/dash_model.dart';
+import '../../../model/dashboard_model/dash_model.dart';
 
 class DashReviews extends StatelessWidget {
   final List<TestimonialDtl>? getTestimonialDetail;

@@ -1,7 +1,7 @@
 import 'package:apniseva/controller/cart_controller/cart_controller.dart';
 import 'package:apniseva/screens/cart/cart_sections/cart_order_schedule.dart';
 import 'package:apniseva/screens/cart/cart_strings/cart_strings.dart';
-import 'package:apniseva/screens/cart/models/cart_details_model.dart';
+import 'package:apniseva/model/cart_model/cart_detail_model/cart_details_model.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:apniseva/utils/bottom_nav_bar.dart';

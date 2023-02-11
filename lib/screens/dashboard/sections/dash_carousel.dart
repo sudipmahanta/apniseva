@@ -2,7 +2,7 @@ import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import '../models/dash_model.dart';
+import '../../../model/dashboard_model/dash_model.dart';
 import '../widget/dash_strings.dart';
 
 class DashCarousel extends StatelessWidget {

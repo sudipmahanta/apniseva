@@ -48,6 +48,7 @@ class _MoreScreenState extends State<MoreScreen> {
     'Career',
     'Blog',
     'Contact Us',
+    'Support & Help'
   ];
 
 
@@ -59,179 +60,428 @@ class _MoreScreenState extends State<MoreScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              height: height * 0.22,
-              width: width,
-              color: primaryColor,
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // User Profile Image
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25.0),
-                    child: Stack(
-                      children: [
-                        InkWell(
-                          // onTap: () {
-                          //   Get.to(() => const EditProfile());
-                          // },
-                          child: CircleAvatar(
-                            radius: 30,
-                            backgroundImage: NetworkImage(DashStrings.bannerImg),
-                          ),
-                        ),
-                        const Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.indigo,
-                            radius: 10,
-                            child: Icon(
-                              Icons.verified_user,
-                              size: 12,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: height * 0.22,
+                width: width,
+                color: primaryColor,
+                padding: const EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // User Profile Image
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25.0),
+                      child: Stack(
+                        children: [
+                          InkWell(
+                            // onTap: () {
+                            //   Get.to(() => const EditProfile());
+                            // },
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(DashStrings.bannerImg),
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-
-                  // User Profile Name
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30.0),
-                    child: Text(
-                      profileController.userModel.value.messages!.status!.fullname ??
-                          'Adam West',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize
+                          const Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.indigo,
+                              radius: 10,
+                              child: Icon(
+                                Icons.verified_user,
+                                size: 12,
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30.0),
-                    child: Text(
-                      "User ID: ${profileController.userModel.value.messages!.status!.userId}",
-                      style: Theme.of(context).textTheme.bodySmall
-                    )
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => screens[index]));
-                    },
-                    child: Container(
-                      width: width,
-                      height: height * 0.083,
-                      decoration: const BoxDecoration(
-                          border: Border(
-                            left: BorderSide.none,
-                            top: BorderSide.none,
-                            right: BorderSide.none,
-                            bottom:
-                            BorderSide(color: Colors.grey),
-                          )),
-                      padding: const EdgeInsets.only(
-                          left: 16.0, top: 8, bottom: 8),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
-                              ' ${items[index]}',
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                          )),
+                    const SizedBox(
+                      height: 10,
                     ),
-                  );
+
+                    // User Profile Name
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30.0),
+                      child: Text(
+                        profileController.userModel.value.messages!.status!.fullname ??
+                            'Adam West',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30.0),
+                      child: Text(
+                        "User ID: ${profileController.userModel.value.messages!.status!.userId}",
+                        style: Theme.of(context).textTheme.bodySmall
+                      )
+                    ),
+                  ],
+                ),
+              ),
+
+              InkWell(
+                onTap: () {
+
                 },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' Notifications',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      )),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) =>
-                      //         const SupportScreen()));
-                    },
-                    child: const Text(
-                      'Support & Help',
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 1.0,
-                          decoration: TextDecoration.underline),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      SharedPreferences pref = await SharedPreferences.getInstance();
-                      pref.clear();
-                      Get.deleteAll();
-                      Get.offAll(() => const RegistrationScreen());
-                    },
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Remix.logout_box_line,
-                          size: 15,
-                          color: Colors.grey,
+
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' Profile',
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          'Log out',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 1.0,
-                              decoration: TextDecoration.underline),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                      )),
+                ),
               ),
-            )
-          ],
+
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' Address',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      )),
+                ),
+              ),
+
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' Orders',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      )),
+                ),
+              ),
+
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' Terms & Conditions',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      )),
+                ),
+              ),
+
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' Privacy Policy',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      )),
+                ),
+              ),
+
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' FAQ',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      )),
+                ),
+              ),
+
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' Career',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      )),
+                ),
+              ),
+
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' Blog',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      )),
+                ),
+              ),
+
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' Contact Us',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      )),
+                ),
+              ),
+
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' Support & Help',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      )),
+                ),
+              ),
+
+              InkWell(
+                onTap: () async {
+                  SharedPreferences pref = await SharedPreferences.getInstance();
+                  pref.clear();
+                  Get.deleteAll();
+                  Get.offAll(() => const RegistrationScreen());
+                },
+                child: Container(
+                  width: width,
+                  height: height * 0.083,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide.none,
+                        top: BorderSide.none,
+                        right: BorderSide.none,
+                        bottom:
+                        BorderSide(color: Colors.grey),
+                      )),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          ' Log Out',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      )),
+                ),
+              ),
+
+            ],
+          ),
         ),
       ),
     );
-    /*Scaffold(
-      body: Center(
-        child: TextButton(
-            onPressed: () async {
-              SharedPreferences pref = await SharedPreferences.getInstance();
-              pref.clear();
-              Get.deleteAll();
-              Get.offAll(() => const RegistrationScreen());
-            },
-            child: Text('More')),
-      )
-    );*/
   }
 }

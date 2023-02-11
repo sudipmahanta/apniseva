@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 import '../../profile/profile_sections/profile_app_bar.dart';
 import '../order_details_model/order_details_model.dart';
-import '../order_model/order_model.dart';
 import '../order_widget/order_strings.dart';
 
 class OrderBookingDetails extends StatefulWidget {

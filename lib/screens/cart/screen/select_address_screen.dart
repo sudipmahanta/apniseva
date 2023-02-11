@@ -10,7 +10,7 @@ import '../../../controller/cart_controller/cart_controller.dart';
 import '../../address/screen/address_form_screen.dart';
 import '../../address/section/address_appbar.dart';
 import '../../address/widget/address_strings.dart';
-import '../models/cart_details_model.dart';
+import '../../../model/cart_model/cart_detail_model/cart_details_model.dart';
 
 class SelectAddressScreen extends StatefulWidget {
   const SelectAddressScreen({Key? key}) : super(key: key);

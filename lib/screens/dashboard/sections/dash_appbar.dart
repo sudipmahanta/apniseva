@@ -6,8 +6,10 @@ import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controller/location_controller/location_controller.dart';
+import '../../../utils/api_strings/api_strings.dart';
 import '../../location/screen/location.dart';
 
 class DashAppBar extends StatefulWidget implements PreferredSizeWidget{
@@ -23,7 +25,17 @@ class _DashAppBarState extends State<DashAppBar> {
 
   final locController = Get.put(LocationController());
   final cartController = Get.put(CartController());
-  String? cityName = 'Location';
+  String? cityName;
+
+  Future<String?> getLoc() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? location = preferences.getString(ApiStrings.cityName);
+    setState(() {
+      cityName = location;
+    });
+    debugPrint('DashAppBar: $cityName');
+    return cityName;
+  }
 
   @override
   void initState() {
@@ -31,6 +43,7 @@ class _DashAppBarState extends State<DashAppBar> {
       locController.getLoc();
       cartController.getCartData();
     });
+    getLoc();
     super.initState();
   }
 
@@ -58,7 +71,7 @@ class _DashAppBarState extends State<DashAppBar> {
                   alignment: Alignment.center,
                   child: Row(
                     children: [
-                      Text(cityName!),
+                      Text(cityName ?? 'Khorda'),
                       const Icon(Icons.location_on_rounded,
                         size: 20,
                       ),
@@ -72,19 +85,19 @@ class _DashAppBarState extends State<DashAppBar> {
               onTap: () {
                 Get.to(()=> const CartScreen());
               },
-              child: Container(
-                height: 55,
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                alignment: Alignment.center,
-                child: const Icon(Remix.shopping_cart_2_fill) /*:  badges.Badge(
-                  position: badges.BadgePosition.topEnd(top: -5, end: -5),
-                    showBadge: cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isEmpty ? false : true,
-                    badgeContent: Text(cartController.cartDetailsDataModel.value.messages!.status!.allCart!.length.toString(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    child: const Icon(Remix.shopping_cart_2_fill)
-                ),*/
-              ),
+              child:  Container(
+                    height: 55,
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    alignment: Alignment.center,
+                    child: /*cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isNotEmpty ? badges.Badge(
+                      position: badges.BadgePosition.topEnd(top: -5, end: -5),
+                        showBadge: cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isEmpty ? false : true,
+                        badgeContent: Text(''*//*cartController.cartDetailsDataModel.value.messages!.status!.allCart!.length.toString()*//*,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        child: const Icon(Remix.shopping_cart_2_fill)
+                    ):*/ const Icon(Remix.shopping_cart_2_fill),
+                  )
             )
           ],
         )

@@ -16,7 +16,16 @@ class GetLocation extends StatefulWidget {
 }
 
 class _GetLocationState extends State<GetLocation> {
-  String? getLoc = 'Khurda';
+
+  String? getLocation;
+
+  Future<String?> getLoc() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? location = preferences.getString(ApiStrings.cityName);
+    getLocation = location;
+    debugPrint(getLocation);
+    return getLocation;
+  }
 
   final locController = Get.put(LocationController());
   final dashController = Get.put(DashController());
@@ -26,6 +35,7 @@ class _GetLocationState extends State<GetLocation> {
     Future.delayed(Duration.zero, () {
       locController.getLoc();
     });
+    getLoc();
     super.initState();
   }
 
@@ -62,7 +72,7 @@ class _GetLocationState extends State<GetLocation> {
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      value: getLoc,
+                      value: getLocation,
                       isExpanded: true,
                       icon: const Icon(Icons.keyboard_arrow_down),
                       items: locController.locationModel.value.messages!.status!.city!.map((items) {
@@ -79,7 +89,7 @@ class _GetLocationState extends State<GetLocation> {
                         );}).toList(),
                       onChanged: (String? newValue) async{
                         setState(() {
-                          getLoc = newValue!;
+                          getLocation = newValue!;
                         });
                       },
                     ),
@@ -89,10 +99,12 @@ class _GetLocationState extends State<GetLocation> {
                 PrimaryButton(
                     width: double.maxFinite,
                     height: 47,
-                    onPressed: () {
-                      setState(() {
-                        dashController.getDashboard();
-                      });
+                    onPressed: () async{
+                      SharedPreferences preferences = await SharedPreferences.getInstance();
+                      String? cityName = preferences.getString(ApiStrings.cityName);
+                      getLocation = cityName;
+                      dashController.getDashboard();
+                      debugPrint(getLocation);
                       Navigator.pop(context);
                     },
                     label: 'SAVE'

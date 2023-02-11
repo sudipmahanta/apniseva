@@ -1,6 +1,7 @@
 
 import 'package:apniseva/controller/cart_controller/cart_controller.dart';
 import 'package:apniseva/controller/service_controller/service_controller.dart';
+import 'package:apniseva/model/service_model/service_model.dart';
 import 'package:apniseva/screens/service/sections/service_appbar.dart';
 import 'package:apniseva/screens/service/sections/service_strings.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
@@ -9,8 +10,6 @@ import 'package:apniseva/utils/color.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../models/service_model.dart';
 
 
 class ServiceScreen extends StatefulWidget {
@@ -53,7 +52,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
                 child: Column(
                   children: List.generate(serviceController.serviceDataModel.value.messages!.status!.serviceList!.length, (index) {
                     List<ServiceList> serviceData = serviceController.serviceDataModel.value.messages!.status!.serviceList!;
-
                     return Card(
                       elevation: 1.4,
                       child: ListTile(

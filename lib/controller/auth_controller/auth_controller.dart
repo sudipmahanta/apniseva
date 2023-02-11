@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:apniseva/screens/auth/model/user_data_model.dart';
+import 'package:apniseva/model/auth_model/user_data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -92,7 +92,6 @@ class AuthController extends GetxController {
       }
     isLoading.value = false;
   }
-
   clear() {
     mobileController.clear();
     otpController.clear();

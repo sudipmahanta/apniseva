@@ -31,68 +31,96 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    return  Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: double.maxFinite,
-          height: double.maxFinite,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Spacer(),
+    return  WillPopScope(
+      onWillPop: () async{
+        final shouldPop = await showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Do you want to go back?'),
+            actionsAlignment: MainAxisAlignment.spaceBetween,
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: const Text('Yes'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: const Text('No'),
+              ),
+            ],
+          );
+        },
+      );
+      return shouldPop!;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Container(
+            width: double.maxFinite,
+            height: double.maxFinite,
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Spacer(),
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Image.asset(SplashStrings.apniSevaLogo),
-                ),
-                SizedBox(height: height * 0.10),
-
-                Text(AuthString.getStarted,
-                    style: AppTheme.lightTheme.textTheme.headlineLarge
-                ),
-                SizedBox(
-                  width: width * 0.65,
-                  child: Text(AuthString.enterMobileNo,
-                      style: AppTheme.lightTheme.textTheme.titleLarge
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Image.asset(SplashStrings.apniSevaLogo),
                   ),
-                ),
-                SizedBox(height: height * 0.015) ,
+                  SizedBox(height: height * 0.10),
 
-                Form(
-                    key: _key,
-                    child: PhoneNumberVerification(
-                      controller: authController.mobileController,
-                    )
-                ),
-                SizedBox(height: height * 0.02),
-                
-                PrimaryButton(
-                    width: width,
-                    height: 47,
-                    onPressed: () async{
-                      if(authController.mobileController.text.isEmpty){
-                        errorLabel = AuthString.validation;
-                      }
-                      else if(_key.currentState!.validate()) {
+                  Text(AuthString.getStarted,
+                      style: AppTheme.lightTheme.textTheme.headlineLarge
+                  ),
+                  SizedBox(
+                    width: width * 0.65,
+                    child: Text(AuthString.enterMobileNo,
+                        style: AppTheme.lightTheme.textTheme.titleLarge
+                    ),
+                  ),
+                  SizedBox(height: height * 0.015) ,
 
-                        Future.delayed(Duration.zero,(){
-                          authController.loginWithOTP();
-                        });
+                  Form(
+                      key: _key,
+                      child: PhoneNumberVerification(
+                        controller: authController.mobileController,
+                      )
+                  ),
+                  SizedBox(height: height * 0.02),
 
-                        Get.to(
-                            OtpVerificationScreen(
-                                phoneNumber: authController.mobileController.text)
-                        );
-                      }else{
-                        Get.snackbar('Login Error', errorLabel!);
-                      }
-                    },
-                    label: AuthString.getOTP
-                ),
+                  PrimaryButton(
+                      width: width,
+                      height: 47,
+                      onPressed: () async{
+                        if(authController.mobileController.text.isEmpty){
+                          errorLabel = AuthString.validation;
+                        }
+                        else if(_key.currentState!.validate()) {
 
-                const Spacer(),
-              ]
+                          Future.delayed(Duration.zero,(){
+                            authController.loginWithOTP();
+                          });
+
+                          Get.to(
+                              OtpVerificationScreen(
+                                  phoneNumber: authController.mobileController.text)
+                          );
+                        }else{
+                          Get.snackbar('Login Error', errorLabel!);
+                        }
+                      },
+                      label: AuthString.getOTP
+                  ),
+
+                  const Spacer(),
+                ]
+            ),
           ),
         ),
       ),

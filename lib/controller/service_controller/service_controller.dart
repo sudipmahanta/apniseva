@@ -1,12 +1,11 @@
 import 'dart:convert';
 
+import 'package:apniseva/model/service_model/service_model.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../screens/service/models/service_model.dart';
 
 class ServiceController extends GetxController{
   RxBool isLoading = false.obs;
@@ -46,8 +45,9 @@ class ServiceController extends GetxController{
       }
 
     }catch(e) {
+      print(e.toString());
       isLoading.value = false;
-      Get.snackbar('Service', 'Something went wrong! Try after sometime');
+      Get.snackbar('Service', e.toString());
     }
 
   }

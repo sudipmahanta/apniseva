@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:apniseva/screens/dashboard/models/dash_model.dart';
+import 'package:apniseva/model/dashboard_model/dash_model.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:get/get.dart';
@@ -61,7 +61,7 @@ class DashController extends GetxController {
 }
 
 class SearchApi{
-  static Future<List<SearchDtl>?> getSearchResult(String query) async{
+  static Future getSearchResult(String query) async{
     try{
       DashDataModel dashModel = DashDataModel();
 

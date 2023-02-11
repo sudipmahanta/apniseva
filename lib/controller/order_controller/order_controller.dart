@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:apniseva/model/order_model/order_model.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../screens/orders/order_model/order_model.dart';
 
 class OrderController extends GetxController{
   RxBool isLoading = false.obs;

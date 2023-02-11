@@ -1,4 +1,4 @@
-import 'package:apniseva/screens/dashboard/models/dash_model.dart';
+import 'package:apniseva/model/dashboard_model/dash_model.dart';
 import 'package:apniseva/screens/profile/profile_sections/profile_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

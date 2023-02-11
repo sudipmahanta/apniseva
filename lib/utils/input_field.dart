@@ -1,11 +1,16 @@
 import 'package:apniseva/controller/dashboard_controller/dash_controller.dart';
-import 'package:apniseva/screens/dashboard/models/dash_model.dart';
+import 'package:apniseva/model/dashboard_model/dash_model.dart';
+import 'package:apniseva/screens/service/screens/service_screen.dart';
+import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:apniseva/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../controller/subcategory_controller/subcategory_controller.dart';
 
 class SearchField extends StatefulWidget {
   const SearchField({Key? key}) : super(key: key);
@@ -17,36 +22,50 @@ class SearchField extends StatefulWidget {
 class _SearchFieldState extends State<SearchField> {
 
   final searchController = Get.put(DashController());
+  final subCategoryController = SubCategoryController();
+
+  Future<Iterable<SearchDtl>> _suggestionCallBack(suggestion) async{
+    if(suggestion.isEmpty){
+      return const Iterable<SearchDtl>.empty();
+    }
+    return searchController.dashDataModel.value.messages!.status!.searchDtl!.where((SearchDtl serviceName) =>
+        serviceName.serviceName.toString().contains(suggestion.toLowerCase()));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: /*TypeAheadFormField<SearchDtl?>(
-        suggestionsCallback: SearchApi.getSearchResult,
-        itemBuilder: (context, SearchDtl? suggestion) {
+      child: TypeAheadFormField<SearchDtl>(
+        suggestionsCallback: _suggestionCallBack,
+        itemBuilder: (context, SearchDtl suggestion) {
           final search = suggestion;
           return ListTile(
-            title: Text(search!.serviceName!),
+            title: Text(search.serviceName!),
           );
         },
-        onSuggestionSelected: (SearchDtl? suggestion) {
-
+        onSuggestionSelected: (SearchDtl suggestion) async{
+            SharedPreferences preferences = await SharedPreferences.getInstance();
+            preferences.setString(ApiStrings.catID, suggestion.catId!);
+            String value = preferences.getString(ApiStrings.categoryID)!;
+            // debugPrint(suggestion.serviceName);
+            debugPrint(suggestion.catId);
+            Get.to(() => const ServiceScreen());
         },
-        noItemsFoundBuilder: (context) => const Text('No Service'),
-      ),*/
-
-      TextFormField(
-        textCapitalization: TextCapitalization.sentences,
-        keyboardType: TextInputType.text,
-        style: Theme.of(context).textTheme.labelLarge,
-        cursorRadius: const Radius.circular(8),
-        cursorColor: Colors.black,
-        cursorWidth: 1.6,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-          hintText: 'AC repair, Washing Machine . . .',
-          hintStyle: Theme.of(context).textTheme.titleMedium,
-          prefixIcon: const Icon(Remix.search_2_line),
+        noItemsFoundBuilder: (context) => const Center(child:  Text('No Service')),
+        textFieldConfiguration: TextFieldConfiguration(
+          style: Theme.of(context).textTheme.headlineMedium,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+            hintText: 'AC repair, Washing Machine . . .',
+            hintStyle: Theme.of(context).textTheme.titleMedium,
+            prefixIcon: const Icon(Remix.search_2_line),
+          )
+        ),
+        suggestionsBoxDecoration: SuggestionsBoxDecoration(
+            elevation: 1.5,
+            shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0)
+          )
         ),
       ),
     );

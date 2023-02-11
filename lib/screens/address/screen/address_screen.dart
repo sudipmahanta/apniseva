@@ -1,6 +1,6 @@
 import 'package:apniseva/controller/cart_controller/cart_controller.dart';
 import 'package:apniseva/screens/address/widget/address_strings.dart';
-import 'package:apniseva/screens/cart/models/cart_details_model.dart';
+import 'package:apniseva/model/cart_model/cart_detail_model/cart_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';

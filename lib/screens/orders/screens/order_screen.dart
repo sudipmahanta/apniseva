@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../model/order_model/order_model.dart';
 import '../../../utils/color.dart';
-import '../order_model/order_model.dart';
 import '../order_widget/order_strings.dart';
 import '../sections/booking_appbar.dart';
 import 'order_details_screen.dart';

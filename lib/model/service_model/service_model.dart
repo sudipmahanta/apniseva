@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final serviceDataModel = serviceDataModelFromJson(jsonString);
+// final serviceDataModel = serviceDataModelFromJson(jsonString);
 
 import 'dart:convert';
 

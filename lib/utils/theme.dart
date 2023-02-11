@@ -136,6 +136,18 @@ class AppTheme {
         color: Colors.white,
       )
     ),
+
+    snackBarTheme: SnackBarThemeData(
+      contentTextStyle: const TextStyle(
+          fontSize: 12,
+          color: Colors.white
+      ),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0)
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: primaryColor,
+    )
   );
 
   static final ThemeData darkTheme = ThemeData(

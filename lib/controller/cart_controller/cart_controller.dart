@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:apniseva/screens/cart/models/cart_details_model.dart';
-import 'package:apniseva/screens/cart/models/coupon_model.dart';
+import 'package:apniseva/model/cart_model/cart_detail_model/cart_details_model.dart';
+import 'package:apniseva/model/cart_model/coupon_model/coupon_model.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +9,9 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../screens/cart/models/add_to_cart_model.dart';
-import '../../screens/cart/models/checkout_data_model.dart';
-import '../../screens/cart/models/remove_items_model.dart';
+import '../../model/cart_model/add_to_cart_model/add_to_cart_model.dart';
+import '../../model/cart_model/checkout_model/checkout_data_model.dart';
+import '../../model/cart_model/remove_item_model/remove_items_model.dart';
 import '../../screens/sucessful/screen/sucessfull_screen.dart';
 
 class CartController extends GetxController{
@@ -75,7 +75,6 @@ class CartController extends GetxController{
       preferences.remove(ApiStrings.catID);
       isLoading.value = false;
       return true;
-
   }
 
   getCartData() async{
@@ -108,6 +107,7 @@ class CartController extends GetxController{
 
       if(response.statusCode == 200 && cartModel.status == 200){
         cartDetailsDataModel.value = cartModel;
+        isLoading.value = false;
       }
 
 
@@ -124,7 +124,7 @@ class CartController extends GetxController{
       // debugPrint('Quantity: ${qty.toString()}');
       // debugPrint('Price: ${price.toString()}');
 
-      isLoading.value = false;
+
    } catch(e){
     isLoading.value = false;
     debugPrint(e.toString());

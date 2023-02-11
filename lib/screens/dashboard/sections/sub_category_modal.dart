@@ -1,4 +1,4 @@
-import 'package:apniseva/screens/dashboard/models/subcategory_model.dart';
+import 'package:apniseva/model/dashboard_model/subcategory_model.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -80,9 +80,9 @@ class _ChooseSubCategoryState extends State<ChooseSubCategory> {
                         onTap: () async{
                           SharedPreferences preferences = await SharedPreferences.getInstance();
                           preferences.setString(ApiStrings.catID, data[index].catId!);
-                          // preferences.setString(ApiStrings.subCat, data[index].subcat!.toString());
-                          // debugPrint('SubCatData: ${data[index].subcat}');
                           debugPrint("SubCategory: ${data[index].catName}");
+                          debugPrint("SubCategory: ${data[index].catId}");
+
 
                           if(data[index].subcat == 1){
                             Get.to(()=> const ServiceScreen());
@@ -95,7 +95,7 @@ class _ChooseSubCategoryState extends State<ChooseSubCategory> {
                           }
                         },
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Card(
@@ -120,6 +120,7 @@ class _ChooseSubCategoryState extends State<ChooseSubCategory> {
                                 padding: const EdgeInsets.only(left: 10),
                                 // color: Colors.blue,
                                 child: Text(data[index].catName!,
+                                  textAlign: TextAlign.center,
                                   maxLines: 2,
                                   style: Theme.of(context).textTheme.labelSmall,
                                 ),

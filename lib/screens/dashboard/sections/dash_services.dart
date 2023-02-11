@@ -1,4 +1,4 @@
-import 'package:apniseva/screens/dashboard/models/dash_model.dart';
+import 'package:apniseva/model/dashboard_model/dash_model.dart';
 import 'package:apniseva/screens/dashboard/sections/sub_category_modal.dart';
 import 'package:apniseva/screens/dashboard/widget/dash_strings.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
@@ -44,7 +44,7 @@ class _DashCategoryState extends State<DashCategory> {
           ),
         ) : GridView.builder(
             shrinkWrap: true,
-            itemCount: widget.getData!.length < 6 ? widget.getData!.length : 6,
+            itemCount: widget.getData!.length,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -57,7 +57,7 @@ class _DashCategoryState extends State<DashCategory> {
                 onTap: () async{
                   SharedPreferences preferences = await SharedPreferences.getInstance();
                   preferences.setString(ApiStrings.catID, data[index].catId!);
-                  // debugPrint("Category: ${data[index].catName}");
+                  debugPrint("Category: ${data[index].catId}");
 
                   showBottomSheet(
                       context: context,
@@ -66,7 +66,7 @@ class _DashCategoryState extends State<DashCategory> {
                       });
                 },
                 child: Card(
-                  elevation: 1.0,
+                  elevation: 6.0,
                   child: Column(
                     children: [
                       ClipRRect(

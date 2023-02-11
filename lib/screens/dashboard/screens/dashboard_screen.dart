@@ -1,14 +1,21 @@
+import 'package:apniseva/controller/auth_controller/auth_controller.dart';
+import 'package:apniseva/controller/cart_controller/cart_controller.dart';
 import 'package:apniseva/controller/dashboard_controller/dash_controller.dart';
+import 'package:apniseva/controller/location_controller/location_controller.dart';
 import 'package:apniseva/controller/order_details_controller/order_details_controller.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_carousel.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_reviews.dart';
 import 'package:apniseva/screens/dashboard/sections/dash_services.dart';
 import 'package:apniseva/screens/dashboard/widget/dash_strings.dart';
+import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../utils/color.dart';
 import '../../../utils/input_field.dart';
+import '../../location/screen/location.dart';
 import '../sections/dash_appbar.dart';
 import 'all_service_screen.dart';
 
@@ -21,22 +28,41 @@ class DashScreen extends StatefulWidget {
 }
 
 class _DashScreenState extends State<DashScreen> {
+  DateTime lastTimeBackButtonWasClicked = DateTime.now();
 
+  final AuthController authController = Get.put(AuthController());
   final DashController dashController = Get.put(DashController());
-  // final OrderDetailsController orderDetailsController = Get.put(OrderDetailsController());
 
   @override
-  void initState() {
-    Future.delayed(Duration.zero, () {
-      dashController.getDashboard();
-      // orderDetailsController.getOrderDetails();
-    });
+  void initState(){
+    checkUserLoc();
     super.initState();
   }
 
+  checkUserLoc() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? otp = preferences.getString(ApiStrings.otp);
+    String? cityID = preferences.getString(ApiStrings.cityID);
+
+    if(cityID!.isEmpty) {
+      Future.delayed(Duration.zero,(){
+        authController.getUserData();
+      });
+
+      preferences.getString(ApiStrings.cityID);
+      showDialog(context: context, builder: (context) {
+        return const GetLocation();
+      });
+    }else{
+      Future.delayed(Duration.zero, () {
+        dashController.getDashboard();
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
-
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height - (
         MediaQuery.of(context).padding.bottom +
@@ -44,16 +70,36 @@ class _DashScreenState extends State<DashScreen> {
     );
 
     return Obx(() {
-        return Scaffold(
-          appBar: const DashAppBar(),
-          body:
-          dashController.isLoading.value == true ? Center(
-            child: CircularProgressIndicator(
-              color: primaryColor,
-              strokeWidth: 2.5,
+        return dashController.isLoading.value == true ?
+        WillPopScope(
+          onWillPop: () async {
+            if (DateTime.now().difference(lastTimeBackButtonWasClicked) >= const Duration(seconds: 1)) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8.0),
+                  content: Text("Press the back button again to go back"),
+                  duration: Duration(seconds: 1),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+              lastTimeBackButtonWasClicked = DateTime.now();
+              return false;
+            } else {
+              return true;
+            }
+          },
+          child: Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(
+                color: primaryColor,
+                strokeWidth: 2.5,
+              ),
             ),
-          ) :
-          Container(
+          ),
+        ) :
+        Scaffold(
+          appBar: const DashAppBar(),
+          body: Container(
               width: width,
               height: height,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -63,31 +109,11 @@ class _DashScreenState extends State<DashScreen> {
                     const SearchField(),
                     SizedBox(height: height * 0.04),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(DashStrings.ourServices,
-                          style: Theme.of(context).textTheme.headlineLarge,
-                        ),
-                        Visibility(
-                          visible: dashController.dashDataModel.value.messages!.status!.categoryDtl!.length > 6 ? true : false,
-                          child: InkWell(
-                            onTap: () {
-                              Get.to(()=> AllServiceScreen(getData: dashController.dashDataModel.value.messages!.status!.categoryDtl!));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-                              child: Text(DashStrings.viewAll,
-                                style: TextStyle(
-                                  letterSpacing: 1.3,
-                                  fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
-                                  color: Theme.of(context).textTheme.titleMedium!.color
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(DashStrings.ourServices,
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
                     ),
                     DashCategory(
                       getData: dashController.dashDataModel.value.messages!.status!.categoryDtl!,

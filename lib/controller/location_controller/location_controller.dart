@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-import '../../screens/location/location_model/location_model.dart';
+import '../../model/location_model/location_model.dart';
 
 class LocationController extends GetxController {
 
@@ -35,6 +35,7 @@ class LocationController extends GetxController {
       );
       locModel = locationModelFromJson(response.body);
       var data = jsonDecode(response.body);
+
       if(data["status"] == 200){
         locationModel.value = locModel;
       }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:apniseva/screens/dashboard/models/subcategory_model.dart';
+import 'package:apniseva/model/dashboard_model/subcategory_model.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:get/get.dart';
