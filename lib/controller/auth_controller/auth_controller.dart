@@ -10,8 +10,8 @@ import '../../utils/api_endpoint_strings/api_endpoint_strings.dart';
 import '../../utils/api_strings/api_strings.dart';
 
 class AuthController extends GetxController {
-  final mobileController = TextEditingController();
-  final otpController =TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController otpController =TextEditingController();
 
   RxBool isLoading = false.obs;
   Rx<UserDataModel> userModel = UserDataModel(
@@ -92,6 +92,7 @@ class AuthController extends GetxController {
       }
     isLoading.value = false;
   }
+
   clear() {
     mobileController.clear();
     otpController.clear();

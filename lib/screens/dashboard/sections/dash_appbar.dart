@@ -85,19 +85,31 @@ class _DashAppBarState extends State<DashAppBar> {
               onTap: () {
                 Get.to(()=> const CartScreen());
               },
-              child:  Container(
-                    height: 55,
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    alignment: Alignment.center,
-                    child: /*cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isNotEmpty ? badges.Badge(
-                      position: badges.BadgePosition.topEnd(top: -5, end: -5),
-                        showBadge: cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isEmpty ? false : true,
-                        badgeContent: Text(''*//*cartController.cartDetailsDataModel.value.messages!.status!.allCart!.length.toString()*//*,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        child: const Icon(Remix.shopping_cart_2_fill)
-                    ):*/ const Icon(Remix.shopping_cart_2_fill),
-                  )
+              child:  Obx(() {
+                  return cartController.isLoading.value == true ?  Container(
+                      height: 55,
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      alignment: Alignment.center,
+                      child: const Icon(Remix.shopping_cart_2_fill)) :
+                  Container(
+                        height: 55,
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        alignment: Alignment.center,
+                        child: cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isNotEmpty ? badges.Badge(
+                          position: badges.BadgePosition.topEnd(top: -5, end: -5),
+                            showBadge: cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isEmpty ? false : true,
+                            badgeContent: Text(cartController.cartDetailsDataModel.value.messages!.status!.allCart!.length.toString(),
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            child: const Icon(Remix.shopping_cart_2_fill)
+                        ): Container(
+                            height: 55,
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            alignment: Alignment.center,
+                            child: const Icon(Remix.shopping_cart_2_fill)),
+                      );
+                }
+              )
             )
           ],
         )

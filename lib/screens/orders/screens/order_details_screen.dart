@@ -38,7 +38,6 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
     double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
 
     return Obx(() {
-
       return Scaffold(
         appBar: PrimaryAppBar(
           title: OrdersDetailStrings.title,

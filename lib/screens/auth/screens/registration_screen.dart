@@ -21,9 +21,17 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
 
-  final _key = GlobalKey<FormState>();
+  DateTime lastTimeBackButtonWasClicked = DateTime.now();
+  final _regdKey = GlobalKey<FormState>();
   final AuthController authController = Get.put(AuthController());
   String? errorLabel;
+
+  @override
+  void dispose() {
+    authController.otpController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,30 +41,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     return  WillPopScope(
       onWillPop: () async{
-        final shouldPop = await showDialog<bool>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Do you want to go back?'),
-            actionsAlignment: MainAxisAlignment.spaceBetween,
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                child: const Text('Yes'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, false);
-                },
-                child: const Text('No'),
-              ),
-            ],
+        if (DateTime.now().difference(lastTimeBackButtonWasClicked) >= const Duration(seconds: 1)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8.0),
+              content: Text("Press the back button again to go back"),
+              duration: Duration(seconds: 1),
+              behavior: SnackBarBehavior.floating,
+            ),
           );
-        },
-      );
-      return shouldPop!;
+          lastTimeBackButtonWasClicked = DateTime.now();
+          return false;
+        } else {
+          return true;
+        }
       },
       child: Scaffold(
         body: SafeArea(
@@ -87,7 +85,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   SizedBox(height: height * 0.015) ,
 
                   Form(
-                      key: _key,
+                      key: _regdKey,
                       child: PhoneNumberVerification(
                         controller: authController.mobileController,
                       )
@@ -101,13 +99,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         if(authController.mobileController.text.isEmpty){
                           errorLabel = AuthString.validation;
                         }
-                        else if(_key.currentState!.validate()) {
+                        else if(_regdKey.currentState!.validate()) {
 
                           Future.delayed(Duration.zero,(){
                             authController.loginWithOTP();
                           });
 
-                          Get.to(
+                          Get.to(()=>
                               OtpVerificationScreen(
                                   phoneNumber: authController.mobileController.text)
                           );

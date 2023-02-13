@@ -102,7 +102,7 @@ class CartController extends GetxController{
           headers: headers
       );
 
-      debugPrint(response.statusCode.toString());
+      debugPrint("CartAPI: ${response.statusCode.toString()}");
       cartModel = cartDetailsDataModelFromJson(response.body);
 
       if(response.statusCode == 200 && cartModel.status == 200){

@@ -49,7 +49,14 @@ class _CartScreenState extends State<CartScreen> {
     double height = MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top);
 
     return Obx(() {
-        return Scaffold(
+        return cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isEmpty ?
+        Scaffold(
+          appBar: CartAppBar(title: CartStrings.title,),
+            body: const Center(child: Text('Cart is Empty')
+            )
+        ):
+
+        Scaffold(
           appBar: CartAppBar(
             title: CartStrings.title,
           ),
@@ -103,12 +110,14 @@ class _CartScreenState extends State<CartScreen> {
                                         Future.delayed(Duration.zero,() {
                                           cartController.removeItem();
                                         });
+                                        cartData.removeAt(index);
                                         refresh();
                                       },
                                       child: const Icon(Remix.delete_bin_6_fill,
                                         color: Color(0xFFDC4D42),
                                       ),
-                                    ),),
+                                    ),
+                                  ),
                                 )
                             );
                           }

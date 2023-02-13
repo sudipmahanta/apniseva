@@ -30,12 +30,20 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final locController = Get.put(LocationController());
 
   @override
+  void dispose() {
+    authController.mobileController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     Future.delayed(Duration.zero, (){
       authController.getUserData();
     });
     super.initState();
   }
+
+
 
   verifyOTP() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -112,11 +120,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                             fontWeight: FontWeight.w400
                         ),
                         appContext: (context),
-                        onChanged: (value) {
-                          // debugPrint(value);
-                          setState(() {
-                            // currentText = value;
-                          });},
+                        onChanged: (value) {},
                         keyboardType: TextInputType.number,
                         pinTheme: PinTheme(
                             borderWidth: 1.5,
@@ -135,6 +139,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           width: width,
                           height: 47,
                           onPressed: () {
+
                             verifyOTP();
                           },
                           label: AuthString.submit
@@ -154,12 +159,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         alignment: Alignment.center,
                         child: TextButton(
                             onPressed: (){
+                              authController.clear();
                               Future.delayed(Duration.zero, (){
                                 authController.loginWithOTP();
                               });
                             },
                             child:  Text('Resend OTP',
-
                               style: Theme.of(context).textTheme.labelLarge
                             )
                         ),

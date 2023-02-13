@@ -41,10 +41,19 @@ class _ServiceScreenState extends State<ServiceScreen> {
     return Obx(() {
       return Scaffold(
           appBar: ServiceAppBar(title: ServiceStrings.serviceName),
-          body: serviceController.isLoading.value == true ? Center(
+          body: serviceController.isLoading.value == true ?
+          Center(
             child: CircularProgressIndicator(
               color: Theme.of(context).primaryColor,
               strokeWidth: 1.5,
+            ),
+          ) :
+          serviceController.serviceDataModel.value.messages!.status!.serviceList!.isEmpty ?
+          const Center(
+            child:  Text('No Service Found',
+              style: TextStyle(
+                color: Colors.black
+              ),
             ),
           ): SingleChildScrollView(
             child: Padding(

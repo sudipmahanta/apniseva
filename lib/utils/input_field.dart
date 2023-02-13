@@ -46,7 +46,8 @@ class _SearchFieldState extends State<SearchField> {
         onSuggestionSelected: (SearchDtl suggestion) async{
             SharedPreferences preferences = await SharedPreferences.getInstance();
             preferences.setString(ApiStrings.catID, suggestion.catId!);
-            String value = preferences.getString(ApiStrings.categoryID)!;
+            String? value = preferences.getString(ApiStrings.categoryID);
+            debugPrint(value);
             // debugPrint(suggestion.serviceName);
             debugPrint(suggestion.catId);
             Get.to(() => const ServiceScreen());
