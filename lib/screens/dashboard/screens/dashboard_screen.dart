@@ -70,76 +70,57 @@ class _DashScreenState extends State<DashScreen> {
     );
 
     return Obx(() {
-        return dashController.isLoading.value == true ?
-        WillPopScope(
-          onWillPop: () async {
-            if (DateTime.now().difference(lastTimeBackButtonWasClicked) >= const Duration(seconds: 1)) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8.0),
-                  content: Text("Press the back button again to go back"),
-                  duration: Duration(seconds: 1),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-              lastTimeBackButtonWasClicked = DateTime.now();
-              return false;
-            } else {
-              return true;
-            }
-          },
-          child: Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(
-                color: primaryColor,
-                strokeWidth: 2.5,
-              ),
-            ),
+      return
+      Scaffold(
+        appBar: dashController.isLoading.value == true ? null : const DashAppBar(),
+        body: dashController.isLoading.value == true ?
+        Center(
+          child: CircularProgressIndicator(
+            color: primaryColor,
+            strokeWidth: 2.5,
           ),
         ) :
-        Scaffold(
-          appBar: const DashAppBar(),
-          body: Container(
-              width: width,
-              height: height,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SearchField(),
-                    SizedBox(height: height * 0.04),
+        Container(
+            width: width,
+            height: height,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SearchField(),
+                  SizedBox(height: height * 0.04),
 
-                    Align(
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(DashStrings.ourServices,
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                  ),
+                  DashCategory(
+                    getData: dashController.dashDataModel.value.messages!.status!.categoryDtl!,
+                  ),
+                  SizedBox(height: height * 0.02),
+
+                  DashCarousel(
+                    getData: dashController.dashDataModel.value.messages!.status!.offerDtl!,
+                  ),
+                  SizedBox(height: height * 0.02),
+
+                  Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(DashStrings.ourServices,
+                      child: Text('Your Reviews',
                         style: Theme.of(context).textTheme.headlineLarge,
-                      ),
-                    ),
-                    DashCategory(
-                      getData: dashController.dashDataModel.value.messages!.status!.categoryDtl!,
-                    ),
-                    SizedBox(height: height * 0.02),
-
-                    DashCarousel(
-                      getData: dashController.dashDataModel.value.messages!.status!.offerDtl!,
-                    ),
-                    SizedBox(height: height * 0.02),
-
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('Your Reviews',
-                          style: Theme.of(context).textTheme.headlineLarge,
-                        )
-                    ),
-                    DashReviews(
-                      getTestimonialDetail: dashController.dashDataModel.value.messages!.status!.testimonialDtl!,
-                    )
-                  ],
-                ),
-              )
-          ),
-        );
-      }
+                      )
+                  ),
+                  DashReviews(
+                    getTestimonialDetail: dashController.dashDataModel.value.messages!.status!.testimonialDtl!,
+                  )
+                ],
+              ),
+            )
+        ),
+      );
+    }
     );
   }
 }

@@ -21,9 +21,7 @@ class LocationController extends GetxController {
 
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? id = pref.getString(ApiStrings.userID);
-      debugPrint(id);
       String url = "${ApiEndPoint.getLoc}=$id";
-      debugPrint(url);
 
       Map<String, String> header = {
         'Content-type': 'application/json; charset=utf-8',

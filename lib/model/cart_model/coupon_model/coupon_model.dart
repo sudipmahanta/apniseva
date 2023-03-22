@@ -20,15 +20,15 @@ class CouponDataModel {
   Messages? messages;
 
   factory CouponDataModel.fromJson(Map<String, dynamic> json) => CouponDataModel(
-    status: json["status"],
-    error: json["error"],
+    status: json["status"] == null ? null : json["status"],
+    error: json["error"] == null ? null : json["error"],
     messages: Messages.fromJson(json["messages"]),
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "error": error,
-    "messages": messages!.toJson(),
+    "messages": messages?.toJson(),
   };
 }
 
@@ -42,13 +42,13 @@ class Messages {
   Status? status;
 
   factory Messages.fromJson(Map<String, dynamic> json) => Messages(
-    responsecode: json["responsecode"],
+    responsecode: json["responsecode"] == null ? null : json["responsecode"],
     status: Status.fromJson(json["status"]),
   );
 
   Map<String, dynamic> toJson() => {
     "responsecode": responsecode,
-    "status": status!.toJson(),
+    "status": status == null ? null : status?.toJson(),
   };
 }
 
@@ -64,15 +64,15 @@ class Status {
   TotalAmount? totalAmount;
 
   factory Status.fromJson(Map<String, dynamic> json) => Status(
-    couponDetails: CouponDetails.fromJson(json["Coupon_Details"]),
-    gst: Gst.fromJson(json["gst"]),
-    totalAmount: TotalAmount.fromJson(json["Total_amount"]),
+    couponDetails: json["Coupon_Details"] == null ? null : CouponDetails.fromJson(json["Coupon_Details"]),
+    gst: json["gst"] == null ? null : Gst.fromJson(json["gst"]),
+    totalAmount: json["Total_amount"] == null ? null : TotalAmount.fromJson(json["Total_amount"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "Coupon_Details": couponDetails!.toJson(),
-    "gst": gst!.toJson(),
-    "Total_amount": totalAmount!.toJson(),
+    "Coupon_Details": couponDetails == null ? null : couponDetails?.toJson(),
+    "gst": gst == null ? null : gst?.toJson(),
+    "Total_amount": totalAmount == null ? null : totalAmount?.toJson(),
   };
 }
 
@@ -86,13 +86,13 @@ class CouponDetails {
   String? couponMsg;
 
   factory CouponDetails.fromJson(Map<String, dynamic> json) => CouponDetails(
-    couponAmount: json["coupon_amount"],
-    couponMsg: json["coupon_msg"],
+    couponAmount: json["coupon_amount"] == null ? null : json["coupon_amount"],
+    couponMsg: json["coupon_msg"] == null ? null : json["coupon_msg"],
   );
 
   Map<String, dynamic> toJson() => {
-    "coupon_amount": couponAmount,
-    "coupon_msg": couponMsg,
+    "coupon_amount": couponAmount == null ? null : couponAmount,
+    "coupon_msg": couponMsg == null ? null : couponMsg,
   };
 }
 
@@ -106,13 +106,13 @@ class Gst {
   String? gstAmount;
 
   factory Gst.fromJson(Map<String, dynamic> json) => Gst(
-    gst: json["gst"],
-    gstAmount: json["gst_amount"],
+    gst: json["gst"] == null ? null : json["gst"],
+    gstAmount: json["gst_amount"] == null ? null : json["gst_amount"],
   );
 
   Map<String, dynamic> toJson() => {
-    "gst": gst,
-    "gst_amount": gstAmount,
+    "gst": gst == null ? null : gst,
+    "gst_amount": gstAmount == null ? null : gstAmount,
   };
 }
 
@@ -126,12 +126,12 @@ class TotalAmount {
   String? grandTotal;
 
   factory TotalAmount.fromJson(Map<String, dynamic> json) => TotalAmount(
-    total: json["Total"],
-    grandTotal: json["Grand_total"],
+    total: json["Total"] == null ? null : json["Total"],
+    grandTotal: json["Grand_total"] == null ? null : json["Grand_total"],
   );
 
   Map<String, dynamic> toJson() => {
-    "Total": total,
-    "Grand_total": grandTotal,
+    "Total": total == null ? null : total,
+    "Grand_total": grandTotal == null ? null : grandTotal,
   };
 }

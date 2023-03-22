@@ -90,8 +90,7 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                     ),
 
                     Visibility(
-                      visible: orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.verifyOtp!.isEmpty &&
-                          orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.verifyOtp == '1' ? true : false,
+                      visible: orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.verifyOtp == null ? false : true,
                       child: Container(
                         // height: 50,
                         width: 80,
@@ -106,7 +105,7 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
                             Text('OTP',
                               style: Theme.of(context).textTheme.headlineMedium,
                             ),
-                            Text(orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.verifyOtp!,
+                            Text(orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.verifyOtp == '1'?  "Verified" : orderDetailsController.orderDetailsModel.value.messages!.status!.otherDtl!.verifyOtp!,
                               style: TextStyle(
                                 fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
                                 color: const Color(0xFF0FFA4E)
@@ -160,7 +159,7 @@ class _OrderBookingDetailsState extends State<OrderBookingDetails> {
               ),
 
               Visibility(
-                visible:  orderDetailsController.orderDetailsModel.value.messages!.status!.additinalOrders!.isEmpty ? true : false,
+                visible:  orderDetailsController.orderDetailsModel.value.messages!.status!.additinalOrders!.isEmpty ? false : true,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: Column(

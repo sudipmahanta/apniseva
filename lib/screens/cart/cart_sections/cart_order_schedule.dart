@@ -1,10 +1,10 @@
 import 'package:apniseva/controller/cart_controller/cart_controller.dart';
-import 'package:apniseva/screens/cart/screen/select_address_screen.dart';
 import 'package:apniseva/utils/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
 
+import '../../address/screen/address_screen.dart';
 import '../../address/widget/address_strings.dart';
 import '../cart_strings/cart_strings.dart';
 
@@ -18,6 +18,20 @@ class CartOrderScheduleTotal extends StatefulWidget {
 class _CartOrderScheduleTotalState extends State<CartOrderScheduleTotal> {
 
   final cartController = Get.put(CartController());
+
+  @override
+  void initState() {
+    cartController.firstName;
+    cartController.lastName;
+    cartController.number;
+    cartController.email;
+    cartController.address1;
+    cartController.address2;
+    cartController.cityName;
+    cartController.state;
+    cartController.pinCode;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,148 +52,161 @@ class _CartOrderScheduleTotalState extends State<CartOrderScheduleTotal> {
             child:  Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Address',
-                      style: Theme.of(context).textTheme.labelLarge
-                    ),
-                    IconButton(
-                      onPressed: (){
-                        Get.to(() => const SelectAddressScreen());
-                      },
-                      icon: const Icon(Icons.edit),
-                      iconSize: 18,
-                    )
-                  ],
+                InkWell(
+                  onTap: (){
+                    Get.to(() => const AddressScreen());
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Address',
+                        style: Theme.of(context).textTheme.labelLarge
+                      ),
+                      IconButton(
+                        onPressed: (){
+
+                        },
+                        icon: const Icon(Icons.edit),
+                        iconSize: 18,
+                      )
+                    ],
+                  ),
                 ),
 
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: AddressStrings.name,
-                              style: Theme.of(context).textTheme.labelMedium
-                          ),
-                          TextSpan(
-                              text: "Sudip Mahanta",
-                              style: Theme.of(context).textTheme.titleLarge
+                Visibility(
+                  visible: cartController.addressID == null ? false : true,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: AddressStrings.name,
+                                    style: Theme.of(context).textTheme.labelMedium
+                                ),
+                                TextSpan(
+                                    text: "${cartController.firstName} ${cartController.lastName}",
+                                    style: Theme.of(context).textTheme.titleLarge
+                                )
+                              ]
                           )
-                        ]
-                    )
-                ),
+                      ),
 
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: AddressStrings.mobile,
-                              style: Theme.of(context).textTheme.labelMedium
-                          ),
-                          TextSpan(
-                              text: "+91- 7852965860",
-                              style: Theme.of(context).textTheme.titleLarge
+                      RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: AddressStrings.mobile,
+                                    style: Theme.of(context).textTheme.labelMedium
+                                ),
+                                TextSpan(
+                                    text: cartController.number,
+                                    style: Theme.of(context).textTheme.titleLarge
+                                )
+                              ]
                           )
-                        ]
-                    )
-                ),
+                      ),
 
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: AddressStrings.mobile,
-                              style: Theme.of(context).textTheme.labelMedium
-                          ),
-                          TextSpan(
-                              text: "sudipmahanta99@gmail.com",
-                              style: Theme.of(context).textTheme.titleLarge
+                      RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: AddressStrings.email,
+                                    style: Theme.of(context).textTheme.labelMedium
+                                ),
+                                TextSpan(
+                                    text: cartController.email,
+                                    style: Theme.of(context).textTheme.titleLarge
+                                )
+                              ]
                           )
-                        ]
-                    )
-                ),
+                      ),
 
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: AddressStrings.address1,
-                              style: Theme.of(context).textTheme.labelMedium
-                          ),
-                          TextSpan(
-                              text: "Address-1",
-                              style: Theme.of(context).textTheme.titleLarge
+                      RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: AddressStrings.address1,
+                                    style: Theme.of(context).textTheme.labelMedium
+                                ),
+                                TextSpan(
+                                    text: cartController.address1,
+                                    style: Theme.of(context).textTheme.titleLarge
+                                )
+                              ]
                           )
-                        ]
-                    )
-                ),
+                      ),
 
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: AddressStrings.address2,
-                              style: Theme.of(context).textTheme.labelMedium
-                          ),
-                          TextSpan(
-                              text: "Address-2",
-                              style: Theme.of(context).textTheme.titleLarge
+                      RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: AddressStrings.address2,
+                                    style: Theme.of(context).textTheme.labelMedium
+                                ),
+                                TextSpan(
+                                    text: cartController.address2,
+                                    style: Theme.of(context).textTheme.titleLarge
+                                )
+                              ]
                           )
-                        ]
-                    )
-                ),
+                      ),
 
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: AddressStrings.city,
-                              style: Theme.of(context).textTheme.labelMedium
-                          ),
-                          TextSpan(
-                              text: "Bhubaneswar",
-                              style: Theme.of(context).textTheme.titleLarge
+                      RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: AddressStrings.city,
+                                    style: Theme.of(context).textTheme.labelMedium
+                                ),
+                                TextSpan(
+                                    text: cartController.cityName,
+                                    style: Theme.of(context).textTheme.titleLarge
+                                )
+                              ]
                           )
-                        ]
-                    )
-                ),
+                      ),
 
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: AddressStrings.state,
-                              style: Theme.of(context).textTheme.labelMedium
-                          ),
-                          TextSpan(
-                              text: "Odisha",
-                              style: Theme.of(context).textTheme.titleLarge
+                      RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: AddressStrings.state,
+                                    style: Theme.of(context).textTheme.labelMedium
+                                ),
+                                TextSpan(
+                                    text: cartController.state,
+                                    style: Theme.of(context).textTheme.titleLarge
+                                )
+                              ]
                           )
-                        ]
-                    )
-                ),
+                      ),
 
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: AddressStrings.pinCode,
-                              style: Theme.of(context).textTheme.labelMedium
-                          ),
-                          TextSpan(
-                              text: "752054",
-                              style: Theme.of(context).textTheme.titleLarge
+                      RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: AddressStrings.pinCode,
+                                    style: Theme.of(context).textTheme.labelMedium
+                                ),
+                                TextSpan(
+                                    text: cartController.pinCode,
+                                    style: Theme.of(context).textTheme.titleLarge
+                                )
+                              ]
                           )
-                        ]
-                    )
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -248,7 +275,6 @@ class _CartOrderScheduleTotalState extends State<CartOrderScheduleTotal> {
                 ),
 
                 SizedBox(height: height * 0.01),
-
               ],
             ),
           ),

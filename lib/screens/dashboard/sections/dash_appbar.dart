@@ -23,7 +23,6 @@ class DashAppBar extends StatefulWidget implements PreferredSizeWidget{
 
 class _DashAppBarState extends State<DashAppBar> {
 
-  final locController = Get.put(LocationController());
   final cartController = Get.put(CartController());
   String? cityName;
 
@@ -40,7 +39,6 @@ class _DashAppBarState extends State<DashAppBar> {
   @override
   void initState() {
     Future.delayed(Duration.zero, (){
-      locController.getLoc();
       cartController.getCartData();
     });
     getLoc();
@@ -81,35 +79,38 @@ class _DashAppBarState extends State<DashAppBar> {
               ),
             ),
 
-            InkWell(
-              onTap: () {
-                Get.to(()=> const CartScreen());
-              },
-              child:  Obx(() {
-                  return cartController.isLoading.value == true ?  Container(
+            Obx(() {
+                return cartController.fetch.value == true && cartController.cartDetailsDataModel.value.status == 400 ?
+                InkWell(
+                  onTap: (){
+                    Get.to(()=> const CartScreen());
+                  },
+                  child: Container(
                       height: 55,
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       alignment: Alignment.center,
-                      child: const Icon(Remix.shopping_cart_2_fill)) :
-                  Container(
-                        height: 55,
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        alignment: Alignment.center,
-                        child: cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isNotEmpty ? badges.Badge(
-                          position: badges.BadgePosition.topEnd(top: -5, end: -5),
-                            showBadge: cartController.cartDetailsDataModel.value.messages!.status!.allCart!.isEmpty ? false : true,
-                            badgeContent: Text(cartController.cartDetailsDataModel.value.messages!.status!.allCart!.length.toString(),
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            child: const Icon(Remix.shopping_cart_2_fill)
-                        ): Container(
-                            height: 55,
-                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                            alignment: Alignment.center,
-                            child: const Icon(Remix.shopping_cart_2_fill)),
-                      );
-                }
-              )
+                      child: const Icon(Remix.shopping_cart_2_fill)
+                  ),
+                ):
+                InkWell(
+                  onTap: (){
+                    Get.to(()=> const CartScreen());
+                  },
+                  child: Container(
+                    height: 55,
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    alignment: Alignment.center,
+                    child: badges.Badge(
+                        position: badges.BadgePosition.topEnd(top: -5, end: -5),
+                        showBadge: cartController.cartDetailsDataModel.value.messages?.status!.allCart! == null ? false : true,
+                        badgeContent: Text(cartController.cartDetailsDataModel.value.messages?.status!.allCart! == null ? '' : cartController.cartDetailsDataModel.value.messages!.status!.allCart!.length.toString(),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        child: const Icon(Remix.shopping_cart_2_fill)
+                    ),
+                  ),
+                );
+              }
             )
           ],
         )

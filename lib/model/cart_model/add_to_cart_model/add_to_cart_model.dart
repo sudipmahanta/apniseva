@@ -42,12 +42,12 @@ class Messages {
   String? status;
 
   factory Messages.fromJson(Map<String, dynamic> json) => Messages(
-    responsecode: json["responsecode"],
-    status: json["status"],
+    responsecode: json["responsecode"] == null ? null : json["responsecode"],
+    status: json["status"] == null ? null : json["status"],
   );
 
   Map<String, dynamic> toJson() => {
-    "responsecode": responsecode,
-    "status": status,
+    "responsecode": responsecode == null ? null : responsecode,
+    "status": status == null ? null : status,
   };
 }

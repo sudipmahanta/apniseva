@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../screens/auth/screens/otp_screen.dart';
 import '../../utils/api_endpoint_strings/api_endpoint_strings.dart';
 import '../../utils/api_strings/api_strings.dart';
 
@@ -14,23 +15,17 @@ class AuthController extends GetxController {
   TextEditingController otpController =TextEditingController();
 
   RxBool isLoading = false.obs;
-  Rx<UserDataModel> userModel = UserDataModel(
-    messages: Messages(
-      status: Status(
-        fullname: 'User',
-        email: 'Unverified',
-        contact: 'null',
-      )
-    )
-  ).obs;
-
+  Rx<UserDataModel> userModel = UserDataModel().obs;
 
   loginWithOTP() async{
     SharedPreferences pref = await SharedPreferences.getInstance();
+    String? mobileNumber = pref.getString(ApiStrings.mobile);
+    debugPrint(mobileNumber);
     isLoading.value = true;
 
-    Map<String, String> body = {'contact': mobileController.text};
-
+    Map<String, String> body = {
+      'contact': mobileNumber!
+    };
     Map<String, String> header = {
       "Content-Type": "application/json"
     };
@@ -41,8 +36,10 @@ class AuthController extends GetxController {
     );
     Map data = jsonDecode(response.body);
     debugPrint('OtpAPI Status Code: ${response.statusCode}');
+    debugPrint(response.body.toString());
 
     if(response.statusCode == 200) {
+      isLoading.value = false;
       pref.setString(ApiStrings.mobile,
           data['messages']["status"]["contact_otp"].toString());
 
@@ -51,18 +48,21 @@ class AuthController extends GetxController {
 
       String? otp = pref.getString(ApiStrings.otp);
       debugPrint("OTP during api: ${otp.toString()}");
-      isLoading.value = false;
-    }else {
-      Get.snackbar('OTP', 'Error occurred while sending OTP.');
-    }
+      Get.to(()=>
+          OtpVerificationScreen(
+              phoneNumber: mobileController.text)
+      );
 
+    }else {
+      isLoading.value = false;
+      Get.snackbar('OTP', 'Something went wrong.');
+    }
     otpController.clear();
   }
 
   getUserData() async{
+    isLoading.value = true;
     UserDataModel model = UserDataModel();
-
-      isLoading.value = true;
       SharedPreferences pref = await SharedPreferences.getInstance();
       String mobile = pref.getString(ApiStrings.mobile)!;
       String verifyOtp = ApiEndPoint.verifyOtp;
@@ -80,17 +80,17 @@ class AuthController extends GetxController {
           body: jsonEncode(body),
           headers: header
       );
-      debugPrint("GetUserResponse: ${response.body}");
+      // debugPrint("GetUserResponse: ${response.body}");
       model = userDataModelFromJson(response.body);
 
       if (response.statusCode == 200 && model.status == 200) {
         userModel.value = model;
         pref.setString(ApiStrings.userID, userModel.value.messages!.status!.userId!);
         String? userID = pref.getString(ApiStrings.userID);
-        debugPrint("User ID: $userID");
+        debugPrint("User Id ${userModel.value.messages!.status!.userId!}");
+        isLoading.value = false;
         return true;
       }
-    isLoading.value = false;
   }
 
   clear() {

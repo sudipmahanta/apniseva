@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:apniseva/model/service_model/service_model.dart';
 import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
@@ -15,7 +15,6 @@ class ServiceController extends GetxController{
     try{
       isLoading.value = true;
       ServiceDataModel serviceModel = ServiceDataModel();
-
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String? userID = preferences.getString(ApiStrings.userID);
       String? cityID = preferences.getString(ApiStrings.cityID);
@@ -45,9 +44,9 @@ class ServiceController extends GetxController{
       }
 
     }catch(e) {
-      print(e.toString());
+      debugPrint(e.toString());
       isLoading.value = false;
-      Get.snackbar('Service', e.toString());
+      debugPrint(e.toString());
     }
 
   }

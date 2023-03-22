@@ -5,6 +5,7 @@ import 'package:apniseva/utils/api_endpoint_strings/api_endpoint_strings.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -52,7 +53,7 @@ class _DashCategoryState extends State<DashCategory> {
             ),
 
             itemBuilder: (BuildContext context, int index) {
-              List<CategoryDtl>? data = widget.getData;
+              List<CategoryDtl> data = widget.getData!;
               return GestureDetector(
                 onTap: () async{
                   SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -62,7 +63,7 @@ class _DashCategoryState extends State<DashCategory> {
                   showBottomSheet(
                       context: context,
                       builder: (context) {
-                        return const ChooseSubCategory();
+                        return  ChooseSubCategory();
                       });
                 },
                 child: Card(
@@ -74,9 +75,26 @@ class _DashCategoryState extends State<DashCategory> {
                           child: Container(
                             height: 90,
                             width: 90,
+                            alignment: Alignment.center,
                             padding: const EdgeInsets.all(20),
-                            child: Image.network('${ApiEndPoint.imageAPI}/${data![index].catImg!}',
+                            child:
+                            Image.network('${ApiEndPoint.imageAPI}/${data[index].catImg!}',
                               fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace){
+                              return Container(
+                                  height: 110,
+                                  width: 110,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    color: Colors.grey.shade100
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text('No Image',
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context).textTheme.headlineSmall,
+                                  )
+                              );
+                              },
                             ),
                           )
                       ),

@@ -22,7 +22,7 @@ class CartAppBar extends StatelessWidget implements PreferredSizeWidget{
           actions: [
             InkWell(
               onTap: () {
-               Get.to(()=> const AddressFormScreen());
+               Get.to(()=> const AddressFormScreen(apiCall: 0,));
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),

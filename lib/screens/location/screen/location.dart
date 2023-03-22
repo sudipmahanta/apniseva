@@ -19,11 +19,18 @@ class _GetLocationState extends State<GetLocation> {
 
   String? getLocation;
 
-  Future<String?> getLoc() async{
+  Future<String?> getCity() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? location = preferences.getString(ApiStrings.cityName);
     getLocation = location;
-    debugPrint(getLocation);
+
+   if(getLocation == null){
+     preferences.setString(ApiStrings.cityID, '23');
+      getLocation = "Bhubaneswar";
+    }else{
+      getLocation = location;
+    }
+    debugPrint("Get Location: $getLocation");
     return getLocation;
   }
 
@@ -35,7 +42,7 @@ class _GetLocationState extends State<GetLocation> {
     Future.delayed(Duration.zero, () {
       locController.getLoc();
     });
-    getLoc();
+    getCity();
     super.initState();
   }
 
@@ -75,7 +82,7 @@ class _GetLocationState extends State<GetLocation> {
                       value: getLocation,
                       isExpanded: true,
                       icon: const Icon(Icons.keyboard_arrow_down),
-                      items: locController.locationModel.value.messages!.status!.city!.map((items) {
+                      items: locController.locationModel.value.messages?.status!.city!.map((items) {
                         return DropdownMenuItem(
                           onTap: () async{
                             SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -104,10 +111,17 @@ class _GetLocationState extends State<GetLocation> {
                       String? cityName = preferences.getString(ApiStrings.cityName);
                       getLocation = cityName;
                       dashController.getDashboard();
-                      debugPrint(getLocation);
-                      Navigator.pop(context);
+                      debugPrint("Loc: $getLocation");
+                      Get.back();
                     },
-                    label: 'SAVE'
+                    child: const Text('SAVE',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          letterSpacing: 1.2,
+                          fontWeight: FontWeight.w600
+                      ),
+                    ),
                 )
               ],
             );

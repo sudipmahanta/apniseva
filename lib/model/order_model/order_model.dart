@@ -20,15 +20,15 @@ class OrderDataModel {
   Messages? messages;
 
   factory OrderDataModel.fromJson(Map<String, dynamic> json) => OrderDataModel(
-    status: json["status"],
-    error: json["error"],
-    messages: Messages.fromJson(json["messages"]),
+    status: json["status"] == null ? null : json["status"],
+    error: json["error"] == null ? null : json["error"],
+    messages: json["messages"] == null ? null : Messages.fromJson(json["messages"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "error": error,
-    "messages": messages!.toJson(),
+    "status": status == null ? null : status,
+    "error": error == null ? null : error,
+    "messages": messages == null ? null : messages?.toJson(),
   };
 }
 
@@ -42,13 +42,13 @@ class Messages {
   Status? status;
 
   factory Messages.fromJson(Map<String, dynamic> json) => Messages(
-    responsecode: json["responsecode"],
-    status: Status.fromJson(json["status"]),
+    responsecode: json["responsecode"] == null ? null : json["responsecode"],
+    status: json["status"] == null ? null : Status.fromJson(json["status"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "responsecode": responsecode,
-    "status": status!.toJson(),
+    "responsecode": responsecode == null ? null : responsecode,
+    "status": status == null ? null : status?.toJson(),
   };
 }
 
@@ -84,18 +84,18 @@ class Orderdtl {
   String? status;
 
   factory Orderdtl.fromJson(Map<String, dynamic> json) => Orderdtl(
-    orderId: json["Order_id"],
-    sheduleDate: json["shedule_date"],
-    sheduledTime: json["sheduled_time"],
-    orderDateTime: json["Order_date_time"],
-    status: json["status"],
+    orderId: json["Order_id"] == null ? null : json["Order_id"],
+    sheduleDate: json["shedule_date"] == null ? null : json["shedule_date"],
+    sheduledTime: json["sheduled_time"] == null ? null : json["sheduled_time"],
+    orderDateTime: json["Order_date_time"] == null ? null : json["Order_date_time"],
+    status: json["status"] == null ? null : json["status"],
   );
 
   Map<String, dynamic> toJson() => {
-    "Order_id": orderId,
-    "shedule_date": sheduleDate,
-    "sheduled_time": sheduledTime,
-    "Order_date_time": orderDateTime,
-    "status": status,
+    "Order_id": orderId == null ? null : orderId,
+    "shedule_date": sheduleDate == null ? null : sheduleDate,
+    "sheduled_time": sheduledTime == null ? null : sheduledTime,
+    "Order_date_time": orderDateTime == null ? null : orderDateTime,
+    "status": status == null ? null : status,
   };
 }

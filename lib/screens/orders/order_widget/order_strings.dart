@@ -38,3 +38,8 @@ class OrdersDetailStrings {
   static String scheduleTime = 'Schedule Time: ';
 
 }
+
+class OrderButtonString{
+  static String orderAccept = "Accept";
+  static String orderReject = "Reject";
+}

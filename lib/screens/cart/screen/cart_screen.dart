@@ -24,7 +24,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
 
   String error = '';
-  final CartController cartController = Get.put(CartController());
+  final CartController cartController = Get.find<CartController>();
 
   @override
   void initState() {
@@ -38,7 +38,6 @@ class _CartScreenState extends State<CartScreen> {
   Future<void> refresh() async {
     return  Future.delayed(Duration.zero,() {
       cartController.getCartData();
-      cartController.removeItem();
     });
   }
 
@@ -60,7 +59,7 @@ class _CartScreenState extends State<CartScreen> {
           appBar: CartAppBar(
             title: CartStrings.title,
           ),
-          body: cartController.isLoading.value == true ? Center(
+          body: cartController.fetch.value == true ? Center(
             child: CircularProgressIndicator(
               color: Theme.of(context).primaryColor,
               strokeWidth: 1.5,
@@ -69,7 +68,8 @@ class _CartScreenState extends State<CartScreen> {
           RefreshIndicator(
             onRefresh: refresh,
             child: SingleChildScrollView(
-              child: cartController.cartDetailsDataModel.value.status == 200 ?
+              child:
+              // cartController.cartDetailsDataModel.value.status == 200 ?
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: Column(
@@ -92,8 +92,26 @@ class _CartScreenState extends State<CartScreen> {
                                         width: 60,
                                         height: 75,
                                         padding: const EdgeInsets.all(5.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5.0)
+                                        ),
                                         child: Image.network("${ApiEndPoint.imageAPI}/${cartData[index].image}",
                                           fit: BoxFit.contain,
+                                          errorBuilder: (context, error, stackTrace){
+                                            return Container(
+                                                height: 110,
+                                                width: 110,
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(5.0),
+                                                    color: Colors.grey.shade100
+                                                ),
+                                                alignment: Alignment.center,
+                                                child: Text('No Image',
+                                                  textAlign: TextAlign.center,
+                                                  style: Theme.of(context).textTheme.headlineSmall,
+                                                )
+                                            );
+                                          },
                                         ),
                                       ),
                                     ),
@@ -164,12 +182,12 @@ class _CartScreenState extends State<CartScreen> {
                       // ),
                   ]
                 ),
-              ) :
-              Container(
+              )
+                  /*: Container(
                   height: height,
                   width: width,
                   alignment: Alignment.center,
-                  child: const Text('Your cart is Empty'))
+                  child: const Text('Your cart is Empty'))*/
             ),
           ),
             bottomNavigationBar: BottomAppBar(
@@ -182,15 +200,27 @@ class _CartScreenState extends State<CartScreen> {
                       width: width * 0.95,
                       height: 47,
                       onPressed: () async{
-                        if(cartController.dateController.text.isEmpty){
-
-                          Get.snackbar('Date', 'Select Date');
+                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                        String? address = preferences.getString(ApiStrings.addressID);
+                        if(address == null){
+                          Get.snackbar('Address', 'Please Select address',
+                            colorText: Colors.white
+                          );
+                        }
+                        else if(cartController.dateController.text.isEmpty){
+                          Get.snackbar('Date', 'Select Date',
+                              colorText: Colors.white
+                          );
                         }else if(cartController.timeController.text.isEmpty){
 
-                          Get.snackbar('Date', 'Select Time');
+                          Get.snackbar('Date', 'Select Time',
+                              colorText: Colors.white
+                          );
                         }else if(cartController.paymentMode == null){
 
-                          Get.snackbar('Cart', 'Select Payment method');
+                          Get.snackbar('Cart', 'Select Payment method',
+                              colorText: Colors.white
+                          );
                         } else{
                           debugPrint(cartController.productName.toString());
                           debugPrint(cartController.price.toString());
@@ -202,12 +232,29 @@ class _CartScreenState extends State<CartScreen> {
                         }
                         refresh();
                         },
-                      label: CartStrings.confirmBooking):
+                      child: Text(CartStrings.confirmBooking,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            letterSpacing: 1.2,
+                            fontWeight: FontWeight.w600
+                        ),
+                      ),
+                  ):
                   PrimaryButton(
                     width: width * 0.95,
                     height: 47,
-                    onPressed: () {Get.to(const BottomNavBar());},
-                    label: 'Book Service',
+                    onPressed: () {
+                      Get.to(const BottomNavBar());
+                      },
+                    child: const Text('Book Service',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          letterSpacing: 1.2,
+                          fontWeight: FontWeight.w600
+                      ),
+                    ),
                   ),
               )
             )

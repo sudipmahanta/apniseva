@@ -1,5 +1,6 @@
 import 'package:apniseva/controller/address_controller/address_controller.dart';
 import 'package:apniseva/utils/buttons.dart';
+import 'package:apniseva/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,14 +11,18 @@ import '../widget/address_inputfield.dart';
 import '../widget/address_strings.dart';
 
 class AddressFormScreen extends StatefulWidget {
-  const AddressFormScreen({Key? key}) : super(key: key);
+  final int apiCall;
+  const AddressFormScreen({
+    Key? key,
+    required this.apiCall,
+  }) : super(key: key);
 
   @override
   State<AddressFormScreen> createState() => _AddressFormScreenState();
 }
 
 class _AddressFormScreenState extends State<AddressFormScreen> {
-  String? getLoc = 'Khurda';
+  String? getLoc;
 
   final formKey = GlobalKey<FormState>();
   final addressController = Get.put(AddressController());
@@ -39,114 +44,132 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
 
     return Scaffold(
       appBar: AppBar(),
-      body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
-              child: Form(
-                key: formKey,
-                child: Column(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                //First Name & Last Name
+                Row(
                   children: [
-                    //First Name & Last Name
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Column(
-                              children: [
-                                Header(title: AddressStrings.fFirstName,),
-                                TextInputField(
-                                  controller: addressController.firstName,
-                                  validator: (value) {
-                                    if(addressController.firstName.text.isEmpty){
-                                      return 'Fill you name';
-                                    }else{
-                                      return null;
-                                    }
-                                  },
-                                  hintText: 'Suresh',
-                                  keyboardType: TextInputType.name,
-                                )
-                              ],
+                    Expanded(
+                        child: Column(
+                          children: [
+                            Header(title: AddressStrings.fFirstName,),
+                            TextInputField(
+                              controller: addressController.firstName,
+                              validator: (value) {
+                                if(addressController.firstName.text.isEmpty){
+                                  return 'Fill you name';
+                                }else{
+                                  return null;
+                                }
+                              },
+                              hintText: 'Suresh',
+                              keyboardType: TextInputType.name,
                             )
-                        ),
-                        const SizedBox(width: 10,),
-                        Expanded(
-                            child: Column(
-                              children: [
-                                Header(title: AddressStrings.fLastName,),
-                                TextInputField(
-                                  controller: addressController.lastName,
-                                  hintText: 'Kumar',
-                                  validator: (value) {
-                                    if(addressController.lastName.text.isEmpty){
-                                      return 'Fill you Last name';
-                                    }else{
-                                      return null;
-                                    }
-                                  },
-                                  keyboardType: TextInputType.name,
-                                )
-                              ],
-                            )
+                          ],
                         )
-                      ],
                     ),
+                    const SizedBox(width: 10,),
+                    Expanded(
+                        child: Column(
+                          children: [
+                            Header(title: AddressStrings.fLastName,),
+                            TextInputField(
+                              controller: addressController.lastName,
+                              hintText: 'Kumar',
+                              validator: (value) {
+                                if(addressController.lastName.text.isEmpty){
+                                  return 'Fill you Last name';
+                                }else{
+                                  return null;
+                                }
+                              },
+                              keyboardType: TextInputType.name,
+                            )
+                          ],
+                        )
+                    )
+                  ],
+                ),
 
-                    Header(title: AddressStrings.fEmail),
-                    TextInputField(
-                      controller: addressController.email,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if(addressController.email.text.isEmpty){
-                          return 'Fill you Email';
-                        }else{
-                          return null;
-                        }
-                      },
-                      hintText: 'sureshkumar@gmail.com',
-                    ),
+                Header(title: AddressStrings.fEmail),
+                TextInputField(
+                  controller: addressController.email,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if(addressController.email.text.isEmpty){
+                      return 'Fill you Email';
+                    }else{
+                      return null;
+                    }
+                  },
+                  hintText: 'sureshkumar@gmail.com',
+                ),
 
-                    Header(title: AddressStrings.fPhone),
-                    TextInputField(
-                      controller: addressController.phone,
-                      validator: (value) {
-                        if(addressController.phone.text.isEmpty){
-                          return 'Fill you Mobile Number';
-                        }else{
-                          return null;
-                        }
-                      },
-                      keyboardType: TextInputType.phone,
-                      hintText: '1234567890',
-                    ),
+                Header(title: AddressStrings.fPhone),
+                TextInputField(
+                  controller: addressController.phone,
+                  validator: (value) {
+                    if(addressController.phone.text.isEmpty){
+                      return 'Fill you Mobile Number';
+                    }else{
+                      return null;
+                    }
+                  },
+                  keyboardType: TextInputType.phone,
+                  hintText: '1234567890',
+                ),
 
-                    Header(title: AddressStrings.fAddress1),
-                    TextInputField(
-                      maxLines: 4,
-                      controller: addressController.address1,
-                      hintText: 'Address 1',
-                      validator: (value) {
-                        if(addressController.address1.text.isEmpty){
-                          return 'Fill your Address';
-                        }else{
-                          return null;
-                        }
-                      },
-                      keyboardType: TextInputType.streetAddress,
-                    ),
+                Header(title: AddressStrings.fAddress1),
+                TextInputField(
+                  maxLines: 4,
+                  controller: addressController.address1,
+                  hintText: 'Address 1',
+                  validator: (value) {
+                    if(addressController.address1.text.isEmpty){
+                      return 'Fill your Address';
+                    }else{
+                      return null;
+                    }
+                  },
+                  keyboardType: TextInputType.streetAddress,
+                ),
 
-                    Header(title: AddressStrings.fAddress2),
-                    TextInputField(
-                      maxLines: 4,
-                      controller: addressController.address2,
-                      hintText: 'Address 2',
-                      keyboardType: TextInputType.streetAddress,
-                    ),
+                Header(title: AddressStrings.fAddress2),
+                TextInputField(
+                  maxLines: 4,
+                  controller: addressController.address2,
+                  hintText: 'Address 2',
+                  keyboardType: TextInputType.streetAddress,
+                ),
 
-                    Header(title: AddressStrings.fCity),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButtonFormField(
+                Header(title: AddressStrings.fCity),
+                Obx(() {
+                    return DropdownButtonHideUnderline(
+                      child: locController.isLoading.value == true ?
+                      Container(
+                        height: 47,
+                        width: width,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1.2,
+                            color: Colors.grey
+                          ),
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1.5,
+                          color: primaryColor,
+                        ),
+                      ) :
+                      DropdownButtonFormField(
                         value: getLoc,
+                        hint: const Text('Choose your Location'),
                         validator: (value){
                           if(value!.isEmpty){
                             return 'Fill your Address';
@@ -156,7 +179,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                         },
                         isExpanded: true,
                         icon: const Icon(Icons.keyboard_arrow_down),
-                        items: locController.locationModel.value.messages!.status!.city!.map((items) {
+                        items: locController.locationModel.value.messages?.status!.city!.map((items) {
                           return DropdownMenuItem(
                             onTap: () async{
                               SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -175,38 +198,40 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                           });
                         },
                       ),
-                    ),
-
-                    Header(title: AddressStrings.fState),
-                    TextInputField(
-                      controller: addressController.state,
-                      validator: (value) {
-                        if(addressController.state.text.isEmpty){
-                          return 'Fill you State';
-                        }else{
-                          return null;
-                        }
-                      },
-                      hintText: 'Odisha',
-                    ),
-
-                    Header(title: AddressStrings.fPinCode),
-                    TextInputField(
-                      controller: addressController.pinCode,
-                      hintText: '751016',
-                      validator: (value) {
-                        if(addressController.pinCode.text.isEmpty){
-                          return 'Fill you Pin-Code';
-                        }else{
-                          return null;
-                        }
-                      },
-                    ),
-                  ]
+                    );
+                  }
                 ),
-              ),
+                const SizedBox(height: 8.0),
+
+                Header(title: AddressStrings.fState),
+                TextInputField(
+                  controller: addressController.state,
+                  validator: (value) {
+                    if(addressController.state.text.isEmpty){
+                      return 'Fill you State';
+                    }else{
+                      return null;
+                    }
+                  },
+                  hintText: 'Odisha',
+                ),
+
+                Header(title: AddressStrings.fPinCode),
+                TextInputField(
+                  controller: addressController.pinCode,
+                  hintText: '751016',
+                  validator: (value) {
+                    if(addressController.pinCode.text.isEmpty){
+                      return 'Fill you Pin-Code';
+                    }else{
+                      return null;
+                    }
+                  },
+                ),
+              ]
             ),
-          )
+          ),
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
@@ -214,17 +239,48 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
             height: 65,
             color: Colors.white,
             alignment: Alignment.center,
+
             child: PrimaryButton(
                 width: width * 0.95,
                 height: 47,
                 onPressed: () async{
                   if(formKey.currentState!.validate()){
-                    Future.delayed(Duration.zero, (){
-                      addressController.sendAddress();
-                    });
+                    if(widget.apiCall == 0){
+                      debugPrint("Add Address API heated");
+                      Future.delayed(Duration.zero, (){
+                        addressController.addAddress();
+                      });
+                    }else if(widget.apiCall == 1){
+                      debugPrint("Updated Address");
+                      Future.delayed(Duration.zero, (){
+                        addressController.updateAddress();
+                      });
+                    }else{}
                   }
+                  Get.back();
                 },
-                label: 'SUBMIT')
+
+                child: Obx(() {
+                    return addressController.isLoading.value == true ? const Center(
+                      child: SizedBox(
+                        height: 25,
+                        width: 25,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1.5,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ) : const Text('SUBMIT',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              letterSpacing: 1.2,
+                              fontWeight: FontWeight.w600
+                          ),
+                        );
+                  }
+                )
+            )
         ),
       ),
     );

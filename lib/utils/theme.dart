@@ -119,10 +119,10 @@ class AppTheme {
 
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontSize: 11,
             decoration: TextDecoration.underline,
-            color: primaryColor
+            color: Colors.white
           )
       ),
     ),

@@ -1,13 +1,14 @@
 import 'package:apniseva/screens/dashboard/screens/dashboard_screen.dart';
 import 'package:apniseva/screens/more/screens/more_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get.dart';
+
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:remixicon/remixicon.dart';
 
+import '../main.dart';
 import '../screens/orders/screens/order_screen.dart';
 import 'color.dart';
+
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key,
@@ -19,6 +20,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
 
+  DateTime lastTimeBackButtonWasClicked = DateTime.now();
   final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
   @override
@@ -59,6 +61,27 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
     return PersistentTabView(
       context,
+      /*onWillPop: (context) async{
+        await showDialog(
+          context: context!,
+          useSafeArea: true,
+          builder: (final context) => Container(
+            height: 50,
+            width: 50,
+            color: Colors.white,
+            child: ElevatedButton(
+              child: const Text("Close"),
+              onPressed: () {
+                Navigator.pop(context);
+                },
+          ),
+        ),
+        );
+        return true;
+      },*/
+      selectedTabScreenContext: (final context) {
+        testContext = context;
+      },
       controller: _controller,
       screens: screens,
       items: item,

@@ -15,8 +15,20 @@ import '../../model/cart_model/remove_item_model/remove_items_model.dart';
 import '../../screens/sucessful/screen/sucessfull_screen.dart';
 
 class CartController extends GetxController{
-  Rx isLoading = false.obs;
+  Rx fetch = false.obs;
   String? paymentMode = "cash";
+
+  String? addressID;
+  String? firstName;
+  String? lastName;
+  String? number;
+  String? email;
+  String? address1;
+  String? address2;
+  String? cityName;
+  String? state;
+  String? pinCode;
+
   List? productName=[];
   List? price=[];
   List? qty=[];
@@ -33,8 +45,8 @@ class CartController extends GetxController{
   TextEditingController timeController = TextEditingController();
 
   addToCart() async{
-    // try{
-      isLoading.value = true;
+    try{
+      fetch.value = true;
       AddToCartDataModel addToCartModel = AddToCartDataModel();
 
       SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -57,30 +69,35 @@ class CartController extends GetxController{
       };
 
       http.Response response = await http.post(
-        Uri.parse(addToCartAPI),
-        body: jsonEncode(body),
-        headers: headers
+          Uri.parse(addToCartAPI),
+          body: jsonEncode(body),
+          headers: headers
       );
       debugPrint('Add To Cart API Status Code:${response.statusCode}' );
       addToCartModel = addToCartDataModelFromJson(response.body);
 
       if(response.statusCode == 200 && addToCartModel.status == 200){
         addToCartDataModel.value = addToCartModel;
-        isLoading.value = false;
         Get.snackbar('Cart', addToCartDataModel.value.messages!.status.toString(),
-          duration: const Duration(seconds: 2),
-          snackPosition: SnackPosition.BOTTOM
+            duration: const Duration(seconds: 2),
+            snackPosition: SnackPosition.BOTTOM
         );
+        fetch.value = false;
       }
       preferences.remove(ApiStrings.catID);
-      isLoading.value = false;
+
       return true;
+    }catch(e){
+      debugPrint(e.toString());
+    }
+
+
   }
 
   getCartData() async{
     clear();
     try{
-      isLoading.value = true;
+      fetch.value = true;
       CartDetailsDataModel cartModel = CartDetailsDataModel();
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String? userID = preferences.getString(ApiStrings.userID);
@@ -102,31 +119,25 @@ class CartController extends GetxController{
           headers: headers
       );
 
-      debugPrint("CartAPI: ${response.statusCode.toString()}");
+      debugPrint("CartAPI: ${response.body.toString()}");
       cartModel = cartDetailsDataModelFromJson(response.body);
 
       if(response.statusCode == 200 && cartModel.status == 200){
         cartDetailsDataModel.value = cartModel;
-        isLoading.value = false;
+        fetch.value = false;
       }
 
-
-      for(int i=0; i < cartDetailsDataModel.value.messages!.status!.allCart!.length; i++){
+      for(int i=0; i <= cartDetailsDataModel.value.messages!.status!.allCart!.length; i++){
         var cartData = cartDetailsDataModel.value.messages!.status!.allCart![i];
 
-        productName?.add(cartData.servicename);
+        productName!.add(cartData.servicename);
         image!.add(cartData.image);
         qty!.add(cartData.qty);
         price!.add(cartData.price);
       }
-      // debugPrint('ProductName: ${productName.toString()}');
-      // debugPrint('Image: ${image.toString()}');
-      // debugPrint('Quantity: ${qty.toString()}');
-      // debugPrint('Price: ${price.toString()}');
-
-
+    fetch.value = false;
    } catch(e){
-    isLoading.value = false;
+    fetch.value = false;
     debugPrint(e.toString());
     return false;
    }
@@ -134,7 +145,7 @@ class CartController extends GetxController{
   }
 
   removeItem() async{
-      isLoading.value = true;
+      fetch.value = true;
       RemoveItemDataModel removeItemModel = RemoveItemDataModel();
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String? cartID = preferences.getString(ApiStrings.cartID);
@@ -158,14 +169,16 @@ class CartController extends GetxController{
 
       if(response.statusCode == 200 && removeItemModel.status == 200){
         removeItemDataModel.value == removeItemModel;
+        fetch.value = false;
       }else{
         Get.snackbar('Cart', 'Cart is empty');
       }
+      fetch.value = false;
   }
 
   applyCoupon() async{
     // try{
-      isLoading.value = true;
+      fetch.value = true;
       SharedPreferences preferences = await SharedPreferences.getInstance();
       CouponDataModel couponModel = CouponDataModel();
 
@@ -197,8 +210,9 @@ class CartController extends GetxController{
         couponDataModel.value = couponModel;
         preferences.setString(ApiStrings.couponCharge, couponDataModel.value.messages!.status!.couponDetails!.couponAmount!);
         preferences.setString(ApiStrings.gstAmount, couponDataModel.value.messages!.status!.gst!.gstAmount!);
+        fetch.value = false;
       }
-      isLoading.value = false;
+      fetch.value = false;
   }
 
   checkOut() async{
@@ -223,7 +237,7 @@ class CartController extends GetxController{
       'cupone_code': couponTextController.text,
       'cupone_charge': couponAmount!,
       'gst': gstAmount!,
-      'address_id': addressID!
+      'address_id': addressID
     };
 
     Map<String, String> headers = {
@@ -240,8 +254,11 @@ class CartController extends GetxController{
     checkOutModel = checkOutDataModelFromJson(response.body);
     if(response.statusCode == 200 && checkOutModel.status == 200){
       checkoutDataModel.value = checkOutModel;
+      fetch.value = false;
       Get.snackbar('Cart', 'Submitted');
+      Get.to(()=> const SuccessfulScreen());
     }
+    fetch.value = false;
 
     clear();
   }

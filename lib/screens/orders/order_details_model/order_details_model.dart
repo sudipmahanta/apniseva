@@ -76,8 +76,8 @@ class Status {
   Map<String, dynamic> toJson() => {
     "All_orders": List<dynamic>.from(allOrders!.map((x) => x.toJson())),
     "additinal_orders": List<dynamic>.from(additinalOrders!.map((x) => x.toJson())),
-    "other_dtl": otherDtl!.toJson(),
-    "address": List<dynamic>.from(address!.map((x) => x.toJson())),
+    "other_dtl": otherDtl == null ? null :otherDtl?.toJson(),
+    "address": address  == null ? [] : List<dynamic>.from(address!.map((x) => x.toJson())),
   };
 }
 
@@ -93,15 +93,15 @@ class AdditinalOrder {
   String? price;
 
   factory AdditinalOrder.fromJson(Map<String, dynamic> json) => AdditinalOrder(
-    productName: json["product_name"],
-    qty: json["qty"],
-    price: json["price"],
+    productName: json["product_name"]  == null ? null :json["product_name"],
+    qty: json["qty"]  == null ? null :json["qty"],
+    price: json["price"]  == null ? null :json["price"],
   );
 
   Map<String, dynamic> toJson() => {
-    "product_name": productName,
-    "qty": qty,
-    "price": price,
+    "product_name": productName  == null ? null : productName,
+    "qty": qty  == null ? null :qty,
+    "price": price  == null ? null :price,
   };
 }
 
@@ -151,49 +151,49 @@ class Address {
   String? updatedDate;
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
-    addressId: json["address_id"],
-    userId: json["user_id"],
-    firstName: json["first_name"],
-    lastName: json["last_name"],
-    cityname: json["cityname"],
-    state: json["state"],
-    pincode: json["pincode"],
-    email: json["email"],
-    number: json["number"],
-    address1: json["address1"],
-    adress2: json["adress2"],
-    isDelte: json["is_delte"],
-    lat: json["lat"],
-    lng: json["lng"],
-    createdDate: json["created_date"],
-    updatdDare: json["updatd_dare"],
-    cityId: json["city_id"],
-    cityName: json["city_name"],
-    status: json["status"],
-    updatedDate: json["updated_date"],
+    addressId: json["address_id"]  == null ? null :json["address_id"],
+    userId: json["user_id"]  == null ? null :json["user_id"],
+    firstName: json["first_name"]  == null ? null : json["first_name"],
+    lastName: json["last_name"]  == null ? null : json["last_name"],
+    cityname: json["cityname"]  == null ? null :json["cityname"],
+    state: json["state"]  == null ? null : json["state"],
+    pincode: json["pincode"]  == null ? null :json["pincode"],
+    email: json["email"]  == null ? null :json["email"],
+    number: json["number"] == null ? null : json["number"],
+    address1: json["address1"] == null ? null : json["address1"],
+    adress2: json["adress2"] == null ? null : json["adress2"],
+    isDelte: json["is_delte"] == null ? null :json["is_delte"],
+    lat: json["lat"]== null ? null : json["lat"],
+    lng: json["lng"]== null ? null : json["lng"],
+    createdDate: json["created_date"] == null ? null : json["created_date"],
+    updatdDare: json["updatd_dare"] == null ? null : json["updatd_dare"],
+    cityId: json["city_id"] == null ? null : json["city_id"],
+    cityName: json["city_name"] == null ? null : json["city_name"],
+    status: json["status"] == null ? null : json["status"],
+    updatedDate: json["updated_date"] == null ? null : json["updated_date"],
   );
 
   Map<String, dynamic> toJson() => {
-    "address_id": addressId,
-    "user_id": userId,
-    "first_name": firstName,
-    "last_name": lastName,
-    "cityname": cityname,
-    "state": state,
-    "pincode": pincode,
-    "email": email,
-    "number": number,
-    "address1": address1,
-    "adress2": adress2,
-    "is_delte": isDelte,
-    "lat": lat,
-    "lng": lng,
-    "created_date": createdDate,
-    "updatd_dare": updatdDare,
-    "city_id": cityId,
-    "city_name": cityName,
-    "status": status,
-    "updated_date": updatedDate,
+    "address_id": addressId == null ? null :addressId,
+    "user_id": userId == null ? null : userId,
+    "first_name": firstName == null ? null : firstName,
+    "last_name": lastName == null ? null : lastName,
+    "cityname": cityname == null ? null : cityname,
+    "state": state == null ? null : state,
+    "pincode": pincode == null ? null : pincode,
+    "email": email == null ? null : email,
+    "number": number == null ? null :number,
+    "address1": address1== null ? null :address1,
+    "adress2": adress2 == null ? null : adress2,
+    "is_delte": isDelte == null ? null : isDelte,
+    "lat": lat == null ? null : lat,
+    "lng": lng == null ? null : lng,
+    "created_date": createdDate == null ? null : createdDate,
+    "updatd_dare": updatdDare == null ? null :updatdDare,
+    "city_id": cityId == null ? null :cityId,
+    "city_name": cityName == null ? null : cityName,
+    "status": status == null ? null : status,
+    "updated_date": updatedDate == null ? null : updatedDate,
   };
 }
 
@@ -211,17 +211,17 @@ class AllOrder {
   String? price;
 
   factory AllOrder.fromJson(Map<String, dynamic> json) => AllOrder(
-    productName: json["product_name"],
-    qty: json["qty"],
-    image: json["image"],
-    price: json["price"],
+    productName: json["product_name"] == null ? null : json["product_name"],
+    qty: json["qty"] == null ? null : json["qty"],
+    image: json["image"] == null ? null : json["image"],
+    price: json["price"] == null ? null : json["price"],
   );
 
   Map<String, dynamic> toJson() => {
-    "product_name": productName,
-    "qty": qty,
-    "image": image,
-    "price": price,
+    "product_name": productName == null ? null : productName,
+    "qty": qty == null ? null : qty,
+    "image": image == null ? null : image,
+    "price": price == null ? null : price,
   };
 }
 
@@ -264,15 +264,15 @@ class OtherDtl {
   );
 
   Map<String, dynamic> toJson() => {
-    "order_id": orderId,
-    "booking_date": bookingDate,
-    "booking_time": bookingTime,
-    "verify_otp": verifyOtp,
-    "total_price": totalPrice,
-    "discount": discount,
-    "gst": gst,
-    "grand_total": grandTotal,
-    "due_amount": dueAmount,
-    "paid_amount": paidAmount,
+    "order_id": orderId== null ? null :orderId,
+    "booking_date": bookingDate == null ? null : bookingDate,
+    "booking_time": bookingTime == null ? null : bookingTime,
+    "verify_otp": verifyOtp == null ? null : verifyOtp,
+    "total_price": totalPrice == null ? null : totalPrice,
+    "discount": discount == null ? null : discount,
+    "gst": gst == null ? null : gst,
+    "grand_total": grandTotal == null ? null : grandTotal,
+    "due_amount": dueAmount == null ? null : dueAmount,
+    "paid_amount": paidAmount == null ? null : paidAmount,
   };
 }

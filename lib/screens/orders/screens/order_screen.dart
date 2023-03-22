@@ -2,10 +2,12 @@ import 'package:apniseva/controller/order_controller/order_controller.dart';
 import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../model/order_model/order_model.dart';
 import '../../../utils/color.dart';
+import '../order_widget/order_button/order_button.dart';
 import '../order_widget/order_strings.dart';
 import '../sections/booking_appbar.dart';
 import 'order_details_screen.dart';
@@ -44,24 +46,32 @@ class _BookingScreenState extends State<BookingScreen> {
     return Obx(() {
         return Scaffold(
           appBar: OrdersAppBar(title: OrderStrings.title),
-          body: Container(
-            width: width,
-            height: height,
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: orderController.isLoading.value == true ? Center(
-              child: CircularProgressIndicator(
-                color: primaryColor,
-                strokeWidth: 2.5,
-              ),
-            ) :
-            orderController.orderDataModel.value.messages?.status!.orderdtls! == null  ? const Center(
-              child: Text('No order history\nMake your first order'),
-            ) :
-            RefreshIndicator(
-              onRefresh: refresh,
-              color: Theme.of(context).primaryColor,
-              child: ListView.builder(
-                  itemCount:  orderController.orderDataModel.value.messages!.status!.orderdtls!.length,
+          body: RefreshIndicator(
+            onRefresh: refresh,
+            child: Container(
+              width: width,
+              height: height,
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: orderController.fetchOrder.value == true ?
+              Center(
+                child: CircularProgressIndicator(
+                  color: primaryColor,
+                  strokeWidth: 2.5,
+                ),
+              ) :
+              orderController.orderDataModel.value.messages!.status!.orderdtls!.isEmpty ?
+              Center(
+                child: InkWell(
+                  onTap: (){
+                    debugPrint(orderController.orderDataModel.value.messages!.status!.orderdtls!.length.toString());
+                  },
+                  child: const Text('No order history\nPlease! Make your first order.',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ) :
+              ListView.builder(
+                  itemCount: orderController.orderDataModel.value.messages!.status!.orderdtls!.length,
                   itemBuilder: (context, index) {
                     List<Orderdtl>? orderData = orderController.orderDataModel.value.messages!.status!.orderdtls;
                     return Padding(
@@ -70,7 +80,7 @@ class _BookingScreenState extends State<BookingScreen> {
                         elevation: 1.2,
                         color: Colors.grey.shade200,
                         child: Container(
-                          height: height * 0.21,
+                          height: height * 0.24,
                           width: width,
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                           child: Column(
@@ -79,36 +89,70 @@ class _BookingScreenState extends State<BookingScreen> {
 
                               // OrderID
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  RichText(
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: OrderStrings.orderID,
-                                            style: Theme.of(context).textTheme.titleLarge,
-                                          ),
-                                          TextSpan(
-                                            text: orderData![index].orderId!,
-                                            style: Theme.of(context).textTheme.labelSmall,
-                                          ),
-                                        ]
-                                      )
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
-                                    decoration: BoxDecoration(
-                                        color: Colors.black12,
-                                        borderRadius: BorderRadius.circular(8.0)
-                                    ),
-                                    child: Text(orderData[index].status!,
-                                      style: TextStyle(
-                                        fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
-                                        color: Theme.of(context).textTheme.labelSmall!.color
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: OrderStrings.orderID,
+                                                style: Theme.of(context).textTheme.titleLarge,
+                                              ),
+                                              TextSpan(
+                                                text: orderData![index].orderId!,
+                                                style: Theme.of(context).textTheme.labelSmall,
+                                              ),
+                                            ]
+                                          )
                                       ),
-                                    ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+                                        decoration: BoxDecoration(
+                                            color: Colors.black12,
+                                            borderRadius: BorderRadius.circular(8.0)
+                                        ),
+                                        child: Text(orderData[index].status!,
+                                          style: TextStyle(
+                                              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+                                              color: Theme.of(context).textTheme.labelSmall!.color
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+
+                                  if (orderData[index].status! == "Additional Bill Added") Column(
+                                        children: [
+                                          AcceptOrderButton(onPressed: () async{
+                                            orderController.statusId = 3;
+                                            orderController.acceptRejectOrder(orderData[index].orderId!);
+
+                                            debugPrint("Accept");
+                                            },
+
+                                          ),
+                                          const SizedBox(height: 5),
+                                          RejectOrderButton(onPressed: (){
+                                            orderController.statusId = 7;
+                                            orderController.acceptRejectOrder(orderData[index].orderId!);
+
+                                            debugPrint("Reject");
+                                          },
+                                          ),
+                                        ],
+                                      )
+                                  else if(orderData[index].status! == "Work Completed")
+                                    IconButton(
+                                        onPressed: (){
+                                          orderController.generatePDF(orderData[index].orderId);
+                                          },
+                                        icon: const Icon(Icons.sim_card_download_rounded)
                                   )
+                                  else Container()
                                 ],
                               ),
                               const Spacer(),

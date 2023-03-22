@@ -37,7 +37,6 @@ class SubCategoryController extends GetxController{
         body: jsonEncode(body),
         headers: header
       );
-      debugPrint(response.statusCode.toString());
       // debugPrint(response.body);
       subCatModel = subCategoryDataModelFromJson(response.body);
 

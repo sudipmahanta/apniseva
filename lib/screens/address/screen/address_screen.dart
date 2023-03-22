@@ -1,9 +1,11 @@
 import 'package:apniseva/controller/cart_controller/cart_controller.dart';
 import 'package:apniseva/screens/address/widget/address_strings.dart';
 import 'package:apniseva/model/cart_model/cart_detail_model/cart_details_model.dart';
+import 'package:apniseva/utils/api_strings/api_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../section/address_appbar.dart';
 import 'address_form_screen.dart';
@@ -47,12 +49,18 @@ class _AddressScreenState extends State<AddressScreen> {
             title: AddressStrings.title,
           ),
           body: SafeArea(
-              child: addressController.isLoading.value == true ? Center(
+              child:
+              addressController.fetch.value == true ?
+              Center(
                 child: CircularProgressIndicator(
                   color: Theme.of(context).primaryColor,
                   strokeWidth: 2.5,
                 )
-              ): RefreshIndicator(
+              ):
+              addressController.cartDetailsDataModel.value.messages!.status!.addressData == null ? const Center(
+                child: Text('Add Address'),
+              ):
+              RefreshIndicator(
                 onRefresh: refresh,
                 child: SingleChildScrollView(
                   child: Padding(
@@ -71,7 +79,6 @@ class _AddressScreenState extends State<AddressScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       RichText(
                                           textAlign: TextAlign.center,
@@ -88,13 +95,36 @@ class _AddressScreenState extends State<AddressScreen> {
                                               ]
                                           )
                                       ),
+                                      const Spacer(),
+                                      IconButton(
+                                        icon: const Icon(Remix.pencil_line),
+                                        onPressed: () async{
+                                          SharedPreferences preferences = await SharedPreferences.getInstance();
+                                          preferences.setString(ApiStrings.addressID, addressData.addressId!);
+                                          debugPrint("Address ID: ${addressData.addressId.toString()}");
+                                          Get.to(()=> const AddressFormScreen(apiCall: 1));
+                                        },
+                                      ),
+
                                       Radio(
                                           value: index,
                                           toggleable: true,
                                           groupValue: _selectedRadioButton,
-                                          onChanged: (value){
+                                          onChanged: (value) async{
+                                            SharedPreferences preferences = await SharedPreferences.getInstance();
+                                            preferences.setString(ApiStrings.addressID, addressData.addressId!);
+                                            String? addressID = preferences.getString(ApiStrings.addressID);
+                                            addressController.addressID = addressID;
                                             setState(() {
                                               _selectedRadioButton = value!;
+                                              addressController.firstName = addressData.firstName;
+                                              addressController.lastName = addressData.lastName;
+                                              addressController.number = addressData.number;
+                                              addressController.email = addressData.email;
+                                              addressController.address1 = addressData.address1;
+                                              addressController.address2 = addressData.adress2;
+                                              addressController.state = addressData.state;
+                                              addressController.pinCode = addressData.pincode;
                                             });
                                             debugPrint(addressData.addressId);
                                           })
@@ -217,7 +247,6 @@ class _AddressScreenState extends State<AddressScreen> {
                           ),
                         );
                       }
-
                       ),
                     ),
                   ),
@@ -226,9 +255,11 @@ class _AddressScreenState extends State<AddressScreen> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: (){
-              Get.to(() => const AddressFormScreen());
+              Get.to(() => const AddressFormScreen(apiCall: 0));
             },
-            child: const Icon(Remix.add_circle_line),
+            child: const Icon(Remix.add_circle_line,
+              size: 22,
+            ),
           ),
         );
       }

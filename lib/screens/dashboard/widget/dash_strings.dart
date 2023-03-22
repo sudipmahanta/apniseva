@@ -9,6 +9,7 @@ class DashStrings {
 
 class DashServicesStrings{
   static String noData = 'No Service Available';
+  static String placeholder = "assets/images/photo.png";
 }
 
 class DashCarouselStrings{

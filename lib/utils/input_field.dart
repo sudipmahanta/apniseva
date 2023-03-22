@@ -103,7 +103,6 @@ class TextInput extends StatelessWidget {
   }
 }
 
-
 class PickerInputField extends StatefulWidget {
   final String pick;
   final double? width;
@@ -163,6 +162,7 @@ class _PickerInputFieldState extends State<PickerInputField> {
         controller: widget.controller,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.sentences,
+        style: Theme.of(context).textTheme.headlineSmall,
         cursorColor: primaryColor,
         cursorWidth: 1.5,
         cursorHeight: 20,

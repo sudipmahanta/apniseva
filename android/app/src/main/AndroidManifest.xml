@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.apniseva">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="apniseva"
+        android:label="Apniseva"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -30,10 +31,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-       <intent-filter>
-           <action android:name="FLUTTER_NOTIFICATION_CLICK" />
-           <category android:name="android.intent.category.DEFAULT" />
-       </intent-filter>
 
     </application>
 </manifest>

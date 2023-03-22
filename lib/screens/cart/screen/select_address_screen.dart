@@ -53,7 +53,7 @@ class _SelectAddressScreenState extends State<SelectAddressScreen> {
           title: AddressStrings.title,
         ),
         body: SafeArea(
-            child: addressController.isLoading.value == true ? Center(
+            child: addressController.fetch.value == true ? Center(
                 child: CircularProgressIndicator(
                   color: Theme.of(context).primaryColor,
                   strokeWidth: 2.5,
@@ -246,7 +246,15 @@ class _SelectAddressScreenState extends State<SelectAddressScreen> {
                     debugPrint(addressId);
                     Navigator.pop(context);
                     },
-                  label: 'Select Address')
+                  child: const Text('Select Address',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        letterSpacing: 1.2,
+                        fontWeight: FontWeight.w600
+                    ),
+                  ),
+              )
           ),
         )
       );

@@ -1,5 +1,5 @@
 class ApiEndPoint {
- static String baseUrl = 'http://collegeprojectz.com/apniseva/API';
+ static String baseUrl = 'https://apniseva.com/API';
  static String loginOtp = '$baseUrl/LoginOTP';
  static String verifyOtp = '$baseUrl/VerifyOTP';
  static String getLoc = '$baseUrl/select_city?user_id';
@@ -15,7 +15,11 @@ class ApiEndPoint {
 
  static String getOrder = '$baseUrl/customer_allorder';
  static String getOrderDetails = "$baseUrl/single_order_user";
- static String imageAPI = 'http://collegeprojectz.com/apniseva/uploads/';
+ static String imageAPI = 'https://apniseva.com/uploads/';
+ static String acceptRejectOrder = "$baseUrl/Aceptreject_order";
 
  static String addressAPI = '$baseUrl/add_address';
+ static String updateAddress = '$baseUrl/update_address';
+
+ static String generatePDF = "https://apniseva.com/Home/generate_pdf";
 }

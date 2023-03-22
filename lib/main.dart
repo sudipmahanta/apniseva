@@ -3,15 +3,13 @@ import 'package:apniseva/screens/splash_screen/screens/splash_screen.dart';
 
 import 'package:apniseva/utils/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main()  async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+void main() async{
   runApp(const MyApp());
 }
+BuildContext? testContext;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -24,10 +22,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const SplashScreen(),
-      // home: const DashScreen(),
     );
   }
 }
-
-
-

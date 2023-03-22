@@ -1,6 +1,7 @@
 import 'package:apniseva/controller/auth_controller/auth_controller.dart';
 import 'package:apniseva/screens/splash_screen/widgets/spalsh_string.dart';
 import 'package:apniseva/utils/buttons.dart';
+import 'package:apniseva/utils/color.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -92,29 +93,54 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   SizedBox(height: height * 0.02),
 
-                  PrimaryButton(
-                      width: width,
-                      height: 47,
-                      onPressed: () async{
-                        if(authController.mobileController.text.isEmpty){
-                          errorLabel = AuthString.validation;
-                        }
-                        else if(_regdKey.currentState!.validate()) {
 
-                          Future.delayed(Duration.zero,(){
-                            authController.loginWithOTP();
-                          });
+               PrimaryButton(
+                 width: width,
+                 height: 47,
+                 onPressed: () async{
+                   if(authController.mobileController.text.isEmpty){
+                     errorLabel = AuthString.validation;
+                   }
+                   else if(_regdKey.currentState!.validate()) {
+                     SharedPreferences preferences = await SharedPreferences.getInstance();
+                     preferences.setString(ApiStrings.mobile, authController.mobileController.text);
 
-                          Get.to(()=>
-                              OtpVerificationScreen(
-                                  phoneNumber: authController.mobileController.text)
-                          );
-                        }else{
-                          Get.snackbar('Login Error', errorLabel!);
-                        }
-                      },
-                      label: AuthString.getOTP
-                  ),
+                     Future.delayed(Duration.zero,(){
+                       authController.loginWithOTP();
+                     });
+
+                   }
+                   else{
+                     Get.snackbar('Login Error', errorLabel!);
+                   }
+                   },
+                 child: Obx(() {
+                   return  authController.isLoading.value == true ?
+                   SizedBox(
+                     width: width,
+                     height: 47,
+                     child:  const Center(
+                       child: SizedBox(
+                         height: 25,
+                         width: 25,
+                         child: CircularProgressIndicator(
+                           strokeWidth: 1.5,
+                           color: Colors.white,
+                         ),
+                       ),
+                     ),
+                   ) :
+                   Text( AuthString.getOTP,
+                     style: const TextStyle(
+                         color: Colors.white,
+                         fontSize: 14,
+                         letterSpacing: 1.2,
+                         fontWeight: FontWeight.w600
+                     ),
+                   );
+                 }
+                 ),
+               ),
 
                   const Spacer(),
                 ]

@@ -12,11 +12,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderController extends GetxController{
   RxBool isLoading = false.obs;
+  RxBool fetchAcceptOrder = false.obs;
+  RxBool fetchOrder = false.obs;
+  RxBool fetchPDF = false.obs;
+  int? statusId;
   Rx<OrderDataModel> orderDataModel = OrderDataModel().obs;
 
   getOrders() async{
     try{
-      isLoading.value = true;
+      fetchOrder.value = true;
       OrderDataModel orderModel = OrderDataModel();
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? userID = pref.getString(ApiStrings.userID);
@@ -38,14 +42,13 @@ class OrderController extends GetxController{
         body: jsonEncode(body),
         headers: header
       );
-      debugPrint('OrderAPI Status Code: ${response.statusCode}');
+      debugPrint('OrderAPI Status Code: ${response.body}');
       orderModel = orderDataModelFromJson(response.body);
 
       if(response.statusCode == 200 && orderModel.status == 200) {
+        fetchOrder.value = false;
         orderDataModel.value = orderModel;
-        isLoading.value = false;
       }
-      debugPrint("OrderAPI Data:\n${response.body}");
 
       return true;
     }catch(error) {
@@ -56,6 +59,68 @@ class OrderController extends GetxController{
           backgroundColor: Colors.white54
       );
       return false;
+    }
+  }
+
+  acceptRejectOrder(String? orderID) async{
+    try{
+      isLoading.value = true;
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      String? userID = preferences.getString(ApiStrings.userID);
+      String? acceptRejectOrderAPI = ApiEndPoint.acceptRejectOrder;
+
+      Map<String, dynamic> body = {
+        "user_id": userID!,
+        'order_id': orderID!,
+        'status_id': statusId!
+      };
+
+      Map<String, String> headers = {
+        "Content-Type": "application/json; charset=utf-8"
+      };
+
+      http.Response response = await http.post(
+          Uri.parse(acceptRejectOrderAPI),
+          body: jsonEncode(body),
+          headers: headers
+      );
+
+      if(response.statusCode == 200) {
+        isLoading.value = false;
+        getOrders();
+        debugPrint(response.body.toString());
+      }
+    }catch(e){
+      debugPrint(e.toString());
+    }
+  }
+
+  generatePDF(String? orderID) async{
+    try{
+      fetchPDF.value = true;
+      String? pdfAPI = ApiEndPoint.generatePDF;
+
+      Map<String, String> body = {
+        'order_id': orderID!,
+      };
+
+      Map<String, String> headers = {
+        "Content-Type": "application/json; charset=utf-8"
+      };
+
+      http.Response response = await http.post(
+          Uri.parse(pdfAPI),
+          body: jsonEncode(body),
+          headers: headers
+      );
+
+      if(response.statusCode == 200){
+        fetchPDF.value = false;
+        getOrders();
+        debugPrint(response.body.toString());
+      }
+    } catch(e){
+      debugPrint(e.toString());
     }
   }
 }

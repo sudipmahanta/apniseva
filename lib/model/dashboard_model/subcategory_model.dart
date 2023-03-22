@@ -22,13 +22,13 @@ class SubCategoryDataModel {
   factory SubCategoryDataModel.fromJson(Map<String, dynamic> json) => SubCategoryDataModel(
     status: json["status"],
     error: json["error"],
-    messages: Messages.fromJson(json["messages"]),
+    messages: json["messages"] == null ? null : Messages.fromJson(json["messages"]),
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "error": error,
-    "messages": messages!.toJson(),
+    "messages": messages?.toJson(),
   };
 }
 
@@ -43,12 +43,12 @@ class Messages {
 
   factory Messages.fromJson(Map<String, dynamic> json) => Messages(
     responsecode: json["responsecode"],
-    status: Status.fromJson(json["status"]),
+    status: json["status"] == null ? null : Status.fromJson(json["status"]),
   );
 
   Map<String, dynamic> toJson() => {
     "responsecode": responsecode,
-    "status": status!.toJson(),
+    "status": status?.toJson(),
   };
 }
 
@@ -60,11 +60,11 @@ class Status {
   List<CategoryDtl>? categoryDtl;
 
   factory Status.fromJson(Map<String, dynamic> json) => Status(
-    categoryDtl: List<CategoryDtl>.from(json["category_dtl"].map((x) => CategoryDtl.fromJson(x))),
+    categoryDtl: json["category_dtl"] == null ? [] : List<CategoryDtl>.from(json["category_dtl"]!.map((x) => CategoryDtl.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "category_dtl": List<dynamic>.from(categoryDtl!.map((x) => x.toJson())),
+    "category_dtl": categoryDtl == null ? [] : List<dynamic>.from(categoryDtl!.map((x) => x.toJson())),
   };
 }
 

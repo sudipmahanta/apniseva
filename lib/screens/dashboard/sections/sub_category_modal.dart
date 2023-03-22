@@ -18,11 +18,13 @@ class ChooseSubCategory extends StatefulWidget {
 
 class _ChooseSubCategoryState extends State<ChooseSubCategory> {
 
-  final subCategoryController = SubCategoryController();
+  final subCategoryController = Get.put(SubCategoryController());
 
   @override
   void initState() {
-    subCategoryController.getSubCat();
+    Future.delayed(Duration.zero,(){
+      subCategoryController.getSubCat();
+    });
     super.initState();
   }
 
@@ -73,16 +75,15 @@ class _ChooseSubCategoryState extends State<ChooseSubCategory> {
                         crossAxisCount: 3,
                         childAspectRatio: 0.74
                     ),
-                    itemCount: subCategoryController.subCategoryDataModel.value.messages!.status!.categoryDtl!.length,
+                    itemCount:  subCategoryController.subCategoryDataModel.value.messages!.status!.categoryDtl!.length,
                     itemBuilder: (BuildContext context, int index){
                       List<CategoryDtl>? data = subCategoryController.subCategoryDataModel.value.messages!.status!.categoryDtl;
                       return InkWell(
                         onTap: () async{
                           SharedPreferences preferences = await SharedPreferences.getInstance();
-                          preferences.setString(ApiStrings.catID, data[index].catId!);
-                          debugPrint("SubCategory: ${data[index].catName}");
-                          debugPrint("SubCategory: ${data[index].catId}");
-
+                          preferences.setString(ApiStrings.catID, data![index].catId!);
+                          // debugPrint("SubCategory: ${data[index].catName}");
+                          // debugPrint("SubCategory: ${data[index].catId}");
 
                           if(data[index].subcat == 1){
                             Get.to(()=> const ServiceScreen());
@@ -91,7 +92,7 @@ class _ChooseSubCategoryState extends State<ChooseSubCategory> {
                                 context: context,
                                 builder: (context) {
                                   return const ChooseSubCategory();
-                                }) ;
+                                });
                           }
                         },
                         child: Column(
@@ -110,7 +111,7 @@ class _ChooseSubCategoryState extends State<ChooseSubCategory> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Image.network('${ApiEndPoint.imageAPI}/${data![index].catImg}',
+                                child: Image.network('${ApiEndPoint.imageAPI}/${data?[index].catImg}',
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -119,7 +120,7 @@ class _ChooseSubCategoryState extends State<ChooseSubCategory> {
                               child: Container(
                                 padding: const EdgeInsets.only(left: 10),
                                 // color: Colors.blue,
-                                child: Text(data[index].catName!,
+                                child: Text(data?[index].catName ?? '',
                                   textAlign: TextAlign.center,
                                   maxLines: 2,
                                   style: Theme.of(context).textTheme.labelSmall,

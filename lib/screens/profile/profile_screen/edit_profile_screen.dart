@@ -95,7 +95,16 @@ class EditProfileScreen extends StatelessWidget {
             ),
             const Spacer(),
             
-            PrimaryButton(width: width, height: 47, onPressed: (){}, label: 'SUBMIT')
+            PrimaryButton(width: width, height: 47, onPressed: (){},
+               child: const Text("Submit",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      letterSpacing: 1.2,
+                      fontWeight: FontWeight.w600
+                  ),
+                ),
+            )
           ],
         ),
       ),

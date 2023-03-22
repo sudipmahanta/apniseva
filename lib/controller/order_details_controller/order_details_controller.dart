@@ -39,9 +39,8 @@ class OrderDetailsController extends GetxController{
           body: jsonEncode(body),
           headers: headers
       );
-      debugPrint(response.statusCode.toString());
+      debugPrint("Status Code: ${response.statusCode.toString()}");
       orderModel = orderDetailDataModelFromJson(response.body);
-      debugPrint(orderModel.toString());
 
       if(response.statusCode == 200 && orderModel.status! == 200) {
         orderDetailsModel.value = orderModel;
